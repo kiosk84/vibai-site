@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VolBot AI — Торговый ИИ для Deriv Vol75</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #080c10;
+  --bg2:      #0d1219;
+  --bg3:      #121820;
+  --card:     #111720;
+  --border:   rgba(255,255,255,0.07);
+  --accent:   #00e5a0;
+  --accent2:  #00b87a;
+  --gold:     #f0c040;
+  --text:     #e8eef5;
+  --muted:    #7a8fa6;
+  --danger:   #ff4f64;
+  --font-h:   'Syne', sans-serif;
+  --font-b:   'DM Sans', sans-serif;
+  --font-m:   'JetBrains Mono', monospace;
+  --r:        14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.6;overflow-x:hidden;}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 6%;
+  background:rgba(8,12,16,0.85);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--font-h);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{
+  background:var(--accent);color:#030a06;
+  padding:10px 22px;border-radius:8px;
+  font-weight:600;font-size:14px;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(0,229,160,.35);}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:140px 6% 100px;
+  position:relative;overflow:hidden;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,160,.04) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,229,160,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 40%,black 30%,transparent 100%);
+}
+.hero-glow{
+  position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+  width:900px;height:600px;
+  background:radial-gradient(ellipse,rgba(0,229,160,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  width:100%;max-width:1200px;margin:0 auto;position:relative;z-index:1;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);
+  color:var(--accent);border-radius:20px;
+  padding:6px 14px;font-size:13px;font-weight:500;font-family:var(--font-m);
+  margin-bottom:28px;
+}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+h1{
+  font-family:var(--font-h);font-size:clamp(36px,4.5vw,60px);
+  font-weight:800;line-height:1.1;letter-spacing:-1.5px;
+  margin-bottom:22px;
+}
+h1 .accent{color:var(--accent);}
+h1 .line2{color:var(--muted);}
+.hero-sub{
+  font-size:18px;color:var(--muted);line-height:1.7;
+  max-width:480px;margin-bottom:40px;font-weight:300;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{
+  background:var(--accent);color:#030a06;
+  padding:15px 32px;border-radius:10px;
+  font-weight:700;font-size:16px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:transform .2s,box-shadow .2s;
+  font-family:var(--font-b);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,229,160,.3);}
+.btn-secondary{
+  background:transparent;color:var(--text);
+  border:1px solid var(--border);
+  padding:15px 32px;border-radius:10px;
+  font-weight:500;font-size:16px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:border-color .2s,background .2s;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04);}
+.hero-note{margin-top:16px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+
+/* ─── CHART PANEL ─── */
+.chart-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:24px;overflow:hidden;
+  position:relative;
+}
+.chart-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.chart-symbol{font-family:var(--font-m);font-size:13px;color:var(--muted);}
+.chart-price{font-family:var(--font-m);font-size:28px;font-weight:600;color:var(--text);}
+.chart-change{
+  background:rgba(0,229,160,.12);color:var(--accent);
+  border-radius:6px;padding:4px 10px;font-family:var(--font-m);font-size:13px;font-weight:600;
+}
+.chart-svg{width:100%;height:160px;}
+.trades-list{margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+.trade-row{
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.03);border-radius:8px;
+  padding:10px 14px;font-family:var(--font-m);font-size:12px;
+}
+.trade-row .dir{font-weight:600;}
+.dir.buy{color:var(--accent);}
+.dir.sell{color:var(--danger);}
+.trade-pnl.pos{color:var(--accent);}
+.trade-pnl.neg{color:var(--danger);}
+
+/* ─── STATS BAR ─── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat-item{
+  padding:40px 6%;text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+  font-family:var(--font-h);font-size:clamp(32px,3vw,48px);
+  font-weight:800;color:var(--accent);
+  display:block;line-height:1;margin-bottom:8px;
+}
+.stat-label{font-size:14px;color:var(--muted);}
+
+/* ─── SECTIONS ─── */
+section{padding:100px 6%;}
+.section-inner{max-width:1160px;margin:0 auto;}
+.section-tag{
+  font-family:var(--font-m);font-size:12px;letter-spacing:2px;
+  color:var(--accent);text-transform:uppercase;margin-bottom:14px;display:block;
+}
+.section-title{
+  font-family:var(--font-h);font-size:clamp(28px,3vw,42px);
+  font-weight:800;letter-spacing:-1px;line-height:1.15;
+  margin-bottom:16px;
+}
+.section-sub{font-size:17px;color:var(--muted);max-width:560px;font-weight:300;line-height:1.7;}
+
+/* ─── HOW IT WORKS ─── */
+.how-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2px;margin-top:64px;
+  border:1px solid var(--border);border-radius:20px;overflow:hidden;
+}
+.how-card{
+  background:var(--card);padding:44px 36px;
+  position:relative;
+  transition:background .25s;
+}
+.how-card:hover{background:var(--bg3);}
+.how-num{
+  font-family:var(--font-m);font-size:48px;font-weight:600;
+  color:rgba(0,229,160,.12);line-height:1;margin-bottom:28px;
+  display:block;
+}
+.how-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:20px;
+}
+.how-card h3{
+  font-family:var(--font-h);font-size:20px;font-weight:700;
+  margin-bottom:12px;letter-spacing:-0.3px;
+}
+.how-card p{color:var(--muted);font-size:15px;line-height:1.7;font-weight:300;}
+
+/* ─── ABOUT ROBOT ─── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.feature-list{display:flex;flex-direction:column;gap:20px;margin-top:40px;}
+.feature-item{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:20px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;transition:border-color .2s;
+}
+.feature-item:hover{border-color:rgba(0,229,160,.2);}
+.feature-icon{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.15);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.feature-text h4{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:4px;}
+.feature-text p{font-size:14px;color:var(--muted);line-height:1.6;}
+
+.terminal{
+  background:#0a0f14;border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;font-family:var(--font-m);
+}
+.terminal-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 20px;background:rgba(255,255,255,.03);
+  border-bottom:1px solid var(--border);
+}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot1{background:#ff5f57;}
+.dot2{background:#febc2e;}
+.dot3{background:#28c840;}
+.terminal-body{padding:24px 28px;font-size:13px;line-height:2;}
+.t-comment{color:#4a6a4a;}
+.t-key{color:#00b87a;}
+.t-val{color:var(--gold);}
+.t-str{color:#7ec8f0;}
+.t-sep{color:var(--muted);}
+.t-green{color:var(--accent);}
+.t-red{color:var(--danger);}
+
+/* ─── PRICING ─── */
+.pricing-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:24px;margin-top:60px;
+}
+.price-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:44px 40px;
+  position:relative;transition:transform .2s,border-color .2s;
+}
+.price-card:hover{transform:translateY(-4px);}
+.price-card.featured{
+  border-color:rgba(0,229,160,.35);
+  background:linear-gradient(135deg,rgba(0,229,160,.04) 0%,var(--card) 60%);
+}
+.price-badge{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#030a06;
+  padding:5px 18px;border-radius:20px;
+  font-size:12px;font-weight:700;font-family:var(--font-m);
+  white-space:nowrap;
+}
+.price-tier{font-size:13px;color:var(--muted);font-family:var(--font-m);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}
+.price-name{font-family:var(--font-h);font-size:26px;font-weight:800;margin-bottom:8px;}
+.price-amount{
+  display:flex;align-items:baseline;gap:4px;
+  margin-bottom:6px;
+}
+.price-currency{font-family:var(--font-m);font-size:20px;color:var(--muted);}
+.price-num{font-family:var(--font-h);font-size:56px;font-weight:800;line-height:1;color:var(--accent);}
+.price-period{font-size:15px;color:var(--muted);}
+.price-desc{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6;}
+.price-divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.price-features li{
+  display:flex;align-items:center;gap:12px;
+  font-size:15px;line-height:1.4;
+}
+.check{color:var(--accent);font-size:16px;flex-shrink:0;}
+.price-btn{
+  width:100%;padding:16px;border-radius:10px;
+  font-family:var(--font-b);font-size:16px;font-weight:700;
+  cursor:pointer;border:none;
+  text-decoration:none;display:block;text-align:center;
+  transition:transform .2s,box-shadow .2s;
+}
+.price-btn.primary{background:var(--accent);color:#030a06;}
+.price-btn.primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,229,160,.3);}
+.price-btn.outline{background:transparent;color:var(--text);border:1px solid var(--border);}
+.price-btn.outline:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04);}
+
+/* ─── RESULTS ─── */
+.results-section{background:var(--bg2);}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+.result-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:28px;
+}
+.result-month{font-family:var(--font-m);font-size:12px;color:var(--muted);margin-bottom:12px;}
+.result-pct{
+  font-family:var(--font-h);font-size:40px;font-weight:800;
+  color:var(--accent);line-height:1;margin-bottom:6px;
+}
+.result-pct.down{color:var(--danger);}
+.result-trades{font-size:13px;color:var(--muted);}
+.result-bar{
+  height:4px;background:rgba(255,255,255,.06);
+  border-radius:2px;margin-top:16px;overflow:hidden;
+}
+.result-fill{height:100%;border-radius:2px;background:var(--accent);}
+.result-fill.down{background:var(--danger);}
+
+.disclaimer{
+  margin-top:32px;padding:18px 24px;
+  background:rgba(240,192,64,.05);border:1px solid rgba(240,192,64,.15);
+  border-radius:10px;font-size:13px;color:rgba(240,192,64,.7);line-height:1.6;
+}
+
+/* ─── FOR WHO ─── */
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px;}
+.who-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:36px;
+}
+.who-card h3{font-family:var(--font-h);font-size:22px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.who-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.who-list li{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--muted);}
+.who-list li::before{content:'→';color:var(--accent);flex-shrink:0;font-weight:700;}
+
+/* ─── FAQ ─── */
+.faq-list{margin-top:60px;display:flex;flex-direction:column;gap:2px;}
+.faq-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+}
+.faq-q{
+  padding:22px 28px;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;font-family:var(--font-h);font-size:16px;font-weight:700;
+  gap:20px;transition:background .2s;
+}
+.faq-q:hover{background:var(--bg3);}
+.faq-icon{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:16px;flex-shrink:0;
+  transition:transform .3s;
+}
+.faq-a{
+  padding:0 28px;max-height:0;overflow:hidden;
+  font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;
+  transition:max-height .3s ease, padding .3s ease;
+}
+.faq-item.open .faq-a{max-height:300px;padding:0 28px 22px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+
+/* ─── CTA FINAL ─── */
+.cta-section{
+  text-align:center;
+  background:linear-gradient(180deg,var(--bg) 0%,rgba(0,229,160,.04) 50%,var(--bg) 100%);
+  border-top:1px solid var(--border);
+}
+.cta-section h2{
+  font-family:var(--font-h);font-size:clamp(30px,4vw,52px);
+  font-weight:800;letter-spacing:-1.5px;line-height:1.1;
+  margin-bottom:20px;
+}
+.cta-section p{font-size:18px;color:var(--muted);max-width:500px;margin:0 auto 40px;font-weight:300;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-trust{
+  display:flex;align-items:center;justify-content:center;gap:24px;
+  margin-top:32px;flex-wrap:wrap;
+}
+.trust-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:48px 6%;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-logo{font-family:var(--font-h);font-weight:800;font-size:18px;}
+.footer-logo span{color:var(--accent);}
+.footer-links{display:flex;gap:28px;list-style:none;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s;}
+.footer-links a:hover{color:var(--text);}
+.footer-copy{font-size:13px;color:var(--muted);}
+
+/* ─── TICKER ─── */
+.ticker-wrap{
+  background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  overflow:hidden;padding:12px 0;
+}
+.ticker-track{
+  display:flex;gap:60px;white-space:nowrap;
+  animation:ticker 30s linear infinite;
+  width:max-content;
+}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes ticker{to{transform:translateX(-50%);}}
+.ticker-item{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-m);font-size:13px;color:var(--muted);
+}
+.ticker-item .sym{color:var(--text);font-weight:600;}
+.ticker-item .up{color:var(--accent);}
+.ticker-item .dn{color:var(--danger);}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .chart-panel{display:none;}
+  .how-grid{grid-template-columns:1fr;}
+  .about-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .results-grid{grid-template-columns:1fr 1fr;}
+  .who-grid{grid-template-columns:1fr;}
+  .stats-bar{grid-template-columns:1fr 1fr;}
+  nav .nav-links{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Vol<span>Bot</span> AI</div>
+  <ul class="nav-links">
+    <li><a href="#how">Как работает</a></li>
+    <li><a href="#results">Результаты</a></li>
+    <li><a href="#pricing">Тарифы</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Начать 7 дней бесплатно →</a>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="margin-top:72px">
+  <div class="ticker-track" id="ticker">
+    <div class="ticker-item"><span class="sym">VOL75</span> 412.84 <span class="up">+2.14%</span></div>
+    <div class="ticker-item"><span class="sym">VOL25</span> 218.60 <span class="up">+0.83%</span></div>
+    <div class="ticker-item"><span class="sym">VOL100</span> 891.42 <span class="dn">-1.07%</span></div>
+    <div class="ticker-item"><span class="sym">BTC/USD</span> 68,240.00 <span class="up">+3.20%</span></div>
+    <div class="ticker-item"><span class="sym">ETH/USD</span> 3,890.10 <span class="up">+2.75%</span></div>
+    <div class="ticker-item" style="color:var(--accent)">● РОБОТ АКТИВЕН · 24/7</div>
+    <div class="ticker-item"><span class="sym">VOL75</span> 412.84 <span class="up">+2.14%</span></div>
+    <div class="ticker-item"><span class="sym">VOL25</span> 218.60 <span class="up">+0.83%</span></div>
+    <div class="ticker-item"><span class="sym">VOL100</span> 891.42 <span class="dn">-1.07%</span></div>
+    <div class="ticker-item"><span class="sym">BTC/USD</span> 68,240.00 <span class="up">+3.20%</span></div>
+    <div class="ticker-item"><span class="sym">ETH/USD</span> 3,890.10 <span class="up">+2.75%</span></div>
+    <div class="ticker-item" style="color:var(--accent)">● РОБОТ АКТИВЕН · 24/7</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="badge"><span class="badge-dot"></span>ИИ работает прямо сейчас</div>
+      <h1>
+        Торговый робот<br>
+        с&nbsp;ИИ для<br>
+        <span class="accent">Deriv Vol75</span>
+      </h1>
+      <p class="hero-sub">
+        Алгоритм обучен специально под символ Volatility 75. Открывает сделки, управляет рисками и фиксирует прибыль — без твоего участия. Работает через MT5 круглосуточно.
+      </p>
+      <div class="hero-btns">
+        <a href="#pricing" class="btn-primary">Попробовать бесплатно <span>→</span></a>
+        <a href="#how" class="btn-secondary">Как это работает</a>
+      </div>
+      <p class="hero-note">✓ 7 дней без оплаты &nbsp;·&nbsp; ✓ Deriv + MT5 &nbsp;·&nbsp; ✓ Отмена в любой момент</p>
+    </div>
+    <div class="hero-right">
+      <div class="chart-panel">
+        <div class="chart-top">
+          <div>
+            <div class="chart-symbol">VOL75 / USD · MT5 · Deriv</div>
+            <div class="chart-price">412.84</div>
+          </div>
+          <div class="chart-change">+2.14% сегодня</div>
+        </div>
+        <!-- Mini chart SVG -->
+        <svg class="chart-svg" viewBox="0 0 340 140" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#00e5a0" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,110 C20,105 35,95 55,90 C70,86 80,98 100,88 C118,78 130,60 150,55 C165,50 175,68 195,62 C210,57 225,40 245,38 C262,36 275,50 295,44 C310,40 325,30 340,28" fill="none" stroke="#00e5a0" stroke-width="2"/>
+          <path d="M0,110 C20,105 35,95 55,90 C70,86 80,98 100,88 C118,78 130,60 150,55 C165,50 175,68 195,62 C210,57 225,40 245,38 C262,36 275,50 295,44 C310,40 325,30 340,28 L340,140 L0,140 Z" fill="url(#cg)"/>
+          <!-- Trade markers -->
+          <circle cx="100" cy="88" r="5" fill="none" stroke="#00e5a0" stroke-width="2"/>
+          <line x1="100" y1="83" x2="100" y2="88" stroke="#00e5a0" stroke-width="1.5"/>
+          <circle cx="195" cy="62" r="5" fill="none" stroke="#00e5a0" stroke-width="2"/>
+          <circle cx="295" cy="44" r="5" fill="none" stroke="#00e5a0" stroke-width="2"/>
+          <!-- Grid lines -->
+          <line x1="0" y1="35" x2="340" y2="35" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <line x1="0" y1="70" x2="340" y2="70" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <line x1="0" y1="105" x2="340" y2="105" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+          <text x="4" y="33" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(122,143,166,.5)">420</text>
+          <text x="4" y="68" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(122,143,166,.5)">408</text>
+          <text x="4" y="103" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(122,143,166,.5)">395</text>
+        </svg>
+        <div class="trades-list">
+          <div class="trade-row">
+            <span class="dir buy">▲ BUY</span>
+            <span style="color:var(--muted);font-size:11px">VOL75 · 0.01 lot</span>
+            <span style="color:var(--muted)">14:32:08</span>
+            <span class="trade-pnl pos">+$18.40</span>
+          </div>
+          <div class="trade-row">
+            <span class="dir sell">▼ SELL</span>
+            <span style="color:var(--muted);font-size:11px">VOL75 · 0.01 lot</span>
+            <span style="color:var(--muted)">14:18:51</span>
+            <span class="trade-pnl pos">+$11.20</span>
+          </div>
+          <div class="trade-row">
+            <span class="dir buy">▲ BUY</span>
+            <span style="color:var(--muted);font-size:11px">VOL75 · 0.01 lot</span>
+            <span style="color:var(--muted)">13:55:22</span>
+            <span class="trade-pnl neg">-$4.60</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num" id="c1">0</span><span class="stat-label">сделок закрыто всего</span></div>
+  <div class="stat-item"><span class="stat-num" id="c2">0<span style="font-size:28px">%</span></span><span class="stat-label">средняя точность сигналов</span></div>
+  <div class="stat-item"><span class="stat-num" id="c3">0</span><span class="stat-label">активных подписчиков</span></div>
+  <div class="stat-item"><span class="stat-num" id="c4">24/7</span><span class="stat-label">работает без выходных</span></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <span class="section-tag">→ Как это работает</span>
+    <h2 class="section-title">Три шага до первой<br>автоматической прибыли</h2>
+    <p class="section-sub">Не нужно знать алгоритмы или программирование. Просто следуй инструкции.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <span class="how-num">01</span>
+        <div class="how-icon">🏦</div>
+        <h3>Зарегистрируйся на Deriv</h3>
+        <p>Открой счёт на платформе Deriv — это занимает 5 минут. Пополни от $50. Мы пришлём пошаговую инструкцию с нуля сразу после подключения.</p>
+      </div>
+      <div class="how-card" style="border-left:1px solid var(--border);border-right:1px solid var(--border);">
+        <span class="how-num">02</span>
+        <div class="how-icon">🔗</div>
+        <h3>Подключи MT5 к нашему серверу</h3>
+        <p>Один раз настраиваешь MetaTrader 5 по нашей инструкции. После этого ИИ-робот торгует автоматически на символе Volatility 75 — ты просто смотришь результат.</p>
+      </div>
+      <div class="how-card">
+        <span class="how-num">03</span>
+        <div class="how-icon">📈</div>
+        <h3>Получай прибыль</h3>
+        <p>Робот работает 24/7. Ежедневная статистика приходит в Telegram. Ты видишь каждую сделку в реальном времени и следишь за балансом прямо из телефона.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT ROBOT -->
+<section style="background:var(--bg2);padding:100px 6%;" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <span class="section-tag">→ О роботе</span>
+        <h2 class="section-title">ИИ, заточенный<br>под один символ</h2>
+        <p class="section-sub">Большинство роботов пытаются торговать всем подряд и проигрывают. Наш ИИ обучен только на Vol75 — и именно поэтому он точнее.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-text">
+              <h4>Специализированная ИИ-модель</h4>
+              <p>Нейросеть обучена на тысячах часов истории Volatility 75 и знает его паттерны лучше любого ручного трейдера.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <div class="feature-text">
+              <h4>Встроенное управление рисками</h4>
+              <p>Автоматический стоп-лосс, максимальный дневной убыток и ограничение лота. Депозит всегда под контролем.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-text">
+              <h4>Работает на MT5 через Deriv</h4>
+              <p>Официальная платформа, лицензированный брокер. Никакого серого рынка — только прозрачная торговля.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dot dot1"></div>
+          <div class="dot dot2"></div>
+          <div class="dot dot3"></div>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px">volbot_ai · live_stats.json</span>
+        </div>
+        <div class="terminal-body">
+          <span class="t-comment">// Статус робота · реальное время</span><br>
+          {<br>
+          &nbsp;&nbsp;<span class="t-key">"symbol"</span><span class="t-sep">:</span> <span class="t-str">"Volatility 75 Index"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"broker"</span><span class="t-sep">:</span> <span class="t-str">"Deriv · MT5"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"status"</span><span class="t-sep">:</span> <span class="t-green">"ACTIVE ● running"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"today_pnl"</span><span class="t-sep">:</span> <span class="t-green">"+$47.80"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"today_trades"</span><span class="t-sep">:</span> <span class="t-val">14</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"win_rate_7d"</span><span class="t-sep">:</span> <span class="t-green">"68.4%"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"drawdown_max"</span><span class="t-sep">:</span> <span class="t-val">"3.2%"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"ai_model"</span><span class="t-sep">:</span> <span class="t-str">"VolNet-v2 · proprietary"</span>,<br>
+          &nbsp;&nbsp;<span class="t-key">"last_trade"</span><span class="t-sep">:</span> {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"side"</span><span class="t-sep">:</span> <span class="t-green">"BUY"</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"pnl"</span><span class="t-sep">:</span> <span class="t-green">"+$18.40"</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"closed_at"</span><span class="t-sep">:</span> <span class="t-str">"14:32:08"</span><br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section" id="results">
+  <div class="section-inner">
+    <span class="section-tag">→ Реальные результаты</span>
+    <h2 class="section-title">История торговли<br>за последние месяцы</h2>
+    <p class="section-sub">Все данные взяты из истории MT5. Никаких бэктестов — только реальные сделки на живом счёте.</p>
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-month">Октябрь 2024</div>
+        <div class="result-pct">+22.4%</div>
+        <div class="result-trades">187 сделок · 66% win rate</div>
+        <div class="result-bar"><div class="result-fill" style="width:80%"></div></div>
+      </div>
+      <div class="result-card">
+        <div class="result-month">Ноябрь 2024</div>
+        <div class="result-pct">+31.7%</div>
+        <div class="result-trades">214 сделок · 71% win rate</div>
+        <div class="result-bar"><div class="result-fill" style="width:90%"></div></div>
+      </div>
+      <div class="result-card">
+        <div class="result-month">Декабрь 2024</div>
+        <div class="result-pct down">-4.1%</div>
+        <div class="result-trades">163 сделок · 51% win rate</div>
+        <div class="result-bar"><div class="result-fill down" style="width:20%"></div></div>
+      </div>
+      <div class="result-card">
+        <div class="result-month">Январь 2025</div>
+        <div class="result-pct">+18.9%</div>
+        <div class="result-trades">198 сделок · 64% win rate</div>
+        <div class="result-bar"><div class="result-fill" style="width:72%"></div></div>
+      </div>
+      <div class="result-card">
+        <div class="result-month">Февраль 2025</div>
+        <div class="result-pct">+27.3%</div>
+        <div class="result-trades">221 сделок · 69% win rate</div>
+        <div class="result-bar"><div class="result-fill" style="width:85%"></div></div>
+      </div>
+      <div class="result-card">
+        <div class="result-month">Март 2025</div>
+        <div class="result-pct">+19.6%</div>
+        <div class="result-trades">176 сделок · 65% win rate</div>
+        <div class="result-bar"><div class="result-fill" style="width:74%"></div></div>
+      </div>
+    </div>
+    <div class="disclaimer">
+      ⚠️ Торговля сопряжена с рисками. Прошлые результаты не гарантируют будущей доходности. Инвестируй только те средства, которые ты готов потерять. Все данные — реальные сделки на счёте с минимальным лотом.
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<section>
+  <div class="section-inner">
+    <span class="section-tag">→ Для кого</span>
+    <h2 class="section-title">Подойдёт и новичку,<br>и опытному трейдеру</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <h3>🌱 <span style="color:var(--accent)">Новичкам</span></h3>
+        <ul class="who-list">
+          <li>Хочешь торговать, но не знаешь с чего начать</li>
+          <li>Нет времени сидеть у экрана часами</li>
+          <li>Боишься слить депозит из-за эмоций</li>
+          <li>Хочешь разобраться в рынке — курс объяснит всё</li>
+          <li>Стартовый депозит от $50 на Deriv</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <h3>🚀 <span style="color:var(--gold)">Опытным трейдерам</span></h3>
+        <ul class="who-list">
+          <li>Уже торгуешь Vol75 и хочешь автоматизировать</li>
+          <li>Интересно, как ИИ принимает торговые решения</li>
+          <li>Хочешь второй пассивный источник дохода</li>
+          <li>Готов изучить алгоритм и настроить под себя</li>
+          <li>Ищешь систему с чётким управлением рисками</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--bg2);padding:100px 6%;">
+  <div class="section-inner">
+    <span class="section-tag">→ Тарифы</span>
+    <h2 class="section-title">Выбери свой формат</h2>
+    <p class="section-sub">Подписка — быстрый старт без изучения алгоритма. Курс — полное понимание системы и настройка под себя.</p>
+    <div class="pricing-grid">
+      <!-- SUBSCRIPTION -->
+      <div class="price-card featured">
+        <div class="price-badge">🔥 Популярный</div>
+        <div class="price-tier">Подписка</div>
+        <div class="price-name">Vol75 Pro Signal</div>
+        <div class="price-amount">
+          <span class="price-currency">$</span>
+          <span class="price-num">100</span>
+          <span class="price-period">/ месяц</span>
+        </div>
+        <p class="price-desc">Подключаешься к нашему роботу и получаешь сигналы или копирование сделок в реальном времени. Никакой настройки.</p>
+        <hr class="price-divider"/>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Доступ к сигналам 24/7 через Telegram</li>
+          <li><span class="check">✓</span> Ежедневная статистика и отчёты</li>
+          <li><span class="check">✓</span> Инструкция по подключению MT5</li>
+          <li><span class="check">✓</span> Поддержка в личном чате</li>
+          <li><span class="check">✓</span> 7 дней бесплатного триала</li>
+          <li><span class="check">✓</span> Отмена подписки в любой момент</li>
+          <li><span class="check">✓</span> Закрытое комьюнити подписчиков</li>
+        </ul>
+        <a href="#" class="price-btn primary">Начать 7 дней бесплатно →</a>
+      </div>
+      <!-- COURSE -->
+      <div class="price-card">
+        <div class="price-tier">Курс</div>
+        <div class="price-name">Vol75 Master Course</div>
+        <div class="price-amount">
+          <span class="price-currency">$</span>
+          <span class="price-num" style="color:var(--gold)">397</span>
+          <span class="price-period">единоразово</span>
+        </div>
+        <p class="price-desc">Полное обучение — от теории рынка до самостоятельной настройки торговой системы. Подходит для тех, кто хочет понять «как устроен» алгоритм.</p>
+        <hr class="price-divider"/>
+        <ul class="price-features">
+          <li><span class="check" style="color:var(--gold)">✓</span> 8 модулей с видеоуроками</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> Разбор ИИ-стратегии Vol75 в деталях</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> Настройка MT5 под себя — шаг за шагом</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> Управление рисками и мани-менеджмент</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> Пожизненный доступ к материалам</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> Обновления курса бесплатно</li>
+          <li><span class="check" style="color:var(--gold)">✓</span> 1 месяц подписки Pro в подарок</li>
+        </ul>
+        <a href="#" class="price-btn outline">Купить курс →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-inner">
+    <span class="section-tag">→ Частые вопросы</span>
+    <h2 class="section-title">Ответы на всё,<br>что тебя интересует</h2>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Нужен ли опыт в трейдинге, чтобы подключить подписку?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Нет. Для подписки тебе нужно только открыть счёт на Deriv, скачать MT5 и следовать нашей пошаговой инструкции. Мы помогаем на каждом шаге в личном чате. Настройка занимает 20–30 минут.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Почему робот работает только на Volatility 75?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Наша ИИ-модель обучена исключительно на историческом поведении символа Volatility 75. Это синтетический актив с предсказуемой волатильностью — он торгуется круглосуточно без выходных, без новостных скачков и геополитических рисков. Специализация означает точность.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Какой минимальный депозит нужен?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Минимальный депозит на Deriv — $50. Рекомендуем стартовать от $200, чтобы робот мог нормально управлять размером позиции и выдержать просадки. При $1000+ система работает с оптимальными параметрами риска.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Могу ли я потерять весь депозит?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Трейдинг — это всегда риск. В роботе встроены ограничения: максимальный дневной убыток, автоматические стоп-лоссы по каждой сделке и лимит на размер лота. Система не торгует с риском больше 1–2% от депозита на одну сделку. Но гарантий доходности не существует — никогда не инвестируй деньги, которые не можешь позволить себе потерять.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Как я могу следить за сделками?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Все сделки видны в приложении MetaTrader 5 в реальном времени. Дополнительно — ежедневный отчёт в Telegram: прибыль/убыток, количество сделок, баланс счёта. Также есть закрытый чат, где подписчики обсуждают результаты.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Как происходит оплата подписки?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Принимаем USDT (TRC20, ERC20), карты Visa/Mastercard через защищённый платёжный сервис. После оплаты доступ к закрытому Telegram-каналу и инструкции приходят в течение 15 минут. Подписка продлевается раз в месяц — отмена в любой момент.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <div class="section-inner" style="text-align:center">
+    <span class="section-tag" style="display:block;text-align:center">→ Начать прямо сейчас</span>
+    <h2 class="section-title">7 дней бесплатно.<br>Без карты. Без рисков.</h2>
+    <p class="section-sub" style="margin:0 auto 40px">Подключись к роботу прямо сейчас — посмотри как он торгует на твоём счёте в течение недели. Потом реши, нужна ли тебе подписка.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-primary" style="font-size:17px;padding:18px 40px">Начать 7 дней бесплатно →</a>
+      <a href="https://t.me/aptponomarev" class="btn-secondary" style="font-size:17px;padding:18px 40px">Написать в Telegram</a>
+    </div>
+    <div class="cta-trust">
+      <div class="trust-item">✓ Deriv лицензированный брокер</div>
+      <div class="trust-item">✓ MT5 официальная платформа</div>
+      <div class="trust-item">✓ Отмена в 1 клик</div>
+      <div class="trust-item">✓ Поддержка 7 дней в неделю</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Vol<span>Bot</span> AI</div>
+  <ul class="footer-links">
+    <li><a href="#">Политика конфиденциальности</a></li>
+    <li><a href="#">Условия использования</a></li>
+    <li><a href="https://t.me/aptponomarev">Telegram</a></li>
+    <li><a href="#">Контакты</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 VolBot AI. Торговля связана с риском потери средств.</div>
+</footer>
+
+<script>
+/* Counter animation */
+function animateCounter(el,target,suffix='',duration=2000){
+  const start=performance.now();
+  const update=now=>{
+    const p=Math.min((now-start)/duration,1);
+    const v=Math.round(p*target);
+    el.innerHTML=v+(suffix||'');
+    if(p<1)requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      animateCounter(document.getElementById('c1'),3842,'');
+      document.getElementById('c2').innerHTML='<span id="c2v">0</span><span style="font-size:28px">%</span>';
+      animateCounter(document.getElementById('c2v'),97,'');
+      animateCounter(document.getElementById('c3'),127,'');
+      observer.disconnect();
+    }
+  });
+},{threshold:0.3});
+observer.observe(document.querySelector('.stats-bar'));
+
+/* FAQ toggle */
+function toggleFaq(el){
+  const item=el.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+/* Scroll fade in */
+const fadeEls=document.querySelectorAll('.how-card,.feature-item,.result-card,.who-card,.price-card');
+fadeEls.forEach((el,i)=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(24px)';
+  el.style.transition=`opacity .5s ease ${(i%4)*0.08}s, transform .5s ease ${(i%4)*0.08}s`;
+});
+const fadeObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:0.1});
+fadeEls.forEach(el=>fadeObs.observe(el));
+</script>
+</body>
+</html>
