@@ -220,21 +220,70 @@ section{padding:100px 6%;}
 .feature-text h4{font-family:var(--font-h);font-size:15px;font-weight:700;margin-bottom:4px;}
 .feature-text p{font-size:14px;color:var(--muted);line-height:1.6;}
 
-.terminal{
+.live-panel{
   background:#0a0f14;border:1px solid var(--border);
   border-radius:16px;overflow:hidden;font-family:var(--font-m);
 }
-.terminal-bar{
-  display:flex;align-items:center;gap:8px;
-  padding:14px 20px;background:rgba(255,255,255,.03);
+.live-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 22px;background:rgba(255,255,255,.03);
   border-bottom:1px solid var(--border);
 }
-.dot{width:11px;height:11px;border-radius:50%;}
-.dot1{background:#ff5f57;}
-.dot2{background:#febc2e;}
-.dot3{background:#28c840;}
-.terminal-body{padding:24px 28px;font-size:13px;line-height:2;}
-.t-comment{color:#4a6a4a;}
+.live-panel-title{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.live-status{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,229,160,.1);color:var(--accent);
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  animation:pulse 2s infinite;
+}
+.live-body{padding:20px;}
+.live-top-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-bottom:16px;
+}
+.live-stat{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;padding:14px;text-align:center;
+}
+.live-stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.live-stat-value{font-size:22px;font-weight:700;color:var(--text);}
+.live-stat-value.green{color:var(--accent);}
+.live-stat-value.gold{color:var(--gold);}
+.live-details{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.live-detail{
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.02);border-radius:8px;
+  padding:10px 14px;font-size:12px;
+}
+.live-detail-key{color:var(--muted);}
+.live-detail-val{color:var(--text);font-weight:600;}
+.live-detail-val.green{color:var(--accent);}
+.live-last-trade{
+  margin-top:12px;
+  background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.15);
+  border-radius:10px;padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.live-trade-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.live-trade-info{display:flex;align-items:center;gap:16px;}
+.live-trade-side{
+  font-size:13px;font-weight:700;color:var(--accent);
+  display:flex;align-items:center;gap:4px;
+}
+.live-trade-pnl{font-size:15px;font-weight:700;color:var(--accent);}
+.live-trade-time{font-size:11px;color:var(--muted);}
+.live-ai-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;font-size:11px;color:var(--muted);
+  margin-top:12px;
+}
+.live-ai-badge span{color:var(--accent);font-weight:600;}
 .t-key{color:#00b87a;}
 .t-val{color:var(--gold);}
 .t-str{color:#7ec8f0;}
@@ -461,7 +510,14 @@ footer{
   .feature-text h4{font-size:14px;}
   .feature-text p{font-size:13px;}
 
-  .terminal-body{padding:16px 18px;font-size:11px;line-height:1.8;}
+  .live-body{padding:14px;}
+  .live-top-stats{gap:8px;}
+  .live-stat{padding:10px;}
+  .live-stat-value{font-size:18px;}
+  .live-details{gap:8px;}
+  .live-detail{padding:8px 10px;font-size:11px;}
+  .live-last-trade{flex-direction:column;gap:10px;align-items:flex-start;}
+  .live-trade-info{width:100%;justify-content:space-between;}
 
   .results-grid{grid-template-columns:1fr;}
   .result-card{padding:20px;}
@@ -679,30 +735,55 @@ footer{
           </div>
         </div>
       </div>
-      <div class="terminal">
-        <div class="terminal-bar">
-          <div class="dot dot1"></div>
-          <div class="dot dot2"></div>
-          <div class="dot dot3"></div>
-          <span style="font-size:12px;color:var(--muted);margin-left:8px">volbot_ai · live_stats.json</span>
+      <div class="live-panel">
+        <div class="live-panel-header">
+          <div class="live-panel-title">📊 Панель статуса робота</div>
+          <div class="live-status"><span class="live-dot"></span>Активен</div>
         </div>
-        <div class="terminal-body">
-          <span class="t-comment">// Статус робота · реальное время</span><br>
-          {<br>
-          &nbsp;&nbsp;<span class="t-key">"symbol"</span><span class="t-sep">:</span> <span class="t-str">"Volatility 75 Index"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"broker"</span><span class="t-sep">:</span> <span class="t-str">"Deriv · MT5"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"status"</span><span class="t-sep">:</span> <span class="t-green">"ACTIVE ● running"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"today_pnl"</span><span class="t-sep">:</span> <span class="t-green">"+$47.80"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"today_trades"</span><span class="t-sep">:</span> <span class="t-val">14</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"win_rate_7d"</span><span class="t-sep">:</span> <span class="t-green">"68.4%"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"drawdown_max"</span><span class="t-sep">:</span> <span class="t-val">"3.2%"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"ai_model"</span><span class="t-sep">:</span> <span class="t-str">"VolNet-v2 · proprietary"</span>,<br>
-          &nbsp;&nbsp;<span class="t-key">"last_trade"</span><span class="t-sep">:</span> {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"side"</span><span class="t-sep">:</span> <span class="t-green">"BUY"</span>,<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"pnl"</span><span class="t-sep">:</span> <span class="t-green">"+$18.40"</span>,<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"closed_at"</span><span class="t-sep">:</span> <span class="t-str">"14:32:08"</span><br>
-          &nbsp;&nbsp;}<br>
-          }
+        <div class="live-body">
+          <div class="live-top-stats">
+            <div class="live-stat">
+              <div class="live-stat-label">Прибыль сегодня</div>
+              <div class="live-stat-value green">+$47.80</div>
+            </div>
+            <div class="live-stat">
+              <div class="live-stat-label">Сделок сегодня</div>
+              <div class="live-stat-value">14</div>
+            </div>
+            <div class="live-stat">
+              <div class="live-stat-label">Винрейт 7д</div>
+              <div class="live-stat-value green">97%</div>
+            </div>
+          </div>
+          <div class="live-details">
+            <div class="live-detail">
+              <span class="live-detail-key">Символ</span>
+              <span class="live-detail-val">Volatility 75</span>
+            </div>
+            <div class="live-detail">
+              <span class="live-detail-key">Брокер</span>
+              <span class="live-detail-val">Deriv · MT5</span>
+            </div>
+            <div class="live-detail">
+              <span class="live-detail-key">Просадка макс</span>
+              <span class="live-detail-val green">3.2%</span>
+            </div>
+            <div class="live-detail">
+              <span class="live-detail-key">ИИ-модель</span>
+              <span class="live-detail-val">VolNet-v2</span>
+            </div>
+          </div>
+          <div class="live-last-trade">
+            <div>
+              <div class="live-trade-label">Последняя сделка</div>
+              <div class="live-trade-time">Закрыта в 14:32:08</div>
+            </div>
+            <div class="live-trade-info">
+              <div class="live-trade-side">▲ BUY</div>
+              <div class="live-trade-pnl">+$18.40</div>
+            </div>
+          </div>
+          <div class="live-ai-badge">🧠 ИИ-модель: <span>VolNet-v2 · proprietary</span></div>
         </div>
       </div>
     </div>
