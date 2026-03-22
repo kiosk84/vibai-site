@@ -149,7 +149,7 @@ def text_payment_instructions(plan: str) -> str:
     if plan == "trial":
         return (
             "✅ *Триал активирован!*\n\n"
-            "Отлично! Дальше пришли @volbotai_support своё:\n"
+            "Отлично! Дальше пришли @aielegan своё:\n"
             "• Имя / никнейм\n"
             "• Логин MT5 (только номер счёта, не пароль)\n\n"
             "Мы подключим тебя в течение *15 минут* и пришлём инструкцию.\n\n"
@@ -168,7 +168,7 @@ def text_payment_instructions(plan: str) -> str:
         "📤 *После оплаты:*\n"
         "Нажми кнопку ниже и отправь скриншот транзакции.\n"
         "Доступ активируем в течение *15 минут*.\n\n"
-        "❓ Вопросы по оплате → @volbotai_support"
+        "❓ Вопросы по оплате → @aielegan"
     )
 
 
@@ -176,10 +176,8 @@ def text_how_to_start() -> str:
     return (
         "🚀 *Как начать — пошаговая инструкция*\n\n"
         "*Шаг 1 — Зарегистрируйся на Deriv*\n"
-        "1. Перейди на [deriv.com](https://deriv.com)\n"
-        "2. Создай аккаунт (5 минут)\n"
-        "3. Пройди верификацию (паспорт или ID)\n"
-        "4. Пополни счёт от $50\n\n"
+        "1. Создай аккаунт (5 минут)\n"
+        "2. Пополни счёт от $50\n\n"
         "*Шаг 2 — Установи MetaTrader 5*\n"
         "1. Скачай MT5 с [официального сайта](https://www.metatrader5.com)\n"
         "2. В Deriv личном кабинете создай MT5 счёт\n"
@@ -242,7 +240,7 @@ FAQ_ANSWERS = {
     "faq_cancel": (
         "🔄 *Как отменить подписку?*\n\n"
         "Очень просто:\n"
-        "• Напиши в /support или @volbotai_support\n"
+        "• Напиши в /support или @aielegan\n"
         "• Скажи «хочу отменить подписку»\n"
         "• Готово — следующее списание не произойдёт\n\n"
         "Никаких штрафов, никаких вопросов.\n"
@@ -255,7 +253,7 @@ FAQ_ANSWERS = {
         "• 💳 Карты Visa/Mastercard\n"
         "• 🏦 Перевод по реквизитам\n\n"
         "После оплаты — доступ в течение 15 минут.\n"
-        "По вопросам оплаты: @volbotai_support"
+        "По вопросам оплаты: @aielegan"
     ),
 }
 
@@ -279,7 +277,7 @@ def kb_main() -> InlineKeyboardMarkup:
                 InlineKeyboardButton("❓ FAQ", callback_data="faq"),
                 InlineKeyboardButton("💬 Поддержка", callback_data="support"),
             ],
-            [InlineKeyboardButton("📡 Наш канал", url="https://t.me/volbotai")],
+            [InlineKeyboardButton("📡 Наш канал", url="https://t.me/volbotchannel")],
         ]
     )
 
@@ -331,11 +329,7 @@ def kb_payment(plan: str) -> InlineKeyboardMarkup:
                     "📎 Отправить чек об оплате", callback_data=f"proof_{plan}"
                 )
             ],
-            [
-                InlineKeyboardButton(
-                    "💬 Вопрос по оплате", url="https://t.me/volbotai_support"
-                )
-            ],
+            [InlineKeyboardButton("💬 Вопрос по оплате", url="https://t.me/aielegan")],
             [InlineKeyboardButton("◀️ Назад", callback_data="pricing")],
         ]
     )
@@ -344,7 +338,11 @@ def kb_payment(plan: str) -> InlineKeyboardMarkup:
 def kb_after_trial() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("📡 Перейти в канал", url="https://t.me/volbotai")],
+            [
+                InlineKeyboardButton(
+                    "📡 Перейти в канал", url="https://t.me/volbotchannel"
+                )
+            ],
             [InlineKeyboardButton("◀️ Главное меню", callback_data="main")],
         ]
     )
@@ -468,7 +466,7 @@ async def cmd_support(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "💬 *Поддержка VolBot AI*\n\n"
         "Напиши своё сообщение, и мы ответим в течение нескольких часов.\n\n"
-        "_Или напрямую: @volbotai_support_",
+        "_Или напрямую: @aielegan_",
         parse_mode=ParseMode.MARKDOWN,
     )
     return WAITING_SUPPORT_MSG
@@ -599,7 +597,7 @@ async def handle_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             "💬 *Напиши свой вопрос*\n\n"
             "Отправь сообщение — мы ответим в ближайшее время.\n\n"
-            "_Или напрямую: @volbotai_support_",
+            "_Или напрямую: @aielegan_",
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=kb_back(),
         )
@@ -635,7 +633,7 @@ async def handle_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 target_uid,
                 "❌ *Платёж не подтверждён*\n\n"
                 "Мы не смогли найти твою транзакцию. "
-                "Пожалуйста, свяжись с поддержкой: @volbotai_support",
+                "Пожалуйста, свяжись с поддержкой: @aielegan",
                 parse_mode=ParseMode.MARKDOWN,
             )
         except Exception:
@@ -707,7 +705,7 @@ async def receive_support_msg(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "✅ Сообщение отправлено!\n\n"
         "Ответим в ближайшее время. Обычно — в течение нескольких часов.\n\n"
-        "_Если срочно — @volbotai_support_",
+        "_Если срочно — @aielegan_",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=kb_main(),
     )
