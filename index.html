@@ -910,12 +910,36 @@ footer {
   .step-time { display: none; }
   .cta-box { padding: 48px 28px; }
   .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .hero-title { font-size: clamp(36px, 7vw, 60px); }
 }
 @media (max-width: 600px) {
   .pricing-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
-  .hero-title { letter-spacing: -2px; }
+  .hero-title { letter-spacing: -2px; font-size: clamp(30px, 10vw, 46px); }
   .section-title { letter-spacing: -1.5px; }
+  .hero-desc { font-size: 16px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+  .hero-stats { gap: 16px; }
+  .hero-stat-num { font-size: 24px; }
+  .hero-stat-label { font-size: 11px; }
+  .container { padding: 0 18px; }
+  section { padding: 60px 0; }
+  #hero { padding: 100px 0 60px; min-height: auto; }
+  .about-avatar { max-width: 200px; margin: 0 auto; }
+  .about-avatar-inner { width: 100px; height: 100px; font-size: 36px; }
+  .about-skills { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+  .outcome-items { flex-direction: column; gap: 12px; }
+  .consult-badge { font-size: 12px; }
+  .step-item { grid-template-columns: 40px 1fr; gap: 16px; }
+  .step-num { width: 32px; height: 32px; font-size: 12px; }
+  .step-content-title { font-size: 18px; }
+  .cta-box { padding: 36px 20px; border-radius: 20px; }
+  .faq-q { font-size: 15px; padding: 18px 0; }
+  .price-card { padding: 24px 20px; }
+  .service-card { padding: 24px 20px; }
+  .nav-cta { padding: 7px 14px; font-size: 12px; }
+  .audience-card { padding: 24px 20px; }
 }
 </style>
 </head>
@@ -929,7 +953,7 @@ footer {
       <li><a href="#consultation">Консультация</a></li>
       <li><a href="#pricing">Продукты</a></li>
       <li><a href="#services">Услуги</a></li>
-      <li><a href="#about">Об Артёме</a></li>
+      <li><a href="#about">Обо мне</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <a href="https://t.me/artponomarev" class="nav-cta" target="_blank">Записаться →</a>
@@ -1277,13 +1301,13 @@ footer {
         </div>
       </div>
       <div class="about-content">
-        <div class="section-label">Об Артёме</div>
-        <h2 class="section-title">Работаю с ИИ, а не рассказываю о нём</h2>
+        <div class="section-label">Обо мне</div>
+        <h2 class="section-title">Не теоретик — практик</h2>
         <p class="about-text">
-          Я <strong>Артём Пономарёв</strong> — разработчик и нейрохудожник. Применяю ИИ-инструменты в реальных задачах: от создания визуального контента и нейроарта до автоматизации процессов и аналитики.
+          Я не читаю лекции из учебников. Каждый день применяю нейросети в реальных проектах — от генерации визуалов и автоматизации до разработки ИИ-ботов. Знаю, что работает, а что — просто хайп.
         </p>
         <p class="about-text">
-          Моя консультация — это не пересказ YouTube-туториалов. Я показываю <strong>как реально работает инструмент</strong> и помогаю встроить его в твою конкретную ситуацию.
+          Моя задача — не рассказать «как крут нейросетевой мир», а <strong>за 90 минут дать тебе конкретный план</strong>, который ты начнёшь исполнять в тот же день.
         </p>
         <ul class="about-list">
           <li>Работаю с Midjourney, SD, Leonardo — создаю нейроарт для реальных проектов</li>
