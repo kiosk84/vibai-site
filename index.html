@@ -18,6 +18,7 @@
   --accent: #00e5c8;
   --accent2: #7b6cff;
   --accent3: #ff6b6b;
+  --gold: #f5c542;
   --text: #f0f0f8;
   --muted: #7a7a9a;
   --muted2: #4a4a6a;
@@ -734,6 +735,68 @@ nav {
   flex-shrink: 0;
 }
 
+/* TESTIMONIALS */
+#testimonials { padding: 100px 0; background: var(--bg2); }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+.testimonial-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 24px;
+  transition: border-color .2s, transform .2s;
+}
+.testimonial-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-3px);
+}
+.testimonial-stars {
+  font-size: 14px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+.testimonial-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-style: italic;
+  margin-bottom: 20px;
+  flex: 1;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.testimonial-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(0,229,200,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.testimonial-name {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.testimonial-role {
+  font-size: 12px;
+  color: var(--muted);
+}
+
 /* PROCESS */
 #process { padding: 100px 0; background: var(--bg2); }
 .process-steps {
@@ -976,6 +1039,7 @@ footer {
   .nav-links { display: none; }
   .audience-grid { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
   .pricing-grid { grid-template-columns: repeat(2, 1fr); }
   .services-grid { grid-template-columns: 1fr 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -1437,15 +1501,21 @@ footer {
   <div class="container">
     <div class="reveal">
       <div class="section-label">Обо мне</div>
-      <h2 class="section-title">Сложное — простыми словами</h2>
+      <h2 class="section-title">Привет, я Артём Пономарёв</h2>
       <p class="about-text">
-        Я не читаю лекции из учебников. Каждый день применяю нейросети в реальных проектах — от генерации визуалов и автоматизации до разработки ИИ-ботов. Знаю, что работает, а что — просто хайп.
+        Разработчик, нейрохудожник и эксперт по ИИ из Ирбита.
       </p>
       <p class="about-text">
-        Моя задача — не рассказать «как крут нейросетевой мир», а <strong>за 90 минут дать тебе конкретный план</strong>, который ты начнёшь исполнять в тот же день.
+        Я не просто рассказываю про нейросети — <strong>я сам каждый день использую их в работе</strong>: создаю AI-агентов, автоматизирую процессы, генерирую визуал для клиентов.
       </p>
       <p class="about-text">
-        Я не использую умные слова и не показываю слайды с графиками. Объясняю так, как объяснил бы другу за кофе — <strong>просто, с примерами и без ощущения что ты чего-то не знаешь</strong>. Не важно, 18 тебе или 60 — ИИ это инструмент, и научиться им пользоваться может каждый.
+        За плечами — студия ART_IRBIT, портреты на холсте по фото, торговые боты, десятки внедрённых ИИ-инструментов в реальные задачи.
+      </p>
+      <p class="about-text">
+        Я объясняю сложное простым языком — потому что <strong>сам прошёл путь от «ничего не понимаю» до «это работает на меня»</strong>.
+      </p>
+      <p class="about-text">
+        Давай разберём, как ИИ может работать на тебя.
       </p>
       <ul class="about-list">
         <li>Midjourney, SD, Leonardo — создаю портреты, редактирую и отрисовываю вручную по вашему желанию</li>
@@ -1454,6 +1524,52 @@ footer {
         <li>Помогаю с установкой локальных моделей и ИИ-агентов на ваш компьютер</li>
         <li>Объясняю сложное простым языком — без воды и перегруза</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 0;">
+      <div class="section-label">Отзывы</div>
+      <h2 class="section-title">Что говорят клиенты</h2>
+      <p class="section-desc" style="margin:12px auto 0;text-align:center">Реальные впечатления тех, кто уже попробовал.</p>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">«Думала, что нейросети — это для программистов. После консультации с Артёмом за 1,5 часа настроила себе автоответы в Telegram и шаблоны для постов. Сэкономила кучу времени!»</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">М</div>
+          <div>
+            <div class="testimonial-name">Марина</div>
+            <div class="testimonial-role">SMM-специалист</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">«Артём объяснил всё без воды. Никакого жаргона — только конкретные инструменты под мои задачи. Теперь ChatGPT реально помогает мне в работе, а не просто "балуется".»</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">И</div>
+          <div>
+            <div class="testimonial-name">Игорь</div>
+            <div class="testimonial-role">Менеджер по продажам</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">«Записался на мини-курс скептиком. Ушёл с готовым рабочим инструментом и списком того, что внедрю на следующей неделе. Рекомендую всем, кто хочет не отстать от времени.»</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">Д</div>
+          <div>
+            <div class="testimonial-name">Дмитрий</div>
+            <div class="testimonial-role">Малый бизнес</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1580,7 +1696,7 @@ const observer = new IntersectionObserver((entries) => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
       // Stagger children
-      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step, .why-card');
+      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step, .why-card, .testimonial-card');
       children.forEach((c, i) => {
         c.style.transitionDelay = (i * 0.08) + 's';
         c.style.opacity = '0';
