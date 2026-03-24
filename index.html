@@ -102,7 +102,11 @@ nav {
   color: var(--text);
   text-decoration: none;
   letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+.nav-logo svg { flex-shrink: 0; }
 .nav-logo span { color: var(--accent); }
 .nav-links {
   display: flex;
@@ -235,20 +239,30 @@ nav {
 
 .hero-stats {
   display: flex;
-  gap: 40px;
-  margin-top: 64px;
-  padding-top: 40px;
-  border-top: 1px solid var(--border);
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 48px;
   animation: fadeUp .6s .4s ease both;
 }
-.hero-stat-num {
-  font-family: var(--font-head);
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--text);
+.hero-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-bright);
+  border-radius: 100px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: var(--muted);
+  transition: border-color .2s;
 }
-.hero-stat-num span { color: var(--accent); }
-.hero-stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.hero-stat-pill:hover { border-color: var(--accent); }
+.hero-stat-pill .pill-num {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--accent);
+}
 
 /* MARQUEE */
 .marquee-wrap {
@@ -970,7 +984,7 @@ footer {
   .step-item { grid-template-columns: 50px 1fr; }
   .step-time { display: none; }
   .cta-box { padding: 48px 28px; }
-  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .hero-stats { gap: 10px; flex-wrap: wrap; }
   .hero-title { font-size: clamp(36px, 7vw, 60px); }
 }
 @media (max-width: 600px) {
@@ -1010,7 +1024,18 @@ footer {
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="#" class="nav-logo">арт<span>.</span>ИИ</a>
+    <a href="#" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="8" fill="rgba(0,229,200,0.15)"/>
+        <circle cx="9" cy="10" r="2.5" fill="#00e5c8"/>
+        <circle cx="19" cy="10" r="2.5" fill="#00e5c8"/>
+        <circle cx="14" cy="19" r="2.5" fill="#00e5c8"/>
+        <line x1="9" y1="10" x2="19" y2="10" stroke="#00e5c8" stroke-width="1.2" opacity="0.5"/>
+        <line x1="9" y1="10" x2="14" y2="19" stroke="#00e5c8" stroke-width="1.2" opacity="0.5"/>
+        <line x1="19" y1="10" x2="14" y2="19" stroke="#00e5c8" stroke-width="1.2" opacity="0.5"/>
+      </svg>
+      Артём <span>.</span>ИИ
+    </a>
     <ul class="nav-links">
       <li><a href="#consultation">Консультация</a></li>
       <li><a href="#pricing">Продукты</a></li>
@@ -1022,49 +1047,8 @@ footer {
   </div>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="grid-bg"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="container">
-    <div class="hero-tag">Эксперт по нейросетям · Нейрохудожник · Разработчик</div>
-    <h1 class="hero-title">
-      <span class="line-dim">Твои нейросети.</span>
-      <span class="line-accent">Твой результат.</span>
-    </h1>
-    <p class="hero-desc">
-      Консультации 1:1, мини-курсы и автоматизация — для тех, кто хочет <strong>не просто знать про ИИ, а зарабатывать с его помощью</strong>. Без технического жаргона. Не нужно быть программистом.
-    </p>
-    <div class="hero-actions">
-      <a href="https://t.me/artponomarev" class="btn-primary" target="_blank">
-        Записаться на консультацию →
-      </a>
-      <a href="#consultation" class="btn-secondary">Посмотреть программу</a>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="hero-stat-num">90<span> мин</span></div>
-        <div class="hero-stat-label">живой созвон 1:1</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">100<span>%</span></div>
-        <div class="hero-stat-label">под твои задачи</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">30<span> дн.</span></div>
-        <div class="hero-stat-label">пошаговый план</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">4<span>+</span></div>
-        <div class="hero-stat-label">направления обучения</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- MARQUEE -->
-<div class="marquee-wrap">
+<div class="marquee-wrap" style="margin-top:56px">
   <div class="marquee-track">
     <div class="marquee-item">Личные консультации по ИИ</div>
     <div class="marquee-item">Мини-курсы по нейросетям</div>
@@ -1080,6 +1064,35 @@ footer {
     <div class="marquee-item">Обучение команд</div>
   </div>
 </div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="container">
+    <div class="hero-tag">Эксперт по нейросетям</div>
+    <h1 class="hero-title">
+      <span class="line-dim">Твои нейросети.</span>
+      <span class="line-accent">Твой результат.</span>
+    </h1>
+    <p class="hero-desc">
+      Консультации 1:1, мини-курсы и автоматизация — для тех, кто хочет <strong>не просто знать про ИИ, а зарабатывать с его помощью</strong>. Без технического жаргона. Не нужно быть программистом.
+    </p>
+    <div class="hero-actions">
+      <a href="https://t.me/artponomarev" class="btn-primary" target="_blank">
+        Записаться на консультацию →
+      </a>
+      <a href="#consultation" class="btn-secondary">Посмотреть программу</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat-pill"><span class="pill-num">90 мин</span> живой созвон 1:1</div>
+      <div class="hero-stat-pill"><span class="pill-num">100%</span> под твои задачи</div>
+      <div class="hero-stat-pill"><span class="pill-num">30 дн.</span> пошаговый план</div>
+      <div class="hero-stat-pill"><span class="pill-num">4+</span> направления обучения</div>
+    </div>
+  </div>
+</section>
 
 <!-- FOR WHOM -->
 <section id="audience">
@@ -1400,6 +1413,12 @@ footer {
         <p class="service-desc">Провожу воркшопы и тренинги по ИИ-инструментам для команд. Формат: онлайн или офлайн, от 2 часов до многодневных программ.</p>
         <div class="service-price">от 30 000 ₽ <span>/ группа</span></div>
       </div>
+      <div class="service-card">
+        <div class="service-icon icon-cyan">🏠</div>
+        <div class="service-name">Выезд на дом / установка локальных моделей</div>
+        <p class="service-desc">Помогу установить и настроить локальные ИИ-модели и агентов прямо у вас дома: Ollama, LM Studio, OpenClaw и другие. Работает без интернета, бесплатно и приватно — на вашем компьютере.</p>
+        <div class="service-price">от 5 000 ₽ <span>/ выезд</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1409,7 +1428,7 @@ footer {
   <div class="container">
     <div class="reveal">
       <div class="section-label">Обо мне</div>
-      <h2 class="section-title">Работаю с ИИ, а не рассказываю о нём</h2>
+      <h2 class="section-title">Сложное — простыми словами</h2>
       <p class="about-text">
         Я не читаю лекции из учебников. Каждый день применяю нейросети в реальных проектах — от генерации визуалов и автоматизации до разработки ИИ-ботов. Знаю, что работает, а что — просто хайп.
       </p>
@@ -1420,9 +1439,10 @@ footer {
         Я не использую умные слова и не показываю слайды с графиками. Объясняю так, как объяснил бы другу за кофе — <strong>просто, с примерами и без ощущения что ты чего-то не знаешь</strong>. Не важно, 18 тебе или 60 — ИИ это инструмент, и научиться им пользоваться может каждый.
       </p>
       <ul class="about-list">
-        <li>Работаю с Midjourney, SD, Leonardo — создаю нейроарт для реальных проектов</li>
+        <li>Midjourney, SD, Leonardo — создаю портреты, редактирую и отрисовываю вручную по вашему желанию</li>
         <li>Разрабатываю ботов и автоматизации на основе ИИ для бизнеса</li>
-        <li>Слежу за рынком ИИ-инструментов и тестирую новинки первым</li>
+        <li>Рассказываю о платных и бесплатных инструментах — чтобы вы не тратили деньги зря</li>
+        <li>Помогаю с установкой локальных моделей и ИИ-агентов на ваш компьютер</li>
         <li>Объясняю сложное простым языком — без воды и перегруза</li>
       </ul>
     </div>
