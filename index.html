@@ -795,6 +795,66 @@ nav {
   transition: color .2s;
 }
 .faq-q:hover { color: var(--accent); }
+
+/* WHY AI */
+#why-ai { padding: 100px 0; background: var(--bg2); }
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+.why-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: border-color .2s, transform .2s;
+}
+.why-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-3px);
+}
+.why-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+.why-card-title {
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.why-card-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.why-card-num {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-top: 16px;
+}
+.why-card-num span {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.why-note {
+  margin-top: 40px;
+  padding: 24px 28px;
+  background: rgba(0,229,200,0.05);
+  border: 1px solid rgba(0,229,200,0.15);
+  border-radius: 16px;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.why-note strong { color: var(--accent); }
 .faq-icon {
   width: 28px; height: 28px;
   border-radius: 50%;
@@ -901,6 +961,7 @@ footer {
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .audience-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
   .pricing-grid { grid-template-columns: repeat(2, 1fr); }
   .services-grid { grid-template-columns: 1fr 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -915,6 +976,7 @@ footer {
 @media (max-width: 600px) {
   .pricing-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: -2px; font-size: clamp(30px, 10vw, 46px); }
   .section-title { letter-spacing: -1.5px; }
   .hero-desc { font-size: 16px; }
@@ -972,7 +1034,7 @@ footer {
       <span class="line-accent">Твой результат.</span>
     </h1>
     <p class="hero-desc">
-      Консультации 1:1, мини-курсы и автоматизация — для тех, кто хочет <strong>не просто знать про ИИ, а зарабатывать с его помощью</strong>.
+      Консультации 1:1, мини-курсы и автоматизация — для тех, кто хочет <strong>не просто знать про ИИ, а зарабатывать с его помощью</strong>. Без технического жаргона. Не нужно быть программистом.
     </p>
     <div class="hero-actions">
       <a href="https://t.me/artponomarev" class="btn-primary" target="_blank">
@@ -1029,20 +1091,87 @@ footer {
     </div>
     <div class="audience-grid reveal">
       <div class="audience-card">
-        <span class="audience-icon">🌱</span>
-        <div class="audience-title">Полный ноль</div>
-        <p class="audience-desc">Слышал про нейросети, но не понимаешь с чего начать и как это вообще применить в жизни. Хочешь разобраться без лишних терминов и паники.</p>
+        <span class="audience-icon">🏢</span>
+        <div class="audience-title">Владелец бизнеса</div>
+        <p class="audience-desc">У вас куча рутины: ответы клиентам, отчёты, почта, контент. ИИ может автоматизировать до 70% этих задач — и высвободить время на рост бизнеса, а не на его обслуживание.</p>
       </div>
       <div class="audience-card">
-        <span class="audience-icon">⚡</span>
-        <div class="audience-title">Есть скиллы — нет ИИ</div>
-        <p class="audience-desc">Ты дизайнер, блогер, маркетолог, трейдер или предприниматель. Уже работаешь, но хочешь ускориться в 2–3 раза с помощью ИИ-инструментов под свою нишу.</p>
+        <span class="audience-icon">📱</span>
+        <div class="audience-title">Маркетолог / SMM</div>
+        <p class="audience-desc">Тратите часы на посты, визуалы, идеи? Нейросети генерируют тексты, изображения и контент-планы за минуты. Не заменят вас — но ускорят в 5–10 раз.</p>
       </div>
       <div class="audience-card">
-        <span class="audience-icon">🚀</span>
-        <div class="audience-title">Хочу зарабатывать на ИИ</div>
-        <p class="audience-desc">Видишь потенциал в нейросетях: нейроарт, автоматизация, контент, боты. Нужен план как монетизировать навыки и не потеряться в потоке инструментов.</p>
+        <span class="audience-icon">🎨</span>
+        <div class="audience-title">Дизайнер / Творческий</div>
+        <p class="audience-desc">Midjourney и Stable Diffusion — не конкуренты, а инструменты. Генерируйте идеи, прототипы и визуалы в 10 раз быстрее. Фокусируйтесь на концепте, а не на рутине.</p>
       </div>
+      <div class="audience-card">
+        <span class="audience-icon">📚</span>
+        <div class="audience-title">Репетитор / Преподаватель</div>
+        <p class="audience-desc">Персональные задания для каждого ученика, автоматическая проверка работ, генерация тестов. ИИ экономит 10+ часов в неделю на подготовке материалов.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">💼</span>
+        <div class="audience-title">Фрилансер / Удалёнщик</div>
+        <p class="audience-desc">Хотите брать больше заказов и быстрее закрывать? ИИ помогает с текстами, кодом, визуалами и автоматизацией — вы работаете быстрее и зарабатываете больше.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">😰</span>
+        <div class="audience-title">Боюсь / Не понимаю ИИ</div>
+        <p class="audience-desc">Это нормально. Я объясню простым языком что это, зачем и как начать — без технического жаргона. Через 90 минут вы поймёте больше, чем за месяц самостоятельного гугления.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY AI -->
+<section id="why-ai">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Зачем вам ИИ</div>
+      <h2 class="section-title">Не будущее — уже настоящее</h2>
+      <p class="section-desc">ИИ — это не космос и не программирование. Это инструмент, который экономит часы вашего времени каждый день. Вот что он уже делает для обычных людей.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <span class="why-icon">✍️</span>
+        <div class="why-card-title">Тексты за минуты</div>
+        <p class="why-card-desc">Посты, письма, описания товаров, рекламные тексты — вместо 2 часов сидения над пустым листом. Вы задаёте тему — ИИ пишет. Вы правите — и готово.</p>
+        <div class="why-card-num">в 10× <span>быстрее</span></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🖼️</span>
+        <div class="why-card-title">Визуалы без дизайнера</div>
+        <p class="why-card-desc">Обложки, баннеры, иллюстрации, фото-обработка. Не нужно уметь рисовать или знать Photoshop — нейросеть создаст визуал по вашему описанию.</p>
+        <div class="why-card-num">за 30 сек <span>на картинку</span></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🤖</span>
+        <div class="why-card-title">Роботы вместо рутины</div>
+        <p class="why-card-desc">ИИ-бот в Telegram отвечает клиентам 24/7. Автоматическая обработка заявок, сортировка писем, генерация отчётов. Вы занимаетесь делом, а рутину делает ИИ.</p>
+        <div class="why-card-num">24/7 <span>без выходных</span></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">📊</span>
+        <div class="why-card-title">Аналитика и данные</div>
+        <p class="why-card-desc">ИИ анализирует конкурентов, рынок, поведение клиентов. Находит закономерности, которые вы бы пропустили. Принимайте решения на основе данных, а не интуиции.</p>
+        <div class="why-card-num">−70% <span>времени на анализ</span></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🎓</span>
+        <div class="why-card-title">Обучение и образование</div>
+        <p class="why-card-desc">ИИ объясняет сложные темы простым языком, составляет план обучения, проверяет задания. Персональный репетитор, который доступен в любое время.</p>
+        <div class="why-card-num">любой <span>уровень</span></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">💡</span>
+        <div class="why-card-title">Генерация идей</div>
+        <p class="why-card-desc">Застряли? ИИ предложит 20 вариантов названий, 15 идей для контента, 10 способов решить задачу. Не заменит вашу креативность — но разгонит её.</p>
+        <div class="why-card-num">20+ <span>идей за минуту</span></div>
+      </div>
+    </div>
+    <div class="why-note reveal">
+      <strong>ИИ не заменяет вас — он усиливает.</strong> Вы остаётесь тем, кто принимает решения. ИИ просто делает рутину быстрее, а творчество — ярче. Не нужно быть программистом. Нужно просто начать.
     </div>
   </div>
 </section>
@@ -1081,13 +1210,13 @@ footer {
           <div class="step-num">02</div>
         </div>
         <div class="step-content">
-          <div class="step-content-title">Нейросети простым языком</div>
-          <p class="step-content-desc">Что такое ИИ и как он работает — объясняю на примерах из жизни, без матана и скучных лекций. Типы инструментов, платные vs бесплатные, где реально помогает, а где хайп.</p>
+          <div class="step-content-title">ИИ простым языком — без страха</div>
+          <p class="step-content-desc">Не паникуйте. ИИ — это не робот из фильма, а просто умная программа. Объясняю что это, зачем и как работает — на примерах из жизни. Вы поймёте за 15 минут то, на что обычно уходит месяц гугления. Никакого жаргона — только то, что вам реально нужно.</p>
           <div class="step-tags">
-            <span class="tag">Текстовые модели</span>
-            <span class="tag">Генерация изображений</span>
-            <span class="tag">Видео и звук</span>
-            <span class="tag">Автоматизация</span>
+            <span class="tag">Что такое ИИ простыми словами</span>
+            <span class="tag">Не нужно бояться</span>
+            <span class="tag">Платные vs бесплатные</span>
+            <span class="tag">Где помогает, а где хайп</span>
           </div>
         </div>
         <div class="step-time">10–15 мин</div>
@@ -1287,6 +1416,9 @@ footer {
       <p class="about-text">
         Моя задача — не рассказать «как крут нейросетевой мир», а <strong>за 90 минут дать тебе конкретный план</strong>, который ты начнёшь исполнять в тот же день.
       </p>
+      <p class="about-text">
+        Я не использую умные слова и не показываю слайды с графиками. Объясняю так, как объяснил бы другу за кофе — <strong>просто, с примерами и без ощущения что ты чего-то не знаешь</strong>. Не важно, 18 тебе или 60 — ИИ это инструмент, и научиться им пользоваться может каждый.
+      </p>
       <ul class="about-list">
         <li>Работаю с Midjourney, SD, Leonardo — создаю нейроарт для реальных проектов</li>
         <li>Разрабатываю ботов и автоматизации на основе ИИ для бизнеса</li>
@@ -1419,7 +1551,7 @@ const observer = new IntersectionObserver((entries) => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
       // Stagger children
-      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step');
+      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step, .why-card');
       children.forEach((c, i) => {
         c.style.transitionDelay = (i * 0.08) + 's';
         c.style.opacity = '0';
