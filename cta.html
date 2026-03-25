@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Консультация по ИИ — Артём Пономарёв</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070710;--card:#111120;
+  --border:rgba(255,255,255,0.07);--border-bright:rgba(255,255,255,0.14);
+  --accent:#00e5c8;
+  --text:#f0f0f8;--muted:#7a7a9a;
+  --font-head:'Syne',sans-serif;--font-body:'Manrope',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:16px;line-height:1.7;overflow-x:hidden;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:40px 20px;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(0,229,200,0.1) 0%,transparent 70%);top:-150px;right:-100px}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(123,108,255,0.08) 0%,transparent 70%);bottom:-100px;left:-100px}
+
+.cta-box{
+  background:var(--card);border:1px solid var(--border-bright);
+  border-radius:28px;padding:72px 60px;text-align:center;
+  position:relative;overflow:hidden;max-width:720px;width:100%;
+  z-index:1;animation:fadeUp .7s ease both;
+}
+.cta-box .orb-inner{
+  position:absolute;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(0,229,200,0.06) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
+}
+.section-label{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block}
+.section-title{font-family:var(--font-head);font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:16px}
+.section-desc{font-size:17px;color:var(--muted);max-width:480px;margin:0 auto 44px;font-weight:300;line-height:1.75}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#000;
+  font-family:var(--font-body);font-weight:700;font-size:15px;
+  padding:14px 30px;border-radius:100px;text-decoration:none;
+  transition:transform .2s,opacity .2s;border:none;cursor:pointer;
+}
+.btn-primary:hover{transform:translateY(-2px);opacity:.9}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border-bright);color:var(--text);
+  font-family:var(--font-body);font-weight:500;font-size:15px;
+  padding:14px 30px;border-radius:100px;text-decoration:none;
+  transition:border-color .2s,background .2s;
+}
+.btn-secondary:hover{border-color:var(--accent);background:rgba(0,229,200,.05)}
+.cta-contact{margin-top:32px;font-size:14px;color:var(--muted)}
+.cta-contact a{color:var(--accent);text-decoration:none;font-weight:600}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:36px}
+.hero-stat-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border-bright);border-radius:100px;padding:10px 20px;font-size:14px;color:var(--muted)}
+.hero-stat-pill .pill-num{font-family:var(--font-head);font-weight:800;font-size:16px;color:var(--accent)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .cta-box{padding:40px 24px;border-radius:20px}
+  .section-title{font-size:clamp(26px,8vw,36px)}
+  .section-desc{font-size:15px;margin-bottom:32px}
+  .hero-actions{flex-direction:column}
+  .btn-primary,.btn-secondary{width:100%;text-align:center;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="cta-box">
+  <div class="orb-inner"></div>
+  <div class="section-label">Готов начать?</div>
+  <h2 class="section-title">Твой маршрут в мир ИИ — за 90 минут</h2>
+  <p class="section-desc">Напиши в Telegram — договоримся о времени и разберём всё по делу.</p>
+  <div class="hero-actions">
+    <a href="https://t.me/artponomarev" class="btn-primary" target="_blank">Написать в Telegram →</a>
+    <a href="index.html" class="btn-secondary">Перейти</a>
+  </div>
+  <p class="cta-contact">
+    или напиши напрямую: <a href="https://t.me/artponomarev" target="_blank">@artponomarev</a> · пометка «Консультация по ИИ»
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat-pill"><span class="pill-num">90 мин</span> живой созвон</div>
+    <div class="hero-stat-pill"><span class="pill-num">100%</span> под твои задачи</div>
+    <div class="hero-stat-pill"><span class="pill-num">30 дн.</span> пошаговый план</div>
+  </div>
+</div>
+
+</body>
+</html>
