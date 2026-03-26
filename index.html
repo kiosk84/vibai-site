@@ -358,6 +358,60 @@ nav {
   line-height: 1.7;
 }
 
+/* RESULTS */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: border-color .2s, transform .2s;
+}
+.result-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+.result-num {
+  font-family: var(--font-head);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.result-title {
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.result-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.trust-badges {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.trust-badge {
+  background: rgba(0,229,200,0.08);
+  border: 1px solid rgba(0,229,200,0.15);
+  border-radius: 100px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
 /* CONSULTATION */
 #consultation { padding: 100px 0; background: var(--bg2); }
 .consult-header {
@@ -1038,6 +1092,7 @@ footer {
   .nav-links { display: none; }
   .audience-grid { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr 1fr; }
+  .results-grid { grid-template-columns: 1fr 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .pricing-grid { grid-template-columns: repeat(2, 1fr); }
   .services-grid { grid-template-columns: 1fr 1fr; }
@@ -1054,6 +1109,7 @@ footer {
   .pricing-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr; }
+  .results-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: -2px; font-size: clamp(30px, 10vw, 46px); }
   .section-title { letter-spacing: -1.5px; }
   .hero-desc { font-size: 16px; }
@@ -1134,13 +1190,13 @@ footer {
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="container">
-    <div class="hero-tag">Эксперт по нейросетям</div>
+    <div class="hero-tag">Консультант по ИИ</div>
     <h1 class="hero-title">
-      <span class="line-dim">Твой личный</span>
-      <span class="line-accent">консультант по ИИ</span>
+      <span class="line-dim">Настрою тебе</span>
+      <span class="line-accent">ИИ под ключ за 1 консультацию</span>
     </h1>
     <p class="hero-desc">
-      Личные консультации и мини-курсы для тех, кто хочет использовать ИИ в работе и жизни — <strong>без сложных терминов, без паники, без лишней воды</strong>.
+      Локальные модели, агенты, автоматизация — <strong>всё настрою лично под тебя за 1–2 часа. Без воды, без теории — только практика</strong>.
     </p>
     <div class="hero-actions">
       <a href="https://t.me/artponomarev" class="btn-primary" target="_blank">
@@ -1149,10 +1205,10 @@ footer {
       <a href="#consultation" class="btn-secondary">Посмотреть программу</a>
     </div>
     <div class="hero-stats">
-      <div class="hero-stat-pill"><span class="pill-num">90 мин</span> живой созвон</div>
-      <div class="hero-stat-pill"><span class="pill-num">100%</span> под твои задачи</div>
-      <div class="hero-stat-pill"><span class="pill-num">30 дн.</span> пошаговый план</div>
-      <div class="hero-stat-pill"><span class="pill-num">4+</span> направления обучения</div>
+      <div class="hero-stat-pill"><span class="pill-num">⚡</span> Уже во время звонка запустим</div>
+      <div class="hero-stat-pill"><span class="pill-num">0₽</span> без подписок</div>
+      <div class="hero-stat-pill"><span class="pill-num">🚫</span> без программирования</div>
+      <div class="hero-stat-pill"><span class="pill-num">1–2 ч</span> готовый результат</div>
     </div>
   </div>
 </section>
@@ -1162,40 +1218,73 @@ footer {
   <div class="container">
     <div class="reveal">
       <div class="section-label">Для кого</div>
-      <h2 class="section-title">Кому это подходит</h2>
-      <p class="section-desc">У каждого свои цели, скиллы и уровень. Именно поэтому нет универсального рецепта — только твой личный маршрут.</p>
+      <h2 class="section-title">Кому подойдёт консультация по ИИ</h2>
+      <p class="section-desc">ИИ сегодня — это не про профессию. Это про навык, который усиливает любого человека.<br>Неважно, кто ты и сколько тебе лет — важно, что ты хочешь <strong>упростить жизнь, зарабатывать больше или разобраться в технологиях</strong>.</p>
     </div>
     <div class="audience-grid reveal">
       <div class="audience-card">
-        <span class="audience-icon">🏢</span>
-        <div class="audience-title">Владелец бизнеса</div>
-        <p class="audience-desc">У вас куча рутины: ответы клиентам, отчёты, почта, контент. ИИ может автоматизировать до 70% этих задач — и высвободить время на рост бизнеса, а не на его обслуживание.</p>
+        <span class="audience-icon">🚀</span>
+        <div class="audience-title">Не понимаешь, как начать с ИИ</div>
+        <p class="audience-desc">Никогда не работал с нейросетями и не понимаешь, с чего начать? Разложу всё по шагам:<br>— что такое ИИ простым языком<br>— какие инструменты реально нужны<br>— как начать пользоваться уже в процессе консультации<br><br><strong>👉 После первой встречи ты уже будешь использовать ИИ в жизни</strong></p>
       </div>
       <div class="audience-card">
-        <span class="audience-icon">📱</span>
-        <div class="audience-title">Маркетолог / SMM</div>
-        <p class="audience-desc">Тратите часы на посты, визуалы, идеи? Нейросети генерируют тексты, изображения и контент-планы за минуты. Не заменят вас — но ускорят в 5–10 раз.</p>
+        <span class="audience-icon">🧠</span>
+        <div class="audience-title">Хочешь разобраться глубже</div>
+        <p class="audience-desc">Пробовал ИИ-чаты или другие сервисы, но чувствуешь, что используешь их «на 10%»? Покажу, как выжать максимум:<br>— правильные запросы (prompt engineering)<br>— автоматизация задач<br>— связки инструментов<br><br><strong>👉 Начнёшь получать результат быстрее и качественнее</strong></p>
       </div>
       <div class="audience-card">
-        <span class="audience-icon">🎨</span>
-        <div class="audience-title">Дизайнер / Творческий</div>
-        <p class="audience-desc">Midjourney и Stable Diffusion — не конкуренты, а инструменты. Генерируйте идеи, прототипы и визуалы в 10 раз быстрее. Фокусируйтесь на концепте, а не на рутине.</p>
-      </div>
-      <div class="audience-card">
-        <span class="audience-icon">📚</span>
-        <div class="audience-title">Репетитор / Преподаватель</div>
-        <p class="audience-desc">Персональные задания для каждого ученика, автоматическая проверка работ, генерация тестов. ИИ экономит 10+ часов в неделю на подготовке материалов.</p>
+        <span class="audience-icon">💻</span>
+        <div class="audience-title">Нужна установка ИИ под ключ</div>
+        <p class="audience-desc">Хочешь свой ИИ без ограничений и подписок? Помогу:<br>— установить локальные модели (на твой ПК)<br>— настроить агентов и автоматизацию<br>— подключить нужные инструменты<br><br><strong>👉 У тебя будет собственный ИИ, работающий на тебя 24/7</strong></p>
       </div>
       <div class="audience-card">
         <span class="audience-icon">💼</span>
-        <div class="audience-title">Фрилансер / Удалёнщик</div>
-        <p class="audience-desc">Хотите брать больше заказов и быстрее закрывать? ИИ помогает с текстами, кодом, визуалами и автоматизацией — вы работаете быстрее и зарабатываете больше.</p>
+        <div class="audience-title">Для работы и дохода</div>
+        <p class="audience-desc">Хочешь зарабатывать с помощью ИИ или ускорить свою работу? Разберём под твою задачу:<br>— фриланс / контент / автоматизация<br>— создание сервисов или ботов<br>— оптимизация процессов<br><br><strong>👉 Покажу реальные способы монетизации</strong></p>
       </div>
       <div class="audience-card">
-        <span class="audience-icon">💡</span>
-        <div class="audience-title">Новичок / Не понимаю ИИ</div>
-        <p class="audience-desc">Не знаете с чего начать? Объясню основы простым языком: что такое нейросети, как ими пользоваться, какие инструменты бесплатные. Через 90 минут вы будете уверенно работать с ИИ.</p>
+        <span class="audience-icon">👨‍👩‍👧</span>
+        <div class="audience-title">Для жизни и повседневных задач</div>
+        <p class="audience-desc">ИИ — это не только про деньги. Он может:<br>— экономить часы времени<br>— помогать в обучении<br>— упрощать бытовые задачи<br><br><strong>👉 Подходит абсолютно каждому — от школьника до взрослого</strong></p>
       </div>
+      <div class="audience-card">
+        <span class="audience-icon">🎯</span>
+        <div class="audience-title">Индивидуальный подход</div>
+        <p class="audience-desc">Нет шаблонов и «одного курса для всех». Каждая консультация — это:<br>— разбор именно твоей ситуации<br>— ответы на любые вопросы<br>— конкретный результат уже во время общения<br><br><strong>👉 Результат — уже через 1–2 часа</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS / TRUST -->
+<section id="results" style="padding: 80px 0;">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Результаты</div>
+      <h2 class="section-title">Что получают мои клиенты</h2>
+      <p class="section-desc">Реальные результаты — не обещания. Каждый кейс сделан за 1–2 часа консультации.</p>
+    </div>
+    <div class="results-grid reveal">
+      <div class="result-card">
+        <div class="result-num">90 мин</div>
+        <div class="result-title">Настроили локальный ИИ</div>
+        <p class="result-desc">Клиент хотел работать с ИИ без ограничений ChatGPT. За одну консультацию установили локальную модель, настроили интерфейс и подключили к рабочему процессу.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-num">3–5 ч/день</div>
+        <div class="result-title">Экономия на автоматизации</div>
+        <p class="result-desc">Автоматизировали рутину: обработка заявок, ответы клиентам, генерация отчётов. Клиент высвободил 3–5 часов каждый день на важные задачи.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-num">1 день</div>
+        <div class="result-title">Telegram-бот с нуля</div>
+        <p class="result-desc">Сделали Telegram-бота, который отвечает клиентам 24/7, собирает заявки и отправляет уведомления. Без единой строки кода — полностью на ИИ.</p>
+      </div>
+    </div>
+    <div class="trust-badges reveal">
+      <div class="trust-badge">⚡ Запуск прямо во время консультации</div>
+      <div class="trust-badge">🛠 Готовый ИИ через 1–2 часа</div>
+      <div class="trust-badge">🎯 Без воды — только практика</div>
     </div>
   </div>
 </section>
@@ -1712,7 +1801,7 @@ const observer = new IntersectionObserver((entries) => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
       // Stagger children
-      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step, .why-card, .testimonial-card');
+      const children = e.target.querySelectorAll('.audience-card, .step-item, .price-card, .service-card, .process-step, .why-card, .testimonial-card, .result-card');
       children.forEach((c, i) => {
         c.style.transitionDelay = (i * 0.08) + 's';
         c.style.opacity = '0';
