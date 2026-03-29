@@ -31,7 +31,7 @@ WAITING_SUPPORT_MSG = 2
 WAITING_BROADCAST_MSG = 3
 
 # ─── Хранилище (в реальном боте — база данных) ───
-# Формат: { user_id: { "plan": "pro"/"course", "trial": bool, "active": bool, "expires": date } }
+# Формат: { user_id: { "plan": "pro"/"course"/"xauusd", "trial": bool, "active": bool, "expires": date } }
 users_db: dict = {}
 pending_payments: dict = {}  # { user_id: plan }
 
@@ -101,9 +101,38 @@ def text_results() -> str:
     )
 
 
+def text_xauusd_vip() -> str:
+    return (
+        "🥇 *XAUUSD VIP — торговые сигналы по золоту*\n\n"
+        "Торгуешь золото (XAUUSD) и хочешь получать точные входы от профи?\n\n"
+        "📌 *Что ты получаешь:*\n"
+        "• Сигналы по XAUUSD в реальном времени\n"
+        "• Точка входа, стоп-лосс, тейк-профит\n"
+        "• 3–8 сделок в день\n"
+        "• Средний профит: +50–150 пунктов на сделку\n"
+        "• Закрытый VIP-канал в Telegram\n"
+        "• Поддержка 7 дней в неделю\n\n"
+        "💰 *Стоимость: $49/мес*\n\n"
+        "📊 *Статистика за последний месяц:*\n"
+        "• Сделок: 142\n"
+        "• Win rate: 73%\n"
+        "• Средний профит: +87 пунктов\n"
+        "• Просадка: 2.1%\n\n"
+        "👇 Выбери действие:"
+    )
+
+
 def text_pricing() -> str:
     return (
         "💎 *Тарифы VolBot AI*\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "🥇 *XAUUSD VIP — $49/мес*\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "✅ Сигналы по золоту (XAUUSD) в реальном времени\n"
+        "✅ Точка входа, SL, TP на каждую сделку\n"
+        "✅ 3–8 сигналов в день\n"
+        "✅ Закрытый VIP-канал\n"
+        "✅ Поддержка 7 дней в неделю\n\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
         "🟢 *Vol75 Pro Signal — $100/мес*\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
@@ -155,8 +184,14 @@ def text_payment_instructions(plan: str) -> str:
             "Мы подключим тебя в течение *15 минут* и пришлём инструкцию.\n\n"
             "📌 Пока жди — вступи в наш канал с результатами:"
         )
-    price = "$100" if plan == "pro" else "$397"
-    plan_name = "Vol75 Pro Signal" if plan == "pro" else "Vol75 Master Course"
+    prices = {"xauusd": "$49", "pro": "$100", "course": "$397"}
+    names = {
+        "xauusd": "XAUUSD VIP",
+        "pro": "Vol75 Pro Signal",
+        "course": "Vol75 Master Course",
+    }
+    price = prices.get(plan, "$49")
+    plan_name = names.get(plan, plan)
     return (
         f"💳 *Оплата — {plan_name}*\n\n"
         f"*Сумма: {price}*\n\n"
@@ -266,13 +301,22 @@ FAQ_ANSWERS = {
 def kb_main() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [
+            [
+                InlineKeyboardButton(
+                    "🥇 XAUUSD VIP — $49/мес", callback_data="xauusd_vip"
+                )
+            ],
             [InlineKeyboardButton("📈 Результаты торговли", callback_data="results")],
             [
                 InlineKeyboardButton("🤖 О роботе", callback_data="about"),
                 InlineKeyboardButton("🚀 Как начать", callback_data="howto"),
             ],
-            [InlineKeyboardButton("💎 Тарифы и цены", callback_data="pricing")],
-            [InlineKeyboardButton("🎁 7 дней бесплатно", callback_data="trial")],
+            [InlineKeyboardButton("💎 Все тарифы", callback_data="pricing")],
+            [
+                InlineKeyboardButton(
+                    "🎁 7 дней бесплатно (Vol75)", callback_data="trial"
+                )
+            ],
             [
                 InlineKeyboardButton("❓ FAQ", callback_data="faq"),
                 InlineKeyboardButton("💬 Поддержка", callback_data="support"),
@@ -291,6 +335,11 @@ def kb_back() -> InlineKeyboardMarkup:
 def kb_pricing() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [
+            [
+                InlineKeyboardButton(
+                    "🥇 XAUUSD VIP — $49/мес", callback_data="pay_xauusd"
+                )
+            ],
             [
                 InlineKeyboardButton(
                     "🎁 Триал 7 дней (бесплатно)", callback_data="trial"
@@ -521,6 +570,33 @@ async def handle_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             text_pricing(), parse_mode=ParseMode.MARKDOWN, reply_markup=kb_pricing()
         )
 
+    # ── XAUUSD VIP ──
+    elif data == "xauusd_vip":
+        await query.edit_message_text(
+            text_xauusd_vip(),
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "💳 Оформить подписку — $49/мес", callback_data="pay_xauusd"
+                        )
+                    ],
+                    [InlineKeyboardButton("💎 Все тарифы", callback_data="pricing")],
+                    [InlineKeyboardButton("◀️ Назад", callback_data="main")],
+                ]
+            ),
+        )
+
+    # ── Оплата XAUUSD VIP ──
+    elif data == "pay_xauusd":
+        pending_payments[user.id] = "xauusd"
+        await query.edit_message_text(
+            text_payment_instructions("xauusd"),
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=kb_payment("xauusd"),
+        )
+
     # ── Триал ──
     elif data == "trial":
         await query.edit_message_text(
@@ -608,7 +684,12 @@ async def handle_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         target_uid = int(parts[2])
         plan = parts[3]
         users_db[target_uid] = {"plan": plan, "trial": False, "active": True}
-        plan_name = "Vol75 Pro Signal" if plan == "pro" else "Vol75 Master Course"
+        plan_names = {
+            "xauusd": "XAUUSD VIP",
+            "pro": "Vol75 Pro Signal",
+            "course": "Vol75 Master Course",
+        }
+        plan_name = plan_names.get(plan, plan)
         try:
             await ctx.bot.send_message(
                 target_uid,
@@ -649,7 +730,12 @@ async def receive_payment_proof(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     plan = ctx.user_data.get(
         "awaiting_proof_plan", pending_payments.get(user.id, "pro")
     )
-    plan_name = "Pro $100/мес" if plan == "pro" else "Курс $397"
+    plan_names = {
+        "xauusd": "XAUUSD VIP $49/мес",
+        "pro": "Pro $100/мес",
+        "course": "Курс $397",
+    }
+    plan_name = plan_names.get(plan, plan)
 
     # Переслать чек админу
     caption = (
@@ -753,6 +839,9 @@ async def cmd_admin(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         return
     total = len(users_db)
     trials = sum(1 for u in users_db.values() if u.get("trial"))
+    xauusd = sum(
+        1 for u in users_db.values() if u.get("plan") == "xauusd" and not u.get("trial")
+    )
     pro = sum(
         1 for u in users_db.values() if u.get("plan") == "pro" and not u.get("trial")
     )
@@ -761,9 +850,10 @@ async def cmd_admin(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         f"📊 *Статистика бота*\n\n"
         f"Всего пользователей: *{total}*\n"
         f"На триале: *{trials}*\n"
+        f"XAUUSD VIP: *{xauusd}*\n"
         f"Подписка Pro: *{pro}*\n"
         f"Купили курс: *{course}*\n\n"
-        f"💰 Выручка (оценка): *${pro * 100 + course * 397}*",
+        f"💰 Выручка (оценка): *${xauusd * 49 + pro * 100 + course * 397}*",
         parse_mode=ParseMode.MARKDOWN,
     )
 
