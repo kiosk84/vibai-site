@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>ART_IRBIT — Портреты на холсте</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bg: #1a1208;
+            --color-bg-deep: #100d04;
+            --color-surface: #261d0e;
+            --color-text: #f5ede0;
+            --color-text-secondary: #d4c4a8;
+            --color-text-muted: #9e8b72;
+            --color-accent-1: #c9973a;
+            --color-accent-2: #e8d5a3;
+            --color-accent-3: #8b6520;
+            --color-glass-bg: rgba(255,245,220,0.06);
+            --color-glass-border: rgba(201,151,58,0.18);
+            --color-vignette: rgba(0,0,0,0.55);
+            --font-display: 'Cormorant', Georgia, serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+    </style>
+
+    <style>
+        :root {
+            --color-bg: #1a1208;
+            --color-text: #f5ede0;
+            --glow-color-rgb: 201,151,58;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; }
+        body { font-family: 'Manrope', sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+        .deck { width: 100vw; height: 100vh; position: relative; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 4rem); }
+        .nav-controls { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,245,220,0.06); backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(201,151,58,0.2); }
+        .nav-btn { width: 40px; height: 40px; border: none; background: rgba(201,151,58,0.1); color: #c9973a; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(201,151,58,0.25); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(201,151,58,0.2); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #c9973a; transform: scale(1.3); }
+        .slide-counter { font-size: 0.8rem; color: #9e8b72; min-width: 40px; text-align: center; font-family: 'Manrope', sans-serif; }
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        .text-glow { text-shadow: 0 0 20px rgba(201,151,58,0.5), 0 0 40px rgba(201,151,58,0.2); }
+        .stat-glow { text-shadow: 0 0 30px rgba(201,151,58,0.6), 0 0 60px rgba(201,151,58,0.25); }
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(201,151,58,0.5), 0 0 40px rgba(201,151,58,0.2); }
+            50% { text-shadow: 0 0 30px rgba(201,151,58,0.8), 0 0 60px rgba(201,151,58,0.3); }
+        }
+        .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+        @keyframes float-slow {
+            0% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(60px,-50px) scale(1.12); }
+            50% { transform: translate(-40px,40px) scale(0.9); }
+            75% { transform: translate(50px,20px) scale(1.08); }
+            100% { transform: translate(0,0) scale(1); }
+        }
+        @keyframes float-drift {
+            0% { transform: translate(0,0) scale(1) rotate(0deg); }
+            33% { transform: translate(-50px,-60px) scale(1.15) rotate(3deg); }
+            66% { transform: translate(40px,30px) scale(0.88) rotate(-2deg); }
+            100% { transform: translate(0,0) scale(1) rotate(0deg); }
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes canvas-texture-drift {
+            0% { transform: rotate(0deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1.2); }
+        }
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 10s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 14s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 18s ease-in-out infinite reverse; }
+        .slide::before {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 200px 200px; opacity: 0.04; mix-blend-mode: overlay;
+        }
+        .slide::after {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 45%, var(--color-vignette) 100%);
+        }
+        /* Canvas texture overlay for "холст" feel */
+        .canvas-texture {
+            position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                repeating-linear-gradient(90deg, rgba(201,151,58,0.012) 0px, transparent 1px, transparent 18px),
+                repeating-linear-gradient(0deg, rgba(201,151,58,0.012) 0px, transparent 1px, transparent 18px);
+        }
+        /* Brush stroke decorative element */
+        .brush-line {
+            width: 80px; height: 3px;
+            background: linear-gradient(90deg, transparent, #c9973a, transparent);
+            border-radius: 3px; margin: 1rem auto;
+        }
+        /* Photo placeholder */
+        .photo-placeholder {
+            width: 100%; aspect-ratio: 3/4;
+            background: linear-gradient(145deg, #261d0e 0%, #332510 50%, #1e1508 100%);
+            border-radius: 8px; border: 1px solid rgba(201,151,58,0.25);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .photo-placeholder::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                repeating-linear-gradient(45deg, rgba(201,151,58,0.03) 0px, transparent 1px, transparent 14px),
+                repeating-linear-gradient(-45deg, rgba(201,151,58,0.03) 0px, transparent 1px, transparent 14px);
+        }
+        .step-card {
+            background: rgba(255,245,220,0.05);
+            border: 1px solid rgba(201,151,58,0.15);
+            border-radius: 12px; padding: 1.5rem;
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(201,151,58,0.15); }
+        .step-number {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #c9973a, #8b6520);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant', serif; font-weight: 700; font-size: 1.2rem;
+            color: #f5ede0; margin-bottom: 0.75rem; flex-shrink: 0;
+        }
+        .gold-tag {
+            display: inline-block; padding: 0.2rem 0.8rem;
+            border: 1px solid rgba(201,151,58,0.4); border-radius: 20px;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            color: #c9973a; margin-bottom: 0.75rem;
+        }
+        .feature-row { display: flex; align-items: flex-start; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid rgba(201,151,58,0.08); }
+        .feature-row:last-child { border-bottom: none; }
+        .feature-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+        .contact-pill {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            padding: 0.7rem 1.4rem; border-radius: 40px;
+            background: rgba(201,151,58,0.1); border: 1px solid rgba(201,151,58,0.3);
+            font-size: 0.9rem; font-weight: 500; color: #e8d5a3;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .contact-pill:hover { background: rgba(201,151,58,0.18); transform: translateY(-2px); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mouse-spotlight" style="position:fixed;inset:0;z-index:99;pointer-events:none;"></div>
+
+<div class="deck">
+
+    <!-- SLIDE 1: ОБЛОЖКА -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-100px;right:-100px;background:#c9973a;opacity:0.12;"></div>
+            <div class="blob" style="width:350px;height:350px;bottom:-80px;left:-60px;background:#8b6520;opacity:0.10;"></div>
+            <div class="blob" style="width:200px;height:200px;top:40%;left:10%;background:#e8d5a3;opacity:0.07;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content text-center">
+            <div style="font-size:90px;animation:float 3.5s ease-in-out infinite;margin-bottom:1.2rem;" class="reveal">🎨</div>
+            <div class="gold-tag reveal">Студия художественных портретов</div>
+            <h1 style="font-family:'Cormorant',serif;font-size:clamp(3rem,7vw,6rem);font-weight:700;background:linear-gradient(135deg,#c9973a,#e8d5a3,#c9973a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em;line-height:1.05;margin-bottom:0.5rem;" class="reveal">ART_IRBIT</h1>
+            <div class="brush-line reveal"></div>
+            <p style="font-family:'Manrope',sans-serif;font-size:clamp(0.85rem,1.4vw,1.15rem);letter-spacing:0.22em;text-transform:uppercase;color:#9e8b72;margin-top:0.75rem;" class="reveal">Портреты на холсте по фотографии · На заказ</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: КАК ЭТО РАБОТАЕТ -->
+    <div class="slide slide-2" data-slide="2">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-80px;right:-60px;background:#c9973a;opacity:0.08;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-60px;left:-40px;background:#8b6520;opacity:0.07;"></div>
+        </div>
+        <div class="content">
+            <div class="text-center" style="margin-bottom:2.5rem;">
+                <div class="gold-tag reveal">Процесс создания</div>
+                <h2 style="font-family:'Cormorant',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;color:#e8d5a3;line-height:1.1;" class="reveal">Как это работает?</h2>
+                <div class="brush-line reveal"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+                <div class="step-card reveal">
+                    <div class="step-number">1</div>
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">📸</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.3rem;font-weight:600;color:#e8d5a3;margin-bottom:0.5rem;">Вы присылаете фото</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Подойдёт любое чёткое фото — портрет, семейный снимок или фото питомца</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-number">2</div>
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">🖌️</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.3rem;font-weight:600;color:#e8d5a3;margin-bottom:0.5rem;">Создаётся портрет</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Художник вручную переносит изображение на холст с детальной проработкой</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-number">3</div>
+                    <div style="font-size:1.8rem;margin-bottom:0.6rem;">🖼️</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.3rem;font-weight:600;color:#e8d5a3;margin-bottom:0.5rem;">Получаете шедевр</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Готовый портрет на натуральном холсте доставляется к вам в течение 14–21 дня</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: ПРИМЕР РАБОТЫ 1 -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:450px;height:450px;top:-80px;left:-60px;background:#c9973a;opacity:0.09;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-50px;right:-50px;background:#e8d5a3;opacity:0.07;"></div>
+        </div>
+        <div class="content">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+                <div>
+                    <div class="gold-tag reveal">Пример работы · №1</div>
+                    <h2 style="font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#e8d5a3;line-height:1.1;margin-bottom:1rem;" class="reveal">Семейный портрет</h2>
+                    <div class="brush-line" style="margin:0 0 1.2rem 0;" ></div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">📐</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Размер</div><div style="font-size:0.9rem;color:#d4c4a8;">60×80 см на натуральном льняном холсте</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">🎨</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Техника</div><div style="font-size:0.9rem;color:#d4c4a8;">Акрил + лессировки, ручная работа</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">⏱️</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Срок</div><div style="font-size:0.9rem;color:#d4c4a8;">14 рабочих дней от фото до доставки</div></div>
+                    </div>
+                    <p style="font-size:0.8rem;color:#9e8b72;margin-top:1rem;font-style:italic;" class="reveal">* Заменить на реальное фото работы</p>
+                </div>
+                <div class="reveal">
+                    <div class="photo-placeholder">
+                        <div style="font-size:3.5rem;margin-bottom:0.8rem;opacity:0.5;">🖼️</div>
+                        <div style="font-size:0.8rem;color:#9e8b72;text-align:center;padding:0 1rem;">Место для фото<br>готовой работы</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: ПРИМЕР РАБОТЫ 2 -->
+    <div class="slide slide-4" data-slide="4">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-60px;right:-80px;background:#8b6520;opacity:0.10;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-70px;left:-30px;background:#c9973a;opacity:0.08;"></div>
+        </div>
+        <div class="content">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+                <div class="reveal">
+                    <div class="photo-placeholder">
+                        <div style="font-size:3.5rem;margin-bottom:0.8rem;opacity:0.5;">🖼️</div>
+                        <div style="font-size:0.8rem;color:#9e8b72;text-align:center;padding:0 1rem;">Место для фото<br>готовой работы</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="gold-tag reveal">Пример работы · №2</div>
+                    <h2 style="font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#e8d5a3;line-height:1.1;margin-bottom:1rem;" class="reveal">Детский портрет</h2>
+                    <div class="brush-line" style="margin:0 0 1.2rem 0;"></div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">📐</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Размер</div><div style="font-size:0.9rem;color:#d4c4a8;">40×50 см, хлопковый холст на подрамнике</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">🎨</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Техника</div><div style="font-size:0.9rem;color:#d4c4a8;">Масло, реалистичная живопись</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">💝</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Идеально</div><div style="font-size:0.9rem;color:#d4c4a8;">Для подарка — упаковка в фирменный тубус</div></div>
+                    </div>
+                    <p style="font-size:0.8rem;color:#9e8b72;margin-top:1rem;font-style:italic;" class="reveal">* Заменить на реальное фото работы</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: ПРИМЕР РАБОТЫ 3 -->
+    <div class="slide slide-5" data-slide="5">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:420px;height:420px;top:-70px;left:-50px;background:#c9973a;opacity:0.09;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-60px;right:-40px;background:#8b6520;opacity:0.08;"></div>
+        </div>
+        <div class="content">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+                <div>
+                    <div class="gold-tag reveal">Пример работы · №3</div>
+                    <h2 style="font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;color:#e8d5a3;line-height:1.1;margin-bottom:1rem;" class="reveal">Портрет питомца</h2>
+                    <div class="brush-line" style="margin:0 0 1.2rem 0;"></div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">📐</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Размер</div><div style="font-size:0.9rem;color:#d4c4a8;">30×40 см, готов к подарку без рамки</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">🎨</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Техника</div><div style="font-size:0.9rem;color:#d4c4a8;">Нейро-художественная обработка + печать</div></div>
+                    </div>
+                    <div class="feature-row reveal">
+                        <span class="feature-icon">🐾</span>
+                        <div><div style="font-size:0.85rem;color:#c9973a;font-weight:600;margin-bottom:0.2rem;">Популярно</div><div style="font-size:0.9rem;color:#d4c4a8;">Кошки, собаки, любые питомцы — 100% схожесть</div></div>
+                    </div>
+                    <p style="font-size:0.8rem;color:#9e8b72;margin-top:1rem;font-style:italic;" class="reveal">* Заменить на реальное фото работы</p>
+                </div>
+                <div class="reveal">
+                    <div class="photo-placeholder">
+                        <div style="font-size:3.5rem;margin-bottom:0.8rem;opacity:0.5;">🖼️</div>
+                        <div style="font-size:0.8rem;color:#9e8b72;text-align:center;padding:0 1rem;">Место для фото<br>готовой работы</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: ПОЧЕМУ МЫ -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-100px;right:-80px;background:#c9973a;opacity:0.09;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-50px;left:-40px;background:#8b6520;opacity:0.07;"></div>
+            <div class="blob" style="width:180px;height:180px;top:30%;left:5%;background:#e8d5a3;opacity:0.05;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="text-center" style="margin-bottom:2rem;">
+                <div class="gold-tag reveal">Наши преимущества</div>
+                <h2 style="font-family:'Cormorant',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;color:#e8d5a3;line-height:1.1;" class="reveal">Почему выбирают ART_IRBIT</h2>
+                <div class="brush-line reveal"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+                <div class="step-card reveal" style="text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:0.8rem;">🏆</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.25rem;font-weight:600;color:#c9973a;margin-bottom:0.6rem;">Ручная работа</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Каждый портрет — уникальный объект искусства, созданный вручную. Не принт, не постер.</p>
+                </div>
+                <div class="step-card reveal" style="text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:0.8rem;">🎯</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.25rem;font-weight:600;color:#c9973a;margin-bottom:0.6rem;">100% сходство</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Работаем до тех пор, пока вы не будете на 100% довольны результатом — гарантия студии.</p>
+                </div>
+                <div class="step-card reveal" style="text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:0.8rem;">🚀</div>
+                    <h3 style="font-family:'Cormorant',serif;font-size:1.25rem;font-weight:600;color:#c9973a;margin-bottom:0.6rem;">Быстрая доставка</h3>
+                    <p style="font-size:0.85rem;color:#9e8b72;line-height:1.6;">Доставка по всей России за 14–21 день. Безопасная упаковка — портрет приедет целым.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: CTA / КОНТАКТЫ -->
+    <div class="slide slide-7" data-slide="7">
+        <div class="canvas-texture"></div>
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-100px;right:-80px;background:#c9973a;opacity:0.14;"></div>
+            <div class="blob" style="width:400px;height:400px;bottom:-100px;left:-80px;background:#8b6520;opacity:0.11;"></div>
+            <div class="blob" style="width:220px;height:220px;top:35%;left:40%;background:#e8d5a3;opacity:0.08;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content text-center">
+            <div style="font-size:70px;animation:float 3s ease-in-out infinite;margin-bottom:1rem;" class="reveal">✉️</div>
+            <div class="gold-tag reveal">Заказать сейчас</div>
+            <h2 style="font-family:'Cormorant',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:700;background:linear-gradient(135deg,#c9973a,#e8d5a3,#c9973a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:0.5rem;" class="reveal">Создадим ваш портрет</h2>
+            <div class="brush-line reveal"></div>
+            <p style="font-size:clamp(0.85rem,1.3vw,1rem);color:#9e8b72;margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;" class="reveal">Отправьте фото в WhatsApp или Telegram — и мы обсудим детали заказа, размер и стиль бесплатно</p>
+            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal">
+                <a href="https://wa.me/79025850404" class="contact-pill">
+                    <span style="font-size:1.2rem;">💬</span>
+                    WhatsApp · +7 902 585-04-04
+                </a>
+                <a href="https://t.me/artponomarev" class="contact-pill">
+                    <span style="font-size:1.2rem;">✈️</span>
+                    Telegram · @artponomarev
+                </a>
+            </div>
+            <p style="font-size:0.78rem;color:#9e8b72;margin-top:2rem;letter-spacing:0.12em;text-transform:uppercase;" class="reveal">ART_IRBIT · Ирбит, Свердловская область</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 7</span>
+</div>
+
+<script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    for (let i = 1; i <= total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; updateNav();
+    }
+    function changeSlide(dir) { let n = current + dir; if (n < 1) n = total; if (n > total) n = 1; goToSlide(n); }
+    function updateNav() {
+        document.querySelectorAll('.dot').forEach((d, i) => { d.classList.toggle('active', i + 1 === current); });
+        counter.textContent = current + ' / ' + total;
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); });
+
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight;
+            const delay = i * 0.08;
+            el.style.transition = `opacity 0.4s ease ${delay}s, transform 0.4s ease ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        const spotlight = document.querySelector('.mouse-spotlight');
+        if (spotlight) {
+            spotlight.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(201,151,58,0.07), transparent 40%)`;
+        }
+    });
+
+    (function() {
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        (function tick() {
+            const ox = (mouseX - cx) / cx, oy = (mouseY - cy) / cy;
+            document.querySelectorAll('.deco-shape').forEach(shape => {
+                const speed = parseFloat(shape.dataset.speed) || 0.03;
+                shape.style.transform = `translate(${ox * speed * 100}px, ${oy * speed * 100}px)`;
+            });
+            requestAnimationFrame(tick);
+        })();
+    })();
+
+    window.initParticles = function(canvas, options) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth || window.innerWidth;
+        canvas.height = canvas.offsetHeight || window.innerHeight;
+        const interactive = options.interactive !== false;
+        const count = options.count || (interactive ? 45 : 15);
+        let mx = -1000, my = -1000;
+        const particles = Array.from({ length: count }, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+            size: Math.random() * 2 + 0.8, alpha: Math.random() * 0.3 + 0.08
+        }));
+        if (interactive) {
+            canvas.addEventListener('mousemove', (e) => { const rect = canvas.getBoundingClientRect(); mx = e.clientX - rect.left; my = e.clientY - rect.top; });
+            canvas.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
+        }
+        (function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                if (interactive) {
+                    const dx = p.x - mx, dy = p.y - my, dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) { const force = (120 - dist) / 120 * 2; p.vx += (dx / dist) * force * 0.08; p.vy += (dy / dist) * force * 0.08; }
+                }
+                p.vx *= 0.98; p.vy *= 0.98; p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(201,151,58,${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+
+    document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c, { interactive: true, count: 45 }));
+    document.querySelectorAll('.particle-canvas-ambient').forEach(c => window.initParticles(c, { interactive: false, count: 15 }));
+
+    try { animateSlide(document.querySelector('.slide.active')); } catch(e) { console.warn(e); }
+</script>
+
+</body>
+</html>
