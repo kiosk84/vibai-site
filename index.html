@@ -363,10 +363,24 @@ nav.scrolled {
   font-size: 11px; color: var(--muted);
 }
 
-/* ─── PORTFOLIO ──────────────────────────── */
-.portfolio-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 2px; background: var(--line); border: 1px solid var(--line);
+/* ─── PORTFOLIO CAROUSEL ─────────────────── */
+.portfolio-wrap {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--line);
+}
+.portfolio-carousel {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+}
+.portfolio-slide {
+  min-width: 100%; position: relative;
+  background: var(--bg);
+}
+@media (min-width: 901px) {
+  .portfolio-slide { min-width: 50%; }
+}
+@media (min-width: 1200px) {
+  .portfolio-slide { min-width: 33.333%; }
 }
 .proj-card {
   background: var(--bg);
@@ -374,6 +388,7 @@ nav.scrolled {
   overflow: hidden; position: relative;
   transition: background .4s;
   text-decoration: none; color: var(--text);
+  height: 100%;
 }
 .proj-card:hover { background: var(--lift); }
 .proj-thumb {
@@ -423,6 +438,32 @@ nav.scrolled {
   transition: color .3s, transform .3s; display: inline-block;
 }
 .proj-card:hover .proj-arrow { color: var(--lime); transform: translateX(4px); }
+
+/* Carousel controls */
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; width: 48px; height: 48px;
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: 50%; color: var(--lime);
+  font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s; opacity: 0.8;
+}
+.carousel-btn:hover { opacity: 1; border-color: var(--lime); background: var(--lift); }
+.carousel-btn--prev { left: 16px; }
+.carousel-btn--next { right: 16px; }
+
+/* Carousel dots */
+.carousel-dots {
+  display: flex; justify-content: center; gap: 8px;
+  margin-top: 24px;
+}
+.carousel-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--dim); border: none; cursor: pointer;
+  transition: all .3s; padding: 0;
+}
+.carousel-dot.active { background: var(--lime); transform: scale(1.3); }
 
 .proj-empty {
   background: var(--bg); padding: 48px 28px;
@@ -508,7 +549,11 @@ footer {
   .sec { padding: 80px 24px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .skills-list { grid-template-columns: 1fr 1fr; }
-  .portfolio-grid { grid-template-columns: 1fr; }
+  .portfolio-wrap { border-radius: 0; }
+  .portfolio-slide { min-width: 100% !important; }
+  .carousel-btn { width: 40px; height: 40px; font-size: 16px; }
+  .carousel-btn--prev { left: 8px; }
+  .carousel-btn--next { right: 8px; }
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
   footer { flex-direction: column; gap: 12px; text-align: center; }
 }
@@ -765,103 +810,116 @@ footer {
   </div>
 </section>
 
-<!-- ─── PORTFOLIO ──────────────────────────── -->
+<!-- ─── PORTFOLIO CAROUSEL ─────────────────── -->
 <section id="portfolio" class="sec sec-alt">
   <div class="sec-eyebrow reveal">03 — Проекты</div>
   <h2 class="sec-heading reveal">Мои <em>работы</em></h2>
 
-  <div class="portfolio-grid reveal">
+  <div class="portfolio-wrap reveal">
+    <button class="carousel-btn carousel-btn--prev" onclick="carouselMove(-1)" aria-label="Назад">&#8249;</button>
+    <button class="carousel-btn carousel-btn--next" onclick="carouselMove(1)" aria-label="Вперёд">&#8250;</button>
+    <div class="portfolio-carousel" id="carousel">
 
-    <!-- Project 1 -->
-    <a class="proj-card" href="septic.html" target="_blank">
-      <div class="proj-thumb">
-        <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A04 0%, #3D1507 100%);">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 60%, rgba(201,75,26,0.4) 0%, transparent 60%);"></div>
-        </div>
-        <i class="fas fa-tractor proj-thumb-icon"></i>
-        <div class="proj-live">↗ Live</div>
+      <!-- Project 1 -->
+      <div class="portfolio-slide">
+        <a class="proj-card" href="septic.html" target="_blank">
+          <div class="proj-thumb">
+            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A04 0%, #3D1507 100%);">
+              <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 60%, rgba(201,75,26,0.4) 0%, transparent 60%);"></div>
+            </div>
+            <i class="fas fa-tractor proj-thumb-icon"></i>
+            <div class="proj-live">↗ Live</div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-num">// project_01</div>
+            <div class="proj-name">СептикПро — Лендинг</div>
+            <div class="proj-desc">Премиальный лендинг для строительной компании. Кастомный курсор, анимации на скролле, калькулятор стоимости.</div>
+            <div class="proj-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JavaScript</span>
+            </div>
+            <span class="proj-arrow">→ Открыть проект</span>
+          </div>
+        </a>
       </div>
-      <div class="proj-body">
-        <div class="proj-num">// project_01</div>
-        <div class="proj-name">СептикПро — Лендинг</div>
-        <div class="proj-desc">Премиальный лендинг для строительной компании. Кастомный курсор, анимации на скролле, калькулятор стоимости.</div>
-        <div class="proj-tags">
-          <span class="tag">HTML</span>
-          <span class="tag">CSS</span>
-          <span class="tag">JavaScript</span>
-        </div>
-        <span class="proj-arrow">→ Открыть проект</span>
-      </div>
-    </a>
 
-    <!-- Project 2: Volbot -->
-    <a class="proj-card" href="volbot.html" target="_blank">
-      <div class="proj-thumb">
-        <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #0A0F1A 0%, #0E1B2E 100%);">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 50%, rgba(0,180,255,0.3) 0%, transparent 60%);"></div>
-        </div>
-        <i class="fas fa-robot proj-thumb-icon"></i>
-        <div class="proj-live">↗ Live</div>
+      <!-- Project 2: Volbot -->
+      <div class="portfolio-slide">
+        <a class="proj-card" href="volbot.html" target="_blank">
+          <div class="proj-thumb">
+            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #0A0F1A 0%, #0E1B2E 100%);">
+              <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 50%, rgba(0,180,255,0.3) 0%, transparent 60%);"></div>
+            </div>
+            <i class="fas fa-robot proj-thumb-icon"></i>
+            <div class="proj-live">↗ Live</div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-num">// project_02</div>
+            <div class="proj-name">VolBot — Telegram Бот</div>
+            <div class="proj-desc">Умный Telegram-бот для торговли и аналитики. Интеграция с API, автоматические сигналы, удобный интерфейс.</div>
+            <div class="proj-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Telegram API</span>
+              <span class="tag">Automation</span>
+            </div>
+            <span class="proj-arrow">→ Открыть проект</span>
+          </div>
+        </a>
       </div>
-      <div class="proj-body">
-        <div class="proj-num">// project_02</div>
-        <div class="proj-name">VolBot — Telegram Бот</div>
-        <div class="proj-desc">Умный Telegram-бот для торговли и аналитики. Интеграция с API, автоматические сигналы, удобный интерфейс.</div>
-        <div class="proj-tags">
-          <span class="tag">Python</span>
-          <span class="tag">Telegram API</span>
-          <span class="tag">Automation</span>
-        </div>
-        <span class="proj-arrow">→ Открыть проект</span>
-      </div>
-    </a>
 
-    <!-- Project 3: Kurs -->
-    <a class="proj-card" href="kurs/Index.html" target="_blank">
-      <div class="proj-thumb">
-        <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A2E 0%, #2D1B4E 100%);">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(123,108,255,0.35) 0%, transparent 60%);"></div>
-        </div>
-        <i class="fas fa-graduation-cap proj-thumb-icon"></i>
-        <div class="proj-live">↗ Live</div>
+      <!-- Project 3: Kurs -->
+      <div class="portfolio-slide">
+        <a class="proj-card" href="kurs/Index.html" target="_blank">
+          <div class="proj-thumb">
+            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A2E 0%, #2D1B4E 100%);">
+              <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(123,108,255,0.35) 0%, transparent 60%);"></div>
+            </div>
+            <i class="fas fa-graduation-cap proj-thumb-icon"></i>
+            <div class="proj-live">↗ Live</div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-num">// project_03</div>
+            <div class="proj-name">Курс — Обучающая платформа</div>
+            <div class="proj-desc">Платформа для онлайн-обучения с интерактивными уроками, прогрессом и адаптивным дизайном.</div>
+            <div class="proj-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JavaScript</span>
+            </div>
+            <span class="proj-arrow">→ Открыть проект</span>
+          </div>
+        </a>
       </div>
-      <div class="proj-body">
-        <div class="proj-num">// project_03</div>
-        <div class="proj-name">Курс — Обучающая платформа</div>
-        <div class="proj-desc">Платформа для онлайн-обучения с интерактивными уроками, прогрессом и адаптивным дизайном.</div>
-        <div class="proj-tags">
-          <span class="tag">HTML</span>
-          <span class="tag">CSS</span>
-          <span class="tag">JavaScript</span>
-        </div>
-        <span class="proj-arrow">→ Открыть проект</span>
-      </div>
-    </a>
 
-    <!-- Project 4: ART_IRBIT -->
-    <a class="proj-card" href="artirbit.html" target="_blank">
-      <div class="proj-thumb">
-        <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A1208 0%, #261D0E 100%);">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(201,151,58,0.35) 0%, transparent 60%);"></div>
-        </div>
-        <i class="fas fa-palette proj-thumb-icon"></i>
-        <div class="proj-live">↗ Live</div>
+      <!-- Project 4: ART_IRBIT -->
+      <div class="portfolio-slide">
+        <a class="proj-card" href="artirbit.html" target="_blank">
+          <div class="proj-thumb">
+            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A1208 0%, #261D0E 100%);">
+              <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(201,151,58,0.35) 0%, transparent 60%);"></div>
+            </div>
+            <i class="fas fa-palette proj-thumb-icon"></i>
+            <div class="proj-live">↗ Live</div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-num">// project_04</div>
+            <div class="proj-name">ART_IRBIT — Портреты на холсте</div>
+            <div class="proj-desc">Презентация-слайды студии художественных портретов. Частицы, анимации, золотая палитра.</div>
+            <div class="proj-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">Canvas</span>
+              <span class="tag">JavaScript</span>
+            </div>
+            <span class="proj-arrow">→ Открыть проект</span>
+          </div>
+        </a>
       </div>
-      <div class="proj-body">
-        <div class="proj-num">// project_04</div>
-        <div class="proj-name">ART_IRBIT — Портреты на холсте</div>
-        <div class="proj-desc">Презентация-слайды студии художественных портретов. Частицы, анимации, золотая палитра.</div>
-        <div class="proj-tags">
-          <span class="tag">HTML</span>
-          <span class="tag">CSS</span>
-          <span class="tag">Canvas</span>
-          <span class="tag">JavaScript</span>
-        </div>
-        <span class="proj-arrow">→ Открыть проект</span>
-      </div>
-    </a>
 
+    </div>
   </div>
+  <div class="carousel-dots reveal" id="carouselDots"></div>
 </section>
 <section id="contact" class="sec">
   <div class="contact-layout">
@@ -971,6 +1029,84 @@ const skillObs = new IntersectionObserver(entries=>{
   });
 },{threshold:.2});
 document.querySelectorAll('.skills-list').forEach(el=>skillObs.observe(el));
+
+/* PORTFOLIO CAROUSEL */
+(function(){
+  const carousel = document.getElementById('carousel');
+  const dotsContainer = document.getElementById('carouselDots');
+  const slides = carousel.querySelectorAll('.portfolio-slide');
+  const totalSlides = slides.length;
+  let currentIndex = 0;
+  let slidesPerView = getSlidesPerView();
+  let maxIndex = Math.max(0, totalSlides - slidesPerView);
+
+  function getSlidesPerView(){
+    if(window.innerWidth >= 1200) return 3;
+    if(window.innerWidth >= 901) return 2;
+    return 1;
+  }
+
+  // Build dots
+  function buildDots(){
+    dotsContainer.innerHTML = '';
+    const totalDots = maxIndex + 1;
+    for(let i = 0; i < totalDots; i++){
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Слайд ' + (i+1));
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function updateCarousel(){
+    const slideWidth = 100 / slidesPerView;
+    carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+    // Update dots
+    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  window.carouselMove = function(dir){
+    currentIndex += dir;
+    if(currentIndex < 0) currentIndex = maxIndex;
+    if(currentIndex > maxIndex) currentIndex = 0;
+    updateCarousel();
+  };
+
+  function goToSlide(index){
+    currentIndex = index;
+    updateCarousel();
+  }
+
+  // Auto-play
+  let autoPlay = setInterval(() => window.carouselMove(1), 4000);
+  carousel.addEventListener('mouseenter', () => clearInterval(autoPlay));
+  carousel.addEventListener('mouseleave', () => {
+    autoPlay = setInterval(() => window.carouselMove(1), 4000);
+  });
+
+  // Touch/swipe support
+  let startX = 0;
+  carousel.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+  carousel.addEventListener('touchend', (e) => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50) window.carouselMove(diff > 0 ? 1 : -1);
+  });
+
+  // Responsive recalc
+  window.addEventListener('resize', () => {
+    slidesPerView = getSlidesPerView();
+    maxIndex = Math.max(0, totalSlides - slidesPerView);
+    if(currentIndex > maxIndex) currentIndex = maxIndex;
+    buildDots();
+    updateCarousel();
+  });
+
+  buildDots();
+  updateCarousel();
+})();
 </script>
 </body>
 </html>
