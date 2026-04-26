@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Артем Пономарев — Разработчик</title>
+<title>Екатерина Наумова — AI Creator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,9 +19,9 @@
   --text:     #F0EDE8;
   --muted:    #666460;
   --dim:      #3A3836;
-  --lime:     #BBFF4B;
-  --lime-dim: rgba(187,255,75,0.08);
-  --lime-glow:rgba(187,255,75,0.25);
+  --coral:    #FF6B6B;
+  --coral-dim:rgba(255,107,107,0.08);
+  --coral-glow:rgba(255,107,107,0.25);
 }
 
 html { scroll-behavior: smooth; }
@@ -34,10 +34,9 @@ body {
   cursor: none;
 }
 
-/* ─── CURSOR ─────────────────────────────── */
 #cur {
   width: 8px; height: 8px;
-  background: var(--lime);
+  background: var(--coral);
   border-radius: 50%;
   position: fixed; z-index: 9999;
   pointer-events: none;
@@ -47,7 +46,7 @@ body {
 }
 #cur-ring {
   width: 32px; height: 32px;
-  border: 1px solid rgba(187,255,75,0.4);
+  border: 1px solid rgba(255,107,107,0.4);
   border-radius: 50%;
   position: fixed; z-index: 9998;
   pointer-events: none;
@@ -55,9 +54,8 @@ body {
   transition: width .3s, height .3s, opacity .3s, border-radius .3s;
 }
 body.hovering #cur { width: 6px; height: 6px; }
-body.hovering #cur-ring { width: 48px; height: 48px; border-color: rgba(187,255,75,0.6); }
+body.hovering #cur-ring { width: 48px; height: 48px; border-color: rgba(255,107,107,0.6); }
 
-/* ─── GRAIN ──────────────────────────────── */
 body::after {
   content:'';
   position: fixed; inset: 0;
@@ -65,7 +63,6 @@ body::after {
   opacity: 0.022; pointer-events: none; z-index: 1;
 }
 
-/* ─── NAV ────────────────────────────────── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
@@ -85,7 +82,7 @@ nav.scrolled {
   letter-spacing: 0.5px;
   display: flex; align-items: center; gap: 2px;
 }
-.nav-logo .bracket { color: var(--lime); }
+.nav-logo .bracket { color: var(--coral); }
 .nav-logo .slash { color: var(--muted); }
 .nav-links {
   display: flex; align-items: center; gap: 40px; list-style: none;
@@ -98,7 +95,7 @@ nav.scrolled {
 .nav-links a:hover { color: var(--text); }
 .nav-tg {
   display: flex; align-items: center; gap: 8px;
-  background: var(--lime); color: var(--bg) !important;
+  background: var(--coral); color: var(--bg) !important;
   padding: 8px 20px; font-size: 12px !important;
   font-weight: 700 !important; letter-spacing: 1.5px !important;
   text-decoration: none; text-transform: uppercase;
@@ -107,7 +104,6 @@ nav.scrolled {
 }
 .nav-tg:hover { opacity: 0.85 !important; }
 
-/* ─── HERO ───────────────────────────────── */
 .hero {
   min-height: 100vh;
   display: flex; flex-direction: column;
@@ -116,7 +112,6 @@ nav.scrolled {
   position: relative; overflow: hidden;
 }
 
-/* Background dot grid */
 .hero::before {
   content: '';
   position: absolute; inset: 0;
@@ -125,11 +120,10 @@ nav.scrolled {
   pointer-events: none;
 }
 
-/* Lime glow orb */
 .hero-orb {
   position: absolute;
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(187,255,75,0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,107,107,0.07) 0%, transparent 70%);
   top: 10%; right: -10%;
   pointer-events: none;
   animation: orbFloat 8s ease-in-out infinite;
@@ -147,7 +141,7 @@ nav.scrolled {
   font-size: 11px; color: var(--muted); letter-spacing: 1px;
   opacity: 0; animation: fadeUp .8s .2s forwards;
 }
-.status-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+.status-dot { width: 6px; height: 6px; background: var(--coral); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.8)} }
 
 .hero-name {
@@ -166,12 +160,12 @@ nav.scrolled {
 }
 .hero-name .l1 .inner { animation-delay: .1s; }
 .hero-name .l2 .inner { animation-delay: .2s; }
-.hero-name .l2 em { font-style: normal; color: var(--lime); }
+.hero-name .l2 em { font-style: normal; color: var(--coral); }
 
 .hero-cursor {
   display: inline-block;
   width: 3px; height: 0.8em;
-  background: var(--lime);
+  background: var(--coral);
   margin-left: 8px;
   vertical-align: middle;
   animation: blink 1.1s step-end infinite;
@@ -187,22 +181,22 @@ nav.scrolled {
 }
 @keyframes fadeUp { to { opacity:1; transform:none; } }
 .hero-desc {
-  max-width: 380px;
+  max-width: 420px;
   font-size: 16px; line-height: 1.7; color: var(--muted);
   font-weight: 400;
 }
 .hero-desc strong { color: var(--text); font-weight: 600; }
 .hero-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
-.btn-lime {
+.btn-coral {
   display: inline-flex; align-items: center; gap: 10px;
-  background: var(--lime); color: var(--bg);
+  background: var(--coral); color: var(--bg);
   padding: 14px 28px; font-size: 12px;
   letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
   text-decoration: none;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   transition: opacity .3s, transform .2s;
 }
-.btn-lime:hover { opacity: .85; transform: translateY(-2px); }
+.btn-coral:hover { opacity: .85; transform: translateY(-2px); }
 .btn-outline {
   display: inline-flex; align-items: center; gap: 10px;
   border: 1px solid var(--line);
@@ -211,9 +205,8 @@ nav.scrolled {
   text-decoration: none;
   transition: border-color .3s, color .3s;
 }
-.btn-outline:hover { border-color: var(--lime); color: var(--lime); }
+.btn-outline:hover { border-color: var(--coral); color: var(--coral); }
 
-/* scroll arrow */
 .hero-scroll {
   position: absolute; bottom: 64px; right: 48px;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -234,7 +227,6 @@ nav.scrolled {
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
-/* ─── MARQUEE ────────────────────────────── */
 .marquee-wrap {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -254,20 +246,19 @@ nav.scrolled {
   font-size: 12px; letter-spacing: 2px; color: var(--muted);
   flex-shrink: 0;
 }
-.marquee-item span { color: var(--lime); }
+.marquee-item span { color: var(--coral); }
 .marquee-sep { color: var(--dim); }
 
-/* ─── SECTIONS ───────────────────────────── */
 .sec { padding: 120px 48px; }
 .sec-alt { background: var(--surface); }
 
 .sec-eyebrow {
   font-family: 'Fira Code', monospace;
-  font-size: 11px; letter-spacing: 3px; color: var(--lime);
+  font-size: 11px; letter-spacing: 3px; color: var(--coral);
   text-transform: uppercase; margin-bottom: 20px;
   display: flex; align-items: center; gap: 12px;
 }
-.sec-eyebrow::before { content:''; width:24px; height:1px; background:var(--lime); }
+.sec-eyebrow::before { content:''; width:24px; height:1px; background:var(--coral); }
 
 .sec-heading {
   font-family: 'DM Serif Display', serif;
@@ -276,9 +267,8 @@ nav.scrolled {
   letter-spacing: -1px;
   margin-bottom: 64px;
 }
-.sec-heading em { font-style: italic; color: var(--lime); }
+.sec-heading em { font-style: italic; color: var(--coral); }
 
-/* ─── ABOUT ──────────────────────────────── */
 .about-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 80px; align-items: start;
@@ -290,12 +280,12 @@ nav.scrolled {
 .about-text strong { color: var(--text); font-weight: 600; }
 .about-link {
   display: inline-flex; align-items: center; gap: 8px;
-  color: var(--lime); font-size: 12px; letter-spacing: 2px;
+  color: var(--coral); font-size: 12px; letter-spacing: 2px;
   text-transform: uppercase; font-weight: 700; text-decoration: none;
   border-bottom: 1px solid transparent; padding-bottom: 2px;
   transition: border-color .3s; margin-top: 16px;
 }
-.about-link:hover { border-color: var(--lime); }
+.about-link:hover { border-color: var(--coral); }
 .about-stats {
   display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
   border: 1px solid var(--line);
@@ -313,180 +303,95 @@ nav.scrolled {
   color: var(--text); letter-spacing: -2px;
   margin-bottom: 8px;
 }
-.stat-val em { font-style: normal; color: var(--lime); font-size: 36px; }
+.stat-val em { font-style: normal; color: var(--coral); font-size: 36px; }
 .stat-label { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); }
 
-/* ─── SKILLS ─────────────────────────────── */
-.skills-list {
+.content-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 2px; background: var(--line); border: 1px solid var(--line);
 }
-.skill-item {
+.content-item {
   background: var(--bg);
   padding: 36px 32px;
-  display: flex; flex-direction: column; gap: 20px;
+  display: flex; flex-direction: column; gap: 16px;
   position: relative; overflow: hidden;
   transition: background .3s;
 }
-.skill-item:hover { background: var(--lift); }
-.skill-item::after {
+.content-item:hover { background: var(--lift); }
+.content-item::after {
   content: '';
   position: absolute; bottom: 0; left: 0;
   height: 2px; width: 0;
-  background: var(--lime);
+  background: var(--coral);
   transition: width .5s cubic-bezier(.16,1,.3,1);
 }
-.skill-item:hover::after { width: 100%; }
-.skill-head {
-  display: flex; align-items: center; gap: 16px;
-}
-.skill-icon {
+.content-item:hover::after { width: 100%; }
+.content-icon {
   width: 44px; height: 44px;
   border: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center;
   font-size: 18px;
   transition: border-color .3s;
 }
-.skill-item:hover .skill-icon { border-color: rgba(187,255,75,0.3); }
-.skill-name { font-size: 16px; font-weight: 700; }
-.skill-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'Fira Code', monospace; }
-.skill-track {
-  height: 2px; background: var(--line); position: relative;
-}
-.skill-fill {
-  height: 100%; background: var(--lime);
-  width: 0; transition: width 1.4s cubic-bezier(.16,1,.3,1);
-}
-.skill-pct {
-  position: absolute; right: 0; top: -18px;
-  font-family: 'Fira Code', monospace;
-  font-size: 11px; color: var(--muted);
-}
+.content-item:hover .content-icon { border-color: rgba(255,107,107,0.3); }
+.content-item:hover .content-icon i { color: var(--coral); }
+.content-title { font-size: 16px; font-weight: 700; }
+.content-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'Fira Code', monospace; }
+.content-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-/* ─── PORTFOLIO CAROUSEL ─────────────────── */
-.portfolio-wrap {
-  position: relative; overflow: hidden;
-  border: 1px solid var(--line);
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 32px;
 }
-.portfolio-carousel {
-  display: flex;
-  transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+.schedule-table th,
+.schedule-table td {
+  padding: 20px 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
 }
-.portfolio-slide {
-  min-width: 100%; position: relative;
-  background: var(--bg);
+.schedule-table th {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface);
 }
-@media (min-width: 901px) {
-  .portfolio-slide { min-width: 50%; }
+.schedule-table td {
+  font-size: 15px;
+  color: var(--text);
 }
-@media (min-width: 1200px) {
-  .portfolio-slide { min-width: 33.333%; }
+.schedule-table tr:hover td {
+  background: var(--lift);
 }
-.proj-card {
-  background: var(--bg);
-  display: flex; flex-direction: column;
-  overflow: hidden; position: relative;
-  transition: background .4s;
-  text-decoration: none; color: var(--text);
-  height: 100%;
+.schedule-table .day {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--coral);
+  letter-spacing: 1px;
 }
-.proj-card:hover { background: var(--lift); }
-.proj-thumb {
-  height: 200px; overflow: hidden; position: relative;
-  display: flex; align-items: center; justify-content: center;
-}
-.proj-thumb-inner {
-  position: absolute; inset: 0;
-  transition: transform .6s cubic-bezier(.16,1,.3,1);
-}
-.proj-card:hover .proj-thumb-inner { transform: scale(1.04); }
-.proj-thumb-icon {
-  position: relative; z-index: 2;
-  font-size: 48px; color: rgba(255,255,255,0.15);
-  transition: transform .4s, color .4s;
-}
-.proj-card:hover .proj-thumb-icon { transform: scale(1.1); color: rgba(187,255,75,0.4); }
-.proj-live {
-  position: absolute; top: 16px; right: 16px; z-index: 3;
-  background: var(--bg); border: 1px solid var(--line);
+.schedule-table .type {
+  display: inline-block;
   padding: 4px 10px;
-  font-family: 'Fira Code', monospace;
-  font-size: 10px; color: var(--lime); letter-spacing: 1px;
+  border-radius: 4px;
+  font-size: 11px; letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
-.proj-body { padding: 32px 28px; flex: 1; display: flex; flex-direction: column; }
-.proj-num {
-  font-family: 'Fira Code', monospace;
-  font-size: 10px; color: var(--muted); letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-.proj-name {
-  font-size: 20px; font-weight: 700; margin-bottom: 10px;
-  transition: color .3s;
-}
-.proj-card:hover .proj-name { color: var(--lime); }
-.proj-desc { font-size: 14px; color: var(--muted); line-height: 1.6; flex: 1; }
-.proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
-.tag {
-  font-family: 'Fira Code', monospace;
-  font-size: 10px; letter-spacing: 1px;
-  border: 1px solid var(--line); padding: 3px 10px; color: var(--muted);
-  transition: border-color .3s, color .3s;
-}
-.proj-card:hover .tag { border-color: rgba(187,255,75,0.2); color: var(--text); }
-.proj-arrow {
-  font-size: 12px; color: var(--muted); margin-top: 20px;
-  transition: color .3s, transform .3s; display: inline-block;
-}
-.proj-card:hover .proj-arrow { color: var(--lime); transform: translateX(4px); }
+.type-video { background: rgba(255,107,107,0.15); color: var(--coral); }
+.type-post { background: rgba(187,255,75,0.1); color: #BBFF4B; }
+.type-story { background: rgba(147,112,219,0.15); color: #9370DB; }
 
-/* Carousel controls */
-.carousel-btn {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  z-index: 10; width: 48px; height: 48px;
-  background: var(--bg); border: 1px solid var(--line);
-  border-radius: 50%; color: var(--lime);
-  font-size: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .3s; opacity: 0.8;
-}
-.carousel-btn:hover { opacity: 1; border-color: var(--lime); background: var(--lift); }
-.carousel-btn--prev { left: 16px; }
-.carousel-btn--next { right: 16px; }
-
-/* Carousel dots */
-.carousel-dots {
-  display: flex; justify-content: center; gap: 8px;
-  margin-top: 24px;
-}
-.carousel-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--dim); border: none; cursor: pointer;
-  transition: all .3s; padding: 0;
-}
-.carousel-dot.active { background: var(--lime); transform: scale(1.3); }
-
-.proj-empty {
-  background: var(--bg); padding: 48px 28px;
-  display: flex; flex-direction: column; justify-content: center;
-  min-height: 380px; border: none;
-}
-.proj-empty-icon { font-size: 32px; color: var(--edge); margin-bottom: 16px; }
-.proj-empty-title { font-size: 18px; font-weight: 700; color: var(--dim); margin-bottom: 8px; }
-.proj-empty-sub { font-size: 13px; color: var(--edge); font-family: 'Fira Code', monospace; }
-
-/* ─── CONTACT ────────────────────────────── */
 .contact-layout {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 80px; align-items: center;
 }
-.contact-left {}
 .contact-big {
   font-family: 'DM Serif Display', serif;
   font-size: clamp(48px, 7vw, 88px);
   line-height: 0.95; letter-spacing: -2px;
   margin-bottom: 32px;
 }
-.contact-big em { font-style: italic; color: var(--lime); }
+.contact-big em { font-style: italic; color: var(--coral); }
 .contact-note { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 360px; }
 .contact-cards { display: flex; flex-direction: column; gap: 2px; }
 .contact-card {
@@ -498,11 +403,11 @@ nav.scrolled {
 }
 .contact-card::after {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 2px; background: var(--lime);
+  width: 2px; background: var(--coral);
   transform: scaleY(0); transform-origin: bottom;
   transition: transform .4s cubic-bezier(.16,1,.3,1);
 }
-.contact-card:hover { background: var(--lift); border-color: rgba(187,255,75,0.15); }
+.contact-card:hover { background: var(--lift); border-color: rgba(255,107,107,0.15); }
 .contact-card:hover::after { transform: scaleY(1); }
 .contact-icon-wrap {
   width: 48px; height: 48px; border: 1px solid var(--line);
@@ -510,14 +415,13 @@ nav.scrolled {
   font-size: 20px; flex-shrink: 0;
   transition: border-color .3s;
 }
-.contact-card:hover .contact-icon-wrap { border-color: rgba(187,255,75,0.3); }
-.contact-icon-wrap i { color: var(--lime); }
+.contact-card:hover .contact-icon-wrap { border-color: rgba(255,107,107,0.3); }
+.contact-icon-wrap i { color: var(--coral); }
 .contact-card-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .contact-card-sub { font-size: 13px; color: var(--muted); font-family: 'Fira Code', monospace; }
 .contact-chevron { margin-left: auto; color: var(--dim); font-size: 12px; transition: transform .3s, color .3s; }
-.contact-card:hover .contact-chevron { transform: translateX(4px); color: var(--lime); }
+.contact-card:hover .contact-chevron { transform: translateX(4px); color: var(--coral); }
 
-/* ─── FOOTER ─────────────────────────────── */
 footer {
   background: var(--bg);
   border-top: 1px solid var(--line);
@@ -528,17 +432,15 @@ footer {
   font-family: 'Fira Code', monospace;
   font-size: 13px; color: var(--muted); text-decoration: none;
 }
-.foot-logo .acc { color: var(--lime); }
+.foot-logo .acc { color: var(--coral); }
 .foot-right { font-size: 11px; color: var(--dim); letter-spacing: 2px; text-transform: uppercase; }
 
-/* ─── REVEAL ─────────────────────────────── */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 .reveal-d1 { transition-delay: .1s; }
 .reveal-d2 { transition-delay: .2s; }
 .reveal-d3 { transition-delay: .3s; }
 
-/* ─── RESPONSIVE ─────────────────────────── */
 @media (max-width: 1024px) {
   nav { padding: 0 24px; }
   .nav-links { display: none; }
@@ -548,17 +450,13 @@ footer {
   .hero-scroll { display: none; }
   .sec { padding: 80px 24px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
-  .skills-list { grid-template-columns: 1fr 1fr; }
-  .portfolio-wrap { border-radius: 0; }
-  .portfolio-slide { min-width: 100% !important; }
-  .carousel-btn { width: 40px; height: 40px; font-size: 16px; }
-  .carousel-btn--prev { left: 8px; }
-  .carousel-btn--next { right: 8px; }
+  .content-grid { grid-template-columns: 1fr 1fr; }
+  .schedule-table { display: block; overflow-x: auto; }
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
   footer { flex-direction: column; gap: 12px; text-align: center; }
 }
 @media (max-width: 640px) {
-  .skills-list { grid-template-columns: 1fr; }
+  .content-grid { grid-template-columns: 1fr; }
   .about-stats { grid-template-columns: 1fr 1fr; }
   .hero-actions { flex-direction: column; }
   nav { padding: 0 20px; }
@@ -566,7 +464,6 @@ footer {
   footer { padding: 24px 20px; }
 }
 
-/* Mobile nav */
 .mob-menu {
   display: none;
   position: fixed; inset: 0; z-index: 99;
@@ -580,7 +477,7 @@ footer {
   font-size: 40px; color: var(--text); text-decoration: none;
   transition: color .3s;
 }
-.mob-menu a:hover { color: var(--lime); }
+.mob-menu a:hover { color: var(--coral); }
 .mob-close {
   position: absolute; top: 24px; right: 24px;
   background: none; border: none; color: var(--muted);
@@ -591,6 +488,8 @@ footer {
   background: none; border: none; color: var(--text);
   font-size: 20px; cursor: none;
 }
+
+#script-container { display: none; }
 </style>
 </head>
 <body>
@@ -598,17 +497,20 @@ footer {
 <div id="cur"></div>
 <div id="cur-ring"></div>
 
-<!-- ─── NAV ─────────────────────────────── -->
+<!-- SCRIPTS PLACEHOLDER -->
+<div id="script-container"></div>
+
+<!-- NAV -->
 <nav id="nav">
   <a class="nav-logo" href="#">
-    <span class="bracket">&lt;</span>AP<span class="slash">/</span><span class="bracket">&gt;</span>
+    <span class="bracket">&lt;</span>EN<span class="slash">/</span><span class="bracket">&gt;</span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">Обо мне</a></li>
-    <li><a href="#skills">Навыки</a></li>
-    <li><a href="#portfolio">Проекты</a></li>
+    <li><a href="#content">Контент</a></li>
+    <li><a href="#schedule">Расписание</a></li>
     <li><a href="#contact">Контакты</a></li>
-    <li><a class="nav-tg" href="https://t.me/artponomarev" target="_blank"><i class="fab fa-telegram"></i> Написать</a></li>
+    <li><a class="nav-tg" href="https://t.me/enaumova_ai" target="_blank"><i class="fab fa-telegram"></i> Написать</a></li>
   </ul>
   <button class="mob-btn md:hidden" id="mobOpen" style="display:none;"><i class="fas fa-bars"></i></button>
 </nav>
@@ -617,38 +519,37 @@ footer {
 <div class="mob-menu" id="mobMenu">
   <button class="mob-close" id="mobClose"><i class="fas fa-times"></i></button>
   <a href="#about" onclick="closeMob()">Обо мне</a>
-  <a href="#skills" onclick="closeMob()">Навыки</a>
-  <a href="#portfolio" onclick="closeMob()">Проекты</a>
+  <a href="#content" onclick="closeMob()">Контент</a>
+  <a href="#schedule" onclick="closeMob()">Расписание</a>
   <a href="#contact" onclick="closeMob()">Контакты</a>
-  <a href="https://t.me/artponomarev" target="_blank" style="color:var(--lime)">@artponomarev</a>
+  <a href="https://t.me/enaumova_ai" target="_blank" style="color:var(--coral)">@enaumova_ai</a>
 </div>
 
-<!-- ─── HERO ──────────────────────────────── -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-orb"></div>
 
   <div class="hero-status">
     <span class="status-dot"></span>
-    Открыт для проектов · 2026
+    AI Creator · Генерирую будущее
   </div>
 
   <h1 class="hero-name">
-    <span class="line l1"><span class="inner">Артем</span></span>
-    <span class="line l2"><span class="inner"><em>Пономарев</em><span class="hero-cursor"></span></span></span>
+    <span class="line l1"><span class="inner">Екатерина</span></span>
+    <span class="line l2"><span class="inner"><em>Наумова</em><span class="hero-cursor"></span></span></span>
   </h1>
 
   <div class="hero-bottom">
     <p class="hero-desc">
-      <strong>Разработчик</strong> — создаю современные веб-приложения,
-      лендинги и цифровые продукты. Чистый код, продуманный UX,
-      результат в срок.
+      <strong>AI Artist & Creator</strong> — создаю визуальные миры с помощью нейросетей.
+      Генерирую уникальные арты, иллюстрации и концепты. Каждый кадр — это рождение новой реальности.
     </p>
     <div class="hero-actions">
-      <a class="btn-lime" href="#portfolio">
-        <i class="fas fa-folder-open"></i> Смотреть работы
+      <a class="btn-coral" href="#content">
+        <i class="fas fa-palette"></i> Смотреть работы
       </a>
-      <a class="btn-outline" href="https://t.me/artponomarev" target="_blank">
-        <i class="fab fa-telegram"></i> @artponomarev
+      <a class="btn-outline" href="https://t.me/enaumova_ai" target="_blank">
+        <i class="fab fa-telegram"></i> @enaumova_ai
       </a>
     </div>
   </div>
@@ -656,298 +557,208 @@ footer {
   <div class="hero-scroll">scroll</div>
 </section>
 
-<!-- ─── MARQUEE ───────────────────────────── -->
+<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <span class="marquee-item"><span>HTML</span> <span class="marquee-sep">·</span> CSS</span>
-    <span class="marquee-item"><span>JavaScript</span> <span class="marquee-sep">·</span> ES6+</span>
-    <span class="marquee-item"><span>React</span> <span class="marquee-sep">·</span> Hooks</span>
-    <span class="marquee-item"><span>Node.js</span> <span class="marquee-sep">·</span> Express</span>
-    <span class="marquee-item"><span>Python</span> <span class="marquee-sep">·</span> Automation</span>
-    <span class="marquee-item"><span>Git</span> <span class="marquee-sep">·</span> GitHub</span>
-    <span class="marquee-item"><span>Tailwind</span> <span class="marquee-sep">·</span> CSS Grid</span>
-    <span class="marquee-item"><span>REST API</span> <span class="marquee-sep">·</span> JSON</span>
+    <span class="marquee-item"><span>Midjourney</span> <span class="marquee-sep">·</span> DALL-E</span>
+    <span class="marquee-item"><span>Stable Diffusion</span> <span class="marquee-sep">·</span> Runway</span>
+    <span class="marquee-item"><span>Generative Art</span> <span class="marquee-sep">·</span> AI Video</span>
+    <span class="marquee-item"><span>Neural Networks</span> <span class="marquee-sep">·</span> Flux</span>
+    <span class="marquee-item"><span>Prompt Engineering</span> <span class="marquee-sep">·</span> AI Art</span>
+    <span class="marquee-item"><span>Concept Art</span> <span class="marquee-sep">·</span> 3D AI</span>
     <!-- dupe -->
-    <span class="marquee-item"><span>HTML</span> <span class="marquee-sep">·</span> CSS</span>
-    <span class="marquee-item"><span>JavaScript</span> <span class="marquee-sep">·</span> ES6+</span>
-    <span class="marquee-item"><span>React</span> <span class="marquee-sep">·</span> Hooks</span>
-    <span class="marquee-item"><span>Node.js</span> <span class="marquee-sep">·</span> Express</span>
-    <span class="marquee-item"><span>Python</span> <span class="marquee-sep">·</span> Automation</span>
-    <span class="marquee-item"><span>Git</span> <span class="marquee-sep">·</span> GitHub</span>
-    <span class="marquee-item"><span>Tailwind</span> <span class="marquee-sep">·</span> CSS Grid</span>
-    <span class="marquee-item"><span>REST API</span> <span class="marquee-sep">·</span> JSON</span>
+    <span class="marquee-item"><span>Midjourney</span> <span class="marquee-sep">·</span> DALL-E</span>
+    <span class="marquee-item"><span>Stable Diffusion</span> <span class="marquee-sep">·</span> Runway</span>
+    <span class="marquee-item"><span>Generative Art</span> <span class="marquee-sep">·</span> AI Video</span>
+    <span class="marquee-item"><span>Neural Networks</span> <span class="marquee-sep">·</span> Flux</span>
+    <span class="marquee-item"><span>Prompt Engineering</span> <span class="marquee-sep">·</span> AI Art</span>
+    <span class="marquee-item"><span>Concept Art</span> <span class="marquee-sep">·</span> 3D AI</span>
   </div>
 </div>
 
-<!-- ─── ABOUT ─────────────────────────────── -->
+<!-- ABOUT -->
 <section id="about" class="sec sec-alt">
   <div class="sec-eyebrow reveal">01 — Обо мне</div>
-  <h2 class="sec-heading reveal">Превращаю идеи<br>в <em>рабочий код</em></h2>
+  <h2 class="sec-heading reveal">Превращаю <em>фантазию</em><br>в визуал</h2>
 
   <div class="about-grid">
     <div class="about-text reveal">
       <p>
-        Меня зовут <strong>Артем Пономарев</strong>. Я фронтенд-разработчик, который делает не просто сайты — а работающие инструменты для бизнеса и личных брендов.
+        Меня зовут <strong>Екатерина Наумова</strong>. Я AI-художник, который превращает слова в невероятные визуальные миры.
       </p>
       <p>
-        Люблю детали: точную типографику, плавные анимации, код без мусора. Каждый проект — от идеи до деплоя.
+        Моя история началась в 2022 году, когда я впервые попробовала Midjourney. То, что начиналось как любопытство, стало моим призванием. Сейчас я создаю арты для брендов, музыкантов, писателей и просто влюблённых в AI людей.
+      </p>
+      <p>
+        <strong>Легенда:</strong> Я — проводник между миром идей и миром образов. Каждый мой промпт — это заклинание, рождающее уникальную вселенную на пересечении технологий и творчества.
       </p>
       <a class="about-link" href="#contact">
-        Обсудить проект <i class="fas fa-arrow-right" style="font-size:10px"></i>
+        Связаться со мной <i class="fas fa-arrow-right" style="font-size:10px"></i>
       </a>
     </div>
 
     <div class="about-stats reveal reveal-d2">
       <div class="stat-cell">
-        <div class="stat-val">3<em>+</em></div>
+        <div class="stat-val">2<em>+</em></div>
         <div class="stat-label">Года опыта</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-val" data-count="150">150<em>+</em></div>
+        <div class="stat-val">500<em>+</em></div>
         <div class="stat-label">Проектов</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-val">100<em>%</em></div>
-        <div class="stat-label">Отдача</div>
+        <div class="stat-val">10K<em>+</em></div>
+        <div class="stat-label">Артов</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-val">24<em>/7</em></div>
-        <div class="stat-label">На связи</div>
+        <div class="stat-val">50<em>+</em></div>
+        <div class="stat-label">Довольных клиентов</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── SKILLS ────────────────────────────── -->
-<section id="skills" class="sec">
-  <div class="sec-eyebrow reveal">02 — Навыки</div>
-  <h2 class="sec-heading reveal">Мой <em>стек</em></h2>
+<!-- CONTENT TYPES -->
+<section id="content" class="sec">
+  <div class="sec-eyebrow reveal">02 — Что я делаю</div>
+  <h2 class="sec-heading reveal">Типы <em>контента</em></h2>
 
-  <div class="skills-list reveal">
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-js" style="color:#F7DF1E"></i></div>
-        <div>
-          <div class="skill-name">JavaScript</div>
-          <div class="skill-sub">ES6+ · async/await · DOM</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">85%</div>
-        <div class="skill-fill" data-w="85%"></div>
-      </div>
+  <div class="content-grid reveal">
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-image" style="color:#FF6B6B"></i></div>
+      <div class="content-title">AI Иллюстрации</div>
+      <div class="content-sub">Midjourney · DALL-E · SD</div>
+      <div class="content-desc">Уникальные иллюстрации, арты и концепты для любых задач</div>
     </div>
 
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-html5" style="color:#E44D26"></i></div>
-        <div>
-          <div class="skill-name">HTML / CSS</div>
-          <div class="skill-sub">Tailwind · Flexbox · Grid</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">95%</div>
-        <div class="skill-fill" data-w="95%"></div>
-      </div>
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-video" style="color:#FF6B6B"></i></div>
+      <div class="content-title">AI Видео</div>
+      <div class="content-sub">Runway · Kling · Sora</div>
+      <div class="content-desc">Анимированные ролики и кинематографичные видео из текста</div>
     </div>
 
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-react" style="color:#61DAFB"></i></div>
-        <div>
-          <div class="skill-name">React</div>
-          <div class="skill-sub">Hooks · Router · State</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">70%</div>
-        <div class="skill-fill" data-w="70%"></div>
-      </div>
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-portrait" style="color:#FF6B6B"></i></div>
+      <div class="content-title">Портреты</div>
+      <div class="content-sub">Flux · Stable Diffusion</div>
+      <div class="content-desc">Фотореалистичные и стилизованные портреты на заказ</div>
     </div>
 
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-node-js" style="color:#68A063"></i></div>
-        <div>
-          <div class="skill-name">Node.js</div>
-          <div class="skill-sub">Express · REST API</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">65%</div>
-        <div class="skill-fill" data-w="65%"></div>
-      </div>
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-tshirt" style="color:#FF6B6B"></i></div>
+      <div class="content-title">Дизайн одежды</div>
+      <div class="content-sub">Fashion AI · Concept</div>
+      <div class="content-desc">Эскизы одежды, принты и концепты для брендов</div>
     </div>
 
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-python" style="color:#4584B6"></i></div>
-        <div>
-          <div class="skill-name">Python</div>
-          <div class="skill-sub">Scripts · Automation · Bots</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">75%</div>
-        <div class="skill-fill" data-w="75%"></div>
-      </div>
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-book-open" style="color:#FF6B6B"></i></div>
+      <div class="content-title">Обложки книг</div>
+      <div class="content-sub">Book Cover AI</div>
+      <div class="content-desc">Оформление книг, журналов и цифровых изданий</div>
     </div>
 
-    <div class="skill-item" data-skill>
-      <div class="skill-head">
-        <div class="skill-icon"><i class="fab fa-git-alt" style="color:#F05032"></i></div>
-        <div>
-          <div class="skill-name">Git</div>
-          <div class="skill-sub">GitHub · CI/CD · Branches</div>
-        </div>
-      </div>
-      <div class="skill-track">
-        <div class="skill-pct">80%</div>
-        <div class="skill-fill" data-w="80%"></div>
-      </div>
+    <div class="content-item">
+      <div class="content-icon"><i class="fas fa-graduation-cap" style="color:#FF6B6B"></i></div>
+      <div class="content-title">Обучение AI</div>
+      <div class="content-sub">Courses · Mentorship</div>
+      <div class="content-desc">Уроки по промптингу и работе с нейросетями</div>
     </div>
   </div>
 </section>
 
-<!-- ─── PORTFOLIO CAROUSEL ─────────────────── -->
-<section id="portfolio" class="sec sec-alt">
-  <div class="sec-eyebrow reveal">03 — Проекты</div>
-  <h2 class="sec-heading reveal">Мои <em>работы</em></h2>
+<!-- SCHEDULE -->
+<section id="schedule" class="sec sec-alt">
+  <div class="sec-eyebrow reveal">03 — Расписание постов</div>
+  <h2 class="sec-heading reveal">Контент <em>план</em></h2>
 
-  <div class="portfolio-wrap reveal">
-    <button class="carousel-btn carousel-btn--prev" onclick="carouselMove(-1)" aria-label="Назад">&#8249;</button>
-    <button class="carousel-btn carousel-btn--next" onclick="carouselMove(1)" aria-label="Вперёд">&#8250;</button>
-    <div class="portfolio-carousel" id="carousel">
-
-      <!-- Project 1 -->
-      <div class="portfolio-slide">
-        <a class="proj-card" href="septic.html" target="_blank">
-          <div class="proj-thumb">
-            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A04 0%, #3D1507 100%);">
-              <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 60%, rgba(201,75,26,0.4) 0%, transparent 60%);"></div>
-            </div>
-            <i class="fas fa-tractor proj-thumb-icon"></i>
-            <div class="proj-live">↗ Live</div>
-          </div>
-          <div class="proj-body">
-            <div class="proj-num">// project_01</div>
-            <div class="proj-name">СептикПро — Лендинг</div>
-            <div class="proj-desc">Премиальный лендинг для строительной компании. Кастомный курсор, анимации на скролле, калькулятор стоимости.</div>
-            <div class="proj-tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">JavaScript</span>
-            </div>
-            <span class="proj-arrow">→ Открыть проект</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- Project 2: Volbot -->
-      <div class="portfolio-slide">
-        <a class="proj-card" href="volbot.html" target="_blank">
-          <div class="proj-thumb">
-            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #0A0F1A 0%, #0E1B2E 100%);">
-              <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 50%, rgba(0,180,255,0.3) 0%, transparent 60%);"></div>
-            </div>
-            <i class="fas fa-robot proj-thumb-icon"></i>
-            <div class="proj-live">↗ Live</div>
-          </div>
-          <div class="proj-body">
-            <div class="proj-num">// project_02</div>
-            <div class="proj-name">VolBot — Telegram Бот</div>
-            <div class="proj-desc">Умный Telegram-бот для торговли и аналитики. Интеграция с API, автоматические сигналы, удобный интерфейс.</div>
-            <div class="proj-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Telegram API</span>
-              <span class="tag">Automation</span>
-            </div>
-            <span class="proj-arrow">→ Открыть проект</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- Project 3: Kurs -->
-      <div class="portfolio-slide">
-        <a class="proj-card" href="kurs/Index.html" target="_blank">
-          <div class="proj-thumb">
-            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A0A2E 0%, #2D1B4E 100%);">
-              <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(123,108,255,0.35) 0%, transparent 60%);"></div>
-            </div>
-            <i class="fas fa-graduation-cap proj-thumb-icon"></i>
-            <div class="proj-live">↗ Live</div>
-          </div>
-          <div class="proj-body">
-            <div class="proj-num">// project_03</div>
-            <div class="proj-name">Курс — Обучающая платформа</div>
-            <div class="proj-desc">Платформа для онлайн-обучения с интерактивными уроками, прогрессом и адаптивным дизайном.</div>
-            <div class="proj-tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">JavaScript</span>
-            </div>
-            <span class="proj-arrow">→ Открыть проект</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- Project 4: ART_IRBIT -->
-      <div class="portfolio-slide">
-        <a class="proj-card" href="artirbit.html" target="_blank">
-          <div class="proj-thumb">
-            <div class="proj-thumb-inner" style="background: linear-gradient(135deg, #1A1208 0%, #261D0E 100%);">
-              <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(201,151,58,0.35) 0%, transparent 60%);"></div>
-            </div>
-            <i class="fas fa-palette proj-thumb-icon"></i>
-            <div class="proj-live">↗ Live</div>
-          </div>
-          <div class="proj-body">
-            <div class="proj-num">// project_04</div>
-            <div class="proj-name">ART_IRBIT — Портреты на холсте</div>
-            <div class="proj-desc">Презентация-слайды студии художественных портретов. Частицы, анимации, золотая палитра.</div>
-            <div class="proj-tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">Canvas</span>
-              <span class="tag">JavaScript</span>
-            </div>
-            <span class="proj-arrow">→ Открыть проект</span>
-          </div>
-        </a>
-      </div>
-
-    </div>
+  <div class="reveal">
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>День</th>
+          <th>Тип контента</th>
+          <th>Тема</th>
+          <th>Описание</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="day">ПОНЕДЕЛЬНИК</td>
+          <td><span class="type type-video">Видео</span></td>
+          <td>AI-арт разбор</td>
+          <td>Разбор интересного промпта или генерации</td>
+        </tr>
+        <tr>
+          <td class="day">ВТОРНИК</td>
+          <td><span class="type type-post">Пост</span></td>
+          <td>Нейросети новости</td>
+          <td>Обзор новых инструментов и обновлений</td>
+        </tr>
+        <tr>
+          <td class="day">СРЕДА</td>
+          <td><span class="type type-story">Сторис</span></td>
+          <td>Behind the scenes</td>
+          <td>Процесс создания работы в реальном времени</td>
+        </tr>
+        <tr>
+          <td class="day">ЧЕТВЕРГ</td>
+          <td><span class="type type-video">Видео</span></td>
+          <td>Tutorial</td>
+          <td>Обучающий контент по промптингу</td>
+        </tr>
+        <tr>
+          <td class="day">ПЯТНИЦА</td>
+          <td><span class="type type-post">Пост</span></td>
+          <td>Портфолио недели</td>
+          <td>Лучшие работы за неделю с комментариями</td>
+        </tr>
+        <tr>
+          <td class="day">СУББОТА</td>
+          <td><span class="type type-story">Сторис</span></td>
+          <td>Q&A</td>
+          <td>Ответы на вопросы подписчиков</td>
+        </tr>
+        <tr>
+          <td class="day">ВОСКРЕСЕНЬЕ</td>
+          <td><span class="type type-post">Пост</span></td>
+          <td>Интерактив</td>
+          <td>Голосования, опросы, конкурсы</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="carousel-dots reveal" id="carouselDots"></div>
 </section>
+
+<!-- CONTACT -->
 <section id="contact" class="sec">
   <div class="contact-layout">
     <div class="reveal">
       <div class="sec-eyebrow">04 — Контакты</div>
-      <h2 class="contact-big">Давайте<br>работать<br><em>вместе</em></h2>
-      <p class="contact-note">Есть идея или проект? Напишите — обсудим детали. Отвечаю быстро, работаю чисто.</p>
+      <h2 class="contact-big">Создадим<br>что-то<br><em>невероятное</em></h2>
+      <p class="contact-note">Есть идея или проект? Напишите — обсудим детали. Создаю уникальные визуальные решения для любых задач.</p>
     </div>
 
     <div class="contact-cards reveal reveal-d2">
-      <a class="contact-card" href="https://t.me/artponomarev" target="_blank">
+      <a class="contact-card" href="https://t.me/enaumova_ai" target="_blank">
         <div class="contact-icon-wrap">
           <i class="fab fa-telegram"></i>
         </div>
         <div>
           <div class="contact-card-title">Telegram</div>
-          <div class="contact-card-sub">@artponomarev</div>
+          <div class="contact-card-sub">@enaumova_ai</div>
         </div>
         <div class="contact-chevron"><i class="fas fa-arrow-right"></i></div>
       </a>
 
-      <a class="contact-card" href="tel:+79025850404">
+      <a class="contact-card" href="https://instagram.com/enaumova.ai" target="_blank">
         <div class="contact-icon-wrap">
-          <i class="fas fa-phone"></i>
+          <i class="fab fa-instagram"></i>
         </div>
         <div>
-          <div class="contact-card-title">Телефон</div>
-          <div class="contact-card-sub">+7 (902) 585-04-04</div>
+          <div class="contact-card-title">Instagram</div>
+          <div class="contact-card-sub">@enaumova.ai</div>
         </div>
         <div class="contact-chevron"><i class="fas fa-arrow-right"></i></div>
       </a>
@@ -965,13 +776,13 @@ footer {
   </div>
 </section>
 
-<!-- ─── FOOTER ────────────────────────────── -->
+<!-- FOOTER -->
 <footer>
   <a class="foot-logo" href="#">
-    <span class="acc">&lt;</span>AP<span style="color:var(--muted)">/</span><span class="acc">&gt;</span>
-    &nbsp;·&nbsp; Артем Пономарев
+    <span class="acc">&lt;</span>EN<span style="color:var(--muted)">/</span><span class="acc">&gt;</span>
+    &nbsp;·&nbsp; Екатерина Наумова
   </a>
-  <div class="foot-right">© 2026 · Все права защищены</div>
+  <div class="foot-right">© 2026 · AI Creator</div>
 </footer>
 
 <script>
@@ -988,7 +799,7 @@ document.addEventListener('mousemove', e => {
   ring.style.left=rx+'px'; ring.style.top=ry+'px';
   requestAnimationFrame(animRing);
 })();
-document.querySelectorAll('a,button,.skill-item,.stat-cell,.contact-card,.proj-card').forEach(el=>{
+document.querySelectorAll('a,button,.content-item,.stat-cell,.contact-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
 });
@@ -1002,7 +813,6 @@ const mobMenu = document.getElementById('mobMenu');
 document.getElementById('mobOpen').addEventListener('click',()=>mobMenu.classList.add('open'));
 document.getElementById('mobClose').addEventListener('click',()=>mobMenu.classList.remove('open'));
 function closeMob(){ mobMenu.classList.remove('open'); }
-// Show mob button on small screens
 function checkMob(){
   const btn = document.getElementById('mobOpen');
   btn.style.display = window.innerWidth < 1024 ? 'block' : 'none';
@@ -1017,95 +827,19 @@ const revObs = new IntersectionObserver(entries=>{
 },{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
 
-/* SKILL BARS */
-const skillObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.querySelectorAll('.skill-fill').forEach(bar=>{
-        setTimeout(()=>{ bar.style.width = bar.dataset.w; }, 200);
-      });
-      skillObs.unobserve(e.target);
-    }
-  });
-},{threshold:.2});
-document.querySelectorAll('.skills-list').forEach(el=>skillObs.observe(el));
-
-/* PORTFOLIO CAROUSEL */
-(function(){
-  const carousel = document.getElementById('carousel');
-  const dotsContainer = document.getElementById('carouselDots');
-  const slides = carousel.querySelectorAll('.portfolio-slide');
-  const totalSlides = slides.length;
-  let currentIndex = 0;
-  let slidesPerView = getSlidesPerView();
-  let maxIndex = Math.max(0, totalSlides - slidesPerView);
-
-  function getSlidesPerView(){
-    if(window.innerWidth >= 1200) return 3;
-    if(window.innerWidth >= 901) return 2;
-    return 1;
-  }
-
-  // Build dots
-  function buildDots(){
-    dotsContainer.innerHTML = '';
-    const totalDots = maxIndex + 1;
-    for(let i = 0; i < totalDots; i++){
-      const dot = document.createElement('button');
-      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Слайд ' + (i+1));
-      dot.onclick = () => goToSlide(i);
-      dotsContainer.appendChild(dot);
-    }
-  }
-
-  function updateCarousel(){
-    const slideWidth = 100 / slidesPerView;
-    carousel.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
-    // Update dots
-    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === currentIndex);
+/* ADD CUSTOM SCRIPTS */
+(function() {
+  const container = document.getElementById('script-container');
+  if (typeof window.customScripts !== 'undefined') {
+    container.style.display = 'block';
+    window.customScripts.forEach(function(script) {
+      try {
+        eval(script);
+      } catch(e) {
+        console.error('Script error:', e);
+      }
     });
   }
-
-  window.carouselMove = function(dir){
-    currentIndex += dir;
-    if(currentIndex < 0) currentIndex = maxIndex;
-    if(currentIndex > maxIndex) currentIndex = 0;
-    updateCarousel();
-  };
-
-  function goToSlide(index){
-    currentIndex = index;
-    updateCarousel();
-  }
-
-  // Auto-play
-  let autoPlay = setInterval(() => window.carouselMove(1), 4000);
-  carousel.addEventListener('mouseenter', () => clearInterval(autoPlay));
-  carousel.addEventListener('mouseleave', () => {
-    autoPlay = setInterval(() => window.carouselMove(1), 4000);
-  });
-
-  // Touch/swipe support
-  let startX = 0;
-  carousel.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
-  carousel.addEventListener('touchend', (e) => {
-    const diff = startX - e.changedTouches[0].clientX;
-    if(Math.abs(diff) > 50) window.carouselMove(diff > 0 ? 1 : -1);
-  });
-
-  // Responsive recalc
-  window.addEventListener('resize', () => {
-    slidesPerView = getSlidesPerView();
-    maxIndex = Math.max(0, totalSlides - slidesPerView);
-    if(currentIndex > maxIndex) currentIndex = maxIndex;
-    buildDots();
-    updateCarousel();
-  });
-
-  buildDots();
-  updateCarousel();
 })();
 </script>
 </body>
