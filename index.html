@@ -645,6 +645,190 @@ footer{
   .guarantee-box{padding:2rem 1.5rem}
   footer{flex-direction:column;text-align:center}
 }
+
+/* ══════════════════════════════════════
+   ── НОВЫЙ БЛОК: ДЛЯ НОВИЧКОВ ──
+══════════════════════════════════════ */
+.beginner-section{
+  background:var(--surface);
+  position:relative;overflow:hidden;
+}
+.beginner-section::before{
+  content:'';position:absolute;
+  top:-200px;left:-200px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,188,212,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.beginner-section::after{
+  content:'';position:absolute;
+  bottom:-200px;right:-200px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(240,176,0,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.beginner-inner{position:relative;z-index:1}
+
+/* Alert-блок вверху */
+.beginner-alert{
+  display:flex;align-items:flex-start;gap:1rem;
+  background:linear-gradient(135deg,rgba(0,188,212,0.07),rgba(0,188,212,0.02));
+  border:1px solid rgba(0,188,212,0.22);
+  border-radius:12px;padding:1.25rem 1.5rem;
+  margin:0 auto 3rem;max-width:780px;
+}
+.beginner-alert-icon{font-size:1.5rem;flex-shrink:0;margin-top:.1rem}
+.beginner-alert p{font-size:.925rem;color:var(--text-dim);line-height:1.65}
+.beginner-alert strong{color:var(--accent)}
+
+/* Таймлайн */
+.steps-timeline{
+  display:flex;flex-direction:column;gap:0;
+  max-width:860px;margin:0 auto;
+  position:relative;
+}
+.steps-timeline::before{
+  content:'';
+  position:absolute;left:27px;top:60px;bottom:60px;
+  width:2px;
+  background:linear-gradient(180deg,rgba(240,176,0,0.3),rgba(0,188,212,0.25),rgba(0,230,118,0.3));
+  pointer-events:none;
+}
+.timeline-step{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:1.25rem;
+  padding:0 0 2.25rem 0;
+  position:relative;
+}
+.timeline-step:last-child{padding-bottom:0}
+.step-circle{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:1.2rem;
+  flex-shrink:0;position:relative;z-index:1;
+  transition:all .3s;
+}
+.step-circle.gold{
+  background:rgba(240,176,0,0.1);
+  border:2px solid rgba(240,176,0,0.4);
+  color:var(--gold);
+  box-shadow:0 0 18px rgba(240,176,0,0.15);
+}
+.step-circle.accent{
+  background:rgba(0,188,212,0.08);
+  border:2px solid rgba(0,188,212,0.35);
+  color:var(--accent);
+  box-shadow:0 0 18px rgba(0,188,212,0.12);
+}
+.step-circle.green{
+  background:rgba(0,230,118,0.08);
+  border:2px solid rgba(0,230,118,0.35);
+  color:var(--green);
+  box-shadow:0 0 18px rgba(0,230,118,0.12);
+}
+.step-body{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.08);
+  border-radius:12px;
+  padding:1.5rem;
+  transition:all .3s;
+}
+.step-body:hover{
+  border-color:rgba(240,176,0,0.2);
+  background:var(--surface-3);
+  transform:translateX(4px);
+}
+.step-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;margin-bottom:.5rem;
+}
+.step-body h3{font-size:1.05rem;font-weight:600}
+.step-tag{
+  font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+}
+.step-tag.free{background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.25)}
+.step-tag.bonus{background:rgba(240,176,0,0.1);color:var(--gold);border:1px solid rgba(240,176,0,0.3)}
+.step-tag.action{background:rgba(0,188,212,0.08);color:var(--accent);border:1px solid rgba(0,188,212,0.25)}
+.step-body p{font-size:.875rem;color:var(--text-dim);line-height:1.65;margin-bottom:.5rem}
+.step-body p:last-child{margin-bottom:0}
+
+/* Discount highlight */
+.discount-highlight{
+  display:flex;align-items:center;gap:1rem;
+  background:linear-gradient(135deg,rgba(240,176,0,0.1),rgba(240,176,0,0.03));
+  border:1px solid rgba(240,176,0,0.28);
+  border-radius:10px;padding:1rem 1.25rem;
+  margin:1rem 0;
+}
+.discount-pct{
+  font-family:var(--font-display);
+  font-size:2.5rem;line-height:1;
+  color:var(--gold);
+  text-shadow:0 0 20px var(--gold-glow);
+  flex-shrink:0;
+}
+.discount-text{font-size:.85rem;color:var(--text-dim);line-height:1.55}
+.discount-text strong{color:var(--text)}
+
+/* CTA row inside steps */
+.step-cta-row{
+  display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem;
+}
+.btn-deriv{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(240,176,0,0.1);
+  border:1px solid rgba(240,176,0,0.35);
+  color:var(--gold);font-weight:700;font-size:.875rem;
+  padding:.6rem 1.25rem;border-radius:8px;
+  text-decoration:none;transition:all .2s;
+}
+.btn-deriv:hover{background:rgba(240,176,0,0.18);border-color:var(--gold);transform:translateY(-1px)}
+.btn-support{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,188,212,0.07);
+  border:1px solid rgba(0,188,212,0.28);
+  color:var(--accent);font-weight:600;font-size:.875rem;
+  padding:.6rem 1.25rem;border-radius:8px;
+  text-decoration:none;transition:all .2s;
+}
+.btn-support:hover{background:rgba(0,188,212,0.14);border-color:var(--accent);transform:translateY(-1px)}
+.btn-tg-bot{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,230,118,0.07);
+  border:1px solid rgba(0,230,118,0.28);
+  color:var(--green);font-weight:600;font-size:.875rem;
+  padding:.6rem 1.25rem;border-radius:8px;
+  text-decoration:none;transition:all .2s;
+}
+.btn-tg-bot:hover{background:rgba(0,230,118,0.13);border-color:var(--green);transform:translateY(-1px)}
+
+/* Support strip */
+.support-strip{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;margin-top:3rem;
+}
+.support-card{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.08);
+  border-radius:12px;padding:1.5rem;
+  display:flex;flex-direction:column;gap:.75rem;
+  transition:all .3s;
+}
+.support-card:hover{border-color:rgba(240,176,0,0.2);background:var(--surface-3)}
+.support-card-head{display:flex;align-items:center;gap:.75rem}
+.support-icon{font-size:1.5rem}
+.support-card h4{font-size:.95rem;font-weight:600}
+.support-card p{font-size:.825rem;color:var(--text-dim);line-height:1.55;flex:1}
+
+@media(max-width:640px){
+  .steps-timeline::before{display:none}
+  .timeline-step{grid-template-columns:44px 1fr;gap:.75rem}
+  .step-circle{width:44px;height:44px;font-size:1rem}
+  .discount-highlight{flex-direction:column;gap:.5rem}
+}
 </style>
 </head>
 <body class="grid-bg">
@@ -656,6 +840,7 @@ footer{
     <li><a href="#how">Как работает</a></li>
     <li><a href="#signals">Сигналы</a></li>
     <li><a href="#pricing">Тарифы</a></li>
+    <li><a href="#beginners">Новичкам</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
   <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="nav-cta">🤖 Открыть бот</a>
@@ -664,7 +849,6 @@ footer{
 <!-- ── LIVE TICKER ── -->
 <div class="ticker-bar">
   <div class="ticker-inner" id="ticker">
-    <!-- items will be cloned by JS -->
     <span class="ticker-item"><span class="ticker-badge">XAUUSD</span><span class="up">▲ 2 347.80</span></span>
     <span class="ticker-item">📡 Сигналов за 30 дней: <b style="color:var(--gold)">1840</b></span>
     <span class="ticker-item">✅ Точность GPT: <span class="up">96%</span></span>
@@ -673,7 +857,7 @@ footer{
     <span class="ticker-item">⚡ Последний сигнал: <span class="up">BUY 2346.10 → TP: +38 pts</span></span>
     <span class="ticker-item">24/5 автоторговля в реальном времени</span>
     <span class="ticker-item"><span class="ticker-badge">AI</span> GPT-анализ рынка</span>
-    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+2 140 pts</span></span>
+    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+18 500 pts</span></span>
     <span class="ticker-item"><span class="ticker-badge">XAUUSD</span><span class="up">▲ 2 347.80</span></span>
     <span class="ticker-item">📡 Сигналов за 30 дней: <b style="color:var(--gold)">1840</b></span>
     <span class="ticker-item">✅ Точность GPT: <span class="up">96%</span></span>
@@ -682,7 +866,7 @@ footer{
     <span class="ticker-item">⚡ Последний сигнал: <span class="up">BUY 2346.10 → TP: +38 pts</span></span>
     <span class="ticker-item">24/5 автоторговля в реальном времени</span>
     <span class="ticker-item"><span class="ticker-badge">AI</span> GPT-анализ рынка</span>
-    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+2 140 pts</span></span>
+    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+18 500 pts</span></span>
   </div>
 </div>
 
@@ -697,7 +881,7 @@ footer{
       Бот активен · Торгуем прямо сейчас
     </div>
     <h1 class="hero-title">
-            AI<br><span class="highlight">СИГНАЛЫ</span><br>XAUUSD
+      AI<br><span class="highlight">СИГНАЛЫ</span><br>XAUUSD
     </h1>
     <p class="hero-sub">
       GPT_MONEY_BOT — торговый ИИ на рынке XAUUSD.<br>
@@ -870,7 +1054,6 @@ footer{
     <p class="section-sub" style="margin:0 auto 0">Никаких скрытых платежей. Плати только за дни, которые нужны.</p>
   </div>
   <div class="pricing-grid">
-    <!-- 5 days -->
     <div class="price-card fade-in">
       <div class="price-days">5 ДНЕЙ</div>
       <div class="price-period">Пробный доступ</div>
@@ -884,7 +1067,6 @@ footer{
       </ul>
       <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-plan">Выбрать →</a>
     </div>
-    <!-- 15 days — FEATURED -->
     <div class="price-card featured fade-in">
       <div class="price-badge">🔥 Популярный</div>
       <div class="price-days">15 ДНЕЙ</div>
@@ -900,7 +1082,6 @@ footer{
       </ul>
       <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-plan">Выбрать →</a>
     </div>
-    <!-- 30 days -->
     <div class="price-card fade-in">
       <div class="price-days">30 ДНЕЙ</div>
       <div class="price-period">Максимальная выгода</div>
@@ -961,6 +1142,167 @@ footer{
       <h3>Всё в Telegram</h3>
       <p>Не нужно ничего устанавливать. Сигналы, статистика и поддержка — прямо в привычном мессенджере.</p>
     </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     ── ДЛЯ НОВИЧКОВ ──
+══════════════════════════════════════ -->
+<section id="beginners" class="beginner-section">
+  <div class="beginner-inner">
+
+    <div class="fade-in" style="text-align:center;margin-bottom:2.5rem">
+      <div class="section-tag">Для новичков</div>
+      <h2 class="section-title">Никогда не торговал?<br><span style="color:var(--gold)">Стартуй с нуля — мы поможем</span></h2>
+    </div>
+
+    <div class="fade-in">
+      <div class="beginner-alert">
+        <span class="beginner-alert-icon">💡</span>
+        <p>
+          Не знаешь что такое брокер и с чего начать? Без проблем — ниже пошаговый маршрут от регистрации
+          до первой сделки. Зарегистрируйся на брокера <strong>Deriv</strong> по нашей партнёрской ссылке
+          и получи <strong>скидку −10% на первую подписку</strong> как бонус за старт с нами.
+        </p>
+      </div>
+    </div>
+
+    <div class="steps-timeline fade-in">
+
+      <!-- ШАГ 1 -->
+      <div class="timeline-step">
+        <div class="step-circle gold">01</div>
+        <div class="step-body">
+          <div class="step-head">
+            <h3>Зарегистрируйся на Deriv</h3>
+            <span class="step-tag bonus">🎁 Бонус −10%</span>
+          </div>
+          <p>
+            <strong style="color:var(--text)">Deriv</strong> — международный лицензированный брокер,
+            на котором работает наш бот. Регистрация занимает 2 минуты: email, пароль, верификация.
+          </p>
+          <div class="discount-highlight">
+            <div class="discount-pct">−10%</div>
+            <div class="discount-text">
+              <strong>Скидка на первую подписку GPT_MONEY_BOT</strong><br>
+              Зарегистрируйся по нашей ссылке → сообщи менеджеру об этом → получи скидку при оформлении.
+            </div>
+          </div>
+          <div class="step-cta-row">
+            <a href="YOUR_DERIV_REFERRAL_LINK" target="_blank" class="btn-deriv">
+              🏦 Открыть счёт на Deriv →
+            </a>
+            <a href="https://t.me/YOUR_SUPPORT_USERNAME" target="_blank" class="btn-support">
+              💬 Написать менеджеру
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ШАГ 2 -->
+      <div class="timeline-step">
+        <div class="step-circle accent">02</div>
+        <div class="step-body">
+          <div class="step-head">
+            <h3>Открой торговый счёт и пополни депозит</h3>
+            <span class="step-tag action">⚙️ 5 минут</span>
+          </div>
+          <p>
+            В личном кабинете Deriv создай счёт типа <strong style="color:var(--text)">CFD → Gold (XAUUSD)</strong>.
+            Минимальный депозит — от $5. Способы пополнения: банковская карта, криптовалюта, электронные кошельки.
+          </p>
+          <p>Не разобрался в личном кабинете? Напиши нам — поможем шаг за шагом в личке.</p>
+          <div class="step-cta-row">
+            <a href="https://t.me/YOUR_SUPPORT_USERNAME" target="_blank" class="btn-support">
+              🙋 Нужна помощь с настройкой
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ШАГ 3 -->
+      <div class="timeline-step">
+        <div class="step-circle gold">03</div>
+        <div class="step-body">
+          <div class="step-head">
+            <h3>Подключи GPT_MONEY_BOT</h3>
+            <span class="step-tag free">✅ 3 дня бесплатно</span>
+          </div>
+          <p>
+            Открой <strong style="color:var(--text)">@GPT_MONEY_BOT</strong> в Telegram → нажми /start.
+            Бесплатный период на 3 дня активируется автоматически — без карты, без оплаты.
+            Сигналы начнут приходить уже через несколько минут.
+          </p>
+          <div class="step-cta-row">
+            <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-tg-bot">
+              🤖 Открыть бот →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ШАГ 4 -->
+      <div class="timeline-step">
+        <div class="step-circle green">04</div>
+        <div class="step-body">
+          <div class="step-head">
+            <h3>Открывай сделки — зарабатывай</h3>
+            <span class="step-tag action">📈 Поехали!</span>
+          </div>
+          <p>
+            Когда приходит сигнал — открываешь сделку в терминале Deriv с указанными параметрами
+            (направление, цена входа, TP, SL). Бот сам отчитается о результате. Не знаешь как читать сигнал?
+            Разберём на живом примере — пиши.
+          </p>
+          <div class="step-cta-row">
+            <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-primary" style="animation:none;padding:.6rem 1.25rem;font-size:.875rem">
+              🚀 Начать торговать
+            </a>
+            <a href="https://t.me/YOUR_SUPPORT_USERNAME" target="_blank" class="btn-support">
+              💬 Разобрать на примере
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /steps-timeline -->
+
+    <!-- Карточки поддержки -->
+    <div class="support-strip fade-in">
+      <div class="support-card">
+        <div class="support-card-head">
+          <span class="support-icon">🙋‍♂️</span>
+          <h4>Личный менеджер</h4>
+        </div>
+        <p>Поможем с регистрацией на Deriv, пополнением счёта и первыми сделками. Ответим на любой вопрос.</p>
+        <a href="https://t.me/YOUR_SUPPORT_USERNAME" target="_blank" class="btn-support" style="justify-content:center">
+          💬 Написать в Telegram
+        </a>
+      </div>
+      <div class="support-card">
+        <div class="support-card-head">
+          <span class="support-icon">📚</span>
+          <h4>Гайд для новичка</h4>
+        </div>
+        <p>Короткий старт-гайд по Deriv и первым сделкам. 5 минут — и ты уже понимаешь что делать.</p>
+        <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-tg-bot" style="justify-content:center">
+          📖 Получить гайд в боте
+        </a>
+      </div>
+      <div class="support-card">
+        <div class="support-card-head">
+          <span class="support-icon">🎁</span>
+          <h4>Скидка −10% за старт</h4>
+        </div>
+        <p>Открой счёт на Deriv по нашей ссылке → сообщи менеджеру → получи скидку на первую подписку.</p>
+        <a href="YOUR_DERIV_REFERRAL_LINK" target="_blank" class="btn-deriv" style="justify-content:center">
+          🏦 Зарегистрироваться на Deriv
+        </a>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1036,6 +1378,15 @@ footer{
         Нет — любая торговля несёт риски. Бот даёт сигналы с высокой вероятностью успеха на основе ИИ-анализа, но итоговый результат зависит от многих факторов. Торгуй только средствами, которые можешь позволить себе потерять.
       </div>
     </div>
+    <div class="faq-item">
+      <button class="faq-q">
+        Я новичок — с какого брокера начать?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        Рекомендуем Deriv — лицензированный международный брокер с минимальным депозитом от $5. Зарегистрируйся по нашей партнёрской ссылке и получи скидку 10% на первую подписку. Наш менеджер поможет с настройкой счёта.
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1064,6 +1415,7 @@ footer{
   <span class="footer-copy">© 2025 · Торговые сигналы XAUUSD · Не является финансовой консультацией</span>
   <ul class="footer-links">
     <li><a href="https://t.me/GPT_MONEY_BOT" target="_blank">Telegram</a></li>
+    <li><a href="#beginners">Новичкам</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#pricing">Тарифы</a></li>
   </ul>
