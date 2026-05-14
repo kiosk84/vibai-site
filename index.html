@@ -1,752 +1,1110 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GPT_MONEY_BOT — Сигналы XAUUSD 24/5 | Зарабатывай на золоте</title>
-  <meta name="description" content="Telegram-бот с точными сигналами по золоту. WinRate 94%+, R:R 1:2+. 3 дня бесплатно. Подписка от 67₽/день.">
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    @import "tailwindcss";
-    @theme {
-      --color-background: #06070d;
-      --color-on-background: #e0e2ef;
-      --color-primary: #f0b000;
-      --color-on-primary: #06070d;
-      --color-primary-container: #ffd740;
-      --color-surface: #0c0d16;
-      --color-on-surface: #e0e2ef;
-      --color-surface-container: #10111c;
-      --color-surface-container-low: #161828;
-      --color-surface-container-highest: #1c1e30;
-      --color-on-surface-variant: rgba(224, 226, 239, 0.7);
-      --color-outline-variant: rgba(240, 176, 0, 0.2);
-      --color-success: #00e676;
-      --color-danger: #ff5252;
-      --color-accent: #00bcd4;
-      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-      --font-mono: "JetBrains Mono", ui-monospace, monospace;
-    }
-    body {
-      background-color: var(--color-background);
-      color: var(--color-on-background);
-      min-height: 100dvh;
-      font-family: var(--font-sans);
-    }
-    .bg-grid {
-      background-image:
-        linear-gradient(rgba(240,176,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(240,176,0,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .glow-gold { box-shadow: 0 0 20px rgba(240,176,0,0.15), 0 0 60px rgba(240,176,0,0.05); }
-    .glow-gold-strong { box-shadow: 0 0 30px rgba(240,176,0,0.3), 0 0 80px rgba(240,176,0,0.1); }
-    .text-glow-gold { text-shadow: 0 0 20px rgba(240,176,0,0.4), 0 0 40px rgba(240,176,0,0.2); }
-    .glow-green { box-shadow: 0 0 20px rgba(0,230,118,0.2), 0 0 60px rgba(0,230,118,0.05); }
-    .scanlines::after {
-      content: ''; position: absolute; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-      pointer-events: none;
-    }
-    .border-gradient {
-      border: 1px solid transparent; background-clip: padding-box; position: relative;
-    }
-    .border-gradient::before {
-      content: ''; position: absolute; inset: -1px;
-      background: linear-gradient(135deg, rgba(240,176,0,0.3), transparent 40%, transparent 60%, rgba(0,188,212,0.3));
-      border-radius: inherit; z-index: -1;
-    }
-    @keyframes pulse-gold {
-      0%, 100% { box-shadow: 0 0 20px rgba(240,176,0,0.3); }
-      50% { box-shadow: 0 0 40px rgba(240,176,0,0.5), 0 0 80px rgba(240,176,0,0.2); }
-    }
-    .pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
-    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    .animate-ticker { animation: ticker 30s linear infinite; }
-    .section-divider {
-      height: 1px; background: linear-gradient(90deg, transparent, rgba(240,176,0,0.3), transparent);
-    }
-    html { scroll-behavior: smooth; }
-    .stat-card { transition: transform 0.2s ease; }
-    .stat-card:hover { transform: translateY(-2px); }
-    .price-card { transition: all 0.3s ease; border: 1px solid transparent; }
-    .price-card.popular {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 30px rgba(240,176,0,0.15);
-    }
-    .price-card:hover {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 40px rgba(240,176,0,0.2);
-      transform: translateY(-4px);
-    }
-    .signal-item {
-      border-left: 3px solid var(--color-success);
-      padding-left: 12px;
-      margin: 8px 0;
-    }
-    .signal-item.loss { border-left-color: var(--color-danger); }
-    .signal-item.pending { border-left-color: var(--color-primary); }
-    .badge-float {
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .counter { transition: all 0.3s ease; }
-    .counter.updated { transform: scale(1.1); color: var(--color-success); }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-slide-up {
-      animation: slideUp 0.6s ease-out forwards;
-    }
-    .delay-100 { animation-delay: 0.1s; opacity: 0; }
-    .delay-200 { animation-delay: 0.2s; opacity: 0; }
-    .delay-300 { animation-delay: 0.3s; opacity: 0; }
-    .delay-400 { animation-delay: 0.4s; opacity: 0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT_MONEY_BOT — AI-сигналы XAUUSD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #f0b000;
+  --gold-dim: rgba(240,176,0,0.15);
+  --gold-glow: rgba(240,176,0,0.4);
+  --bg: #06070d;
+  --surface: #0c0d16;
+  --surface-2: #10111c;
+  --surface-3: #161828;
+  --surface-4: #1c1e30;
+  --text: #e0e2ef;
+  --text-dim: rgba(224,226,239,0.6);
+  --text-faint: rgba(224,226,239,0.35);
+  --green: #00e676;
+  --red: #ff5252;
+  --accent: #00bcd4;
+  --font: 'Space Grotesk', sans-serif;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  min-height:100dvh;
+  overflow-x:hidden;
+}
+
+/* ── GRID BG ── */
+.grid-bg{
+  background-image:
+    linear-gradient(rgba(240,176,0,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(240,176,0,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* ── GLOWS ── */
+.glow-gold{box-shadow:0 0 24px var(--gold-dim),0 0 60px rgba(240,176,0,0.06)}
+.glow-green{box-shadow:0 0 20px rgba(0,230,118,0.2)}
+.text-gold{color:var(--gold)}
+.text-green{color:var(--green)}
+.text-red{color:var(--red)}
+.text-dim{color:var(--text-dim)}
+.text-glow{text-shadow:0 0 20px var(--gold-glow),0 0 60px rgba(240,176,0,0.2)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:64px;
+  background:rgba(6,7,13,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(240,176,0,0.12);
+}
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:1.5rem;letter-spacing:.05em;
+  color:var(--gold);
+  text-shadow:0 0 20px var(--gold-glow);
+}
+.nav-logo span{color:var(--text)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  color:var(--text-dim);font-size:.875rem;font-weight:500;
+  text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{
+  background:var(--gold);color:#06070d;
+  font-weight:700;font-size:.875rem;
+  padding:.5rem 1.25rem;border-radius:6px;
+  text-decoration:none;
+  transition:all .2s;
+  box-shadow:0 0 20px rgba(240,176,0,0.3);
+}
+.nav-cta:hover{background:#ffd740;box-shadow:0 0 32px rgba(240,176,0,0.5)}
+
+/* ── TICKER ── */
+.ticker-bar{
+  margin-top:64px;
+  background:var(--surface);
+  border-bottom:1px solid rgba(240,176,0,0.12);
+  overflow:hidden;padding:.5rem 0;
+  position:relative;z-index:1;
+}
+.ticker-inner{
+  display:flex;gap:4rem;
+  white-space:nowrap;
+  animation:ticker 30s linear infinite;
+  width:max-content;
+}
+@keyframes ticker{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+.ticker-item{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:var(--font-mono);font-size:.75rem;
+}
+.ticker-badge{
+  background:rgba(240,176,0,0.1);
+  color:var(--gold);
+  padding:2px 8px;border-radius:4px;
+  font-size:.65rem;font-weight:600;letter-spacing:.08em;
+}
+.up{color:var(--green)}.down{color:var(--red)}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:0 5%;
+  overflow:hidden;
+}
+.hero-radial{
+  position:absolute;
+  width:800px;height:800px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(240,176,0,0.08) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.hero-ring{
+  position:absolute;
+  width:600px;height:600px;
+  border:1px solid rgba(240,176,0,0.08);
+  border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:ring-pulse 4s ease-in-out infinite;
+}
+.hero-ring-2{
+  width:400px;height:400px;
+  animation-delay:2s;
+}
+@keyframes ring-pulse{
+  0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(1)}
+  50%{opacity:.8;transform:translate(-50%,-50%) scale(1.04)}
+}
+.hero-content{position:relative;z-index:2;max-width:860px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(240,176,0,0.1);
+  border:1px solid rgba(240,176,0,0.25);
+  color:var(--gold);
+  padding:.4rem 1rem;border-radius:999px;
+  font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:1.75rem;
+}
+.badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:blink 1.5s ease-in-out infinite;
+  box-shadow:0 0 8px var(--green);
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(3.5rem,9vw,7rem);
+  line-height:.95;letter-spacing:.02em;
+  margin-bottom:1.25rem;
+  color:var(--text);
+}
+.hero-title .highlight{
+  color:var(--gold);
+  text-shadow:0 0 30px var(--gold-glow),0 0 80px rgba(240,176,0,0.15);
+}
+.hero-sub{
+  font-size:clamp(1rem,2.5vw,1.25rem);
+  color:var(--text-dim);
+  line-height:1.65;
+  max-width:580px;margin:0 auto 2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--gold);color:#06070d;
+  font-weight:700;font-size:1rem;
+  padding:.875rem 2rem;border-radius:8px;
+  text-decoration:none;
+  animation:pulse-gold 2s ease-in-out infinite;
+  transition:all .2s;
+}
+.btn-primary:hover{background:#ffd740;transform:translateY(-2px)}
+@keyframes pulse-gold{
+  0%,100%{box-shadow:0 0 20px rgba(240,176,0,0.35)}
+  50%{box-shadow:0 0 40px rgba(240,176,0,0.6),0 0 80px rgba(240,176,0,0.2)}
+}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:transparent;
+  border:1px solid rgba(240,176,0,0.35);
+  color:var(--gold);
+  font-weight:600;font-size:1rem;
+  padding:.875rem 2rem;border-radius:8px;
+  text-decoration:none;
+  transition:all .2s;
+}
+.btn-secondary:hover{background:rgba(240,176,0,0.08);border-color:rgba(240,176,0,0.6)}
+.hero-trust{
+  display:flex;align-items:center;justify-content:center;
+  gap:2rem;flex-wrap:wrap;
+  color:var(--text-faint);font-size:.8rem;
+}
+.trust-item{display:flex;align-items:center;gap:.4rem}
+.trust-icon{color:var(--gold);font-size:1rem}
+
+/* ── STATS STRIP ── */
+.stats-strip{
+  background:var(--surface);
+  border-top:1px solid rgba(240,176,0,0.1);
+  border-bottom:1px solid rgba(240,176,0,0.1);
+  padding:2rem 5%;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:2rem;
+  position:relative;z-index:1;
+}
+.stat-item{text-align:center}
+.stat-value{
+  font-family:var(--font-display);
+  font-size:2.5rem;letter-spacing:.03em;
+  color:var(--gold);
+  text-shadow:0 0 20px var(--gold-glow);
+  display:block;
+}
+.stat-label{
+  font-size:.75rem;font-weight:500;
+  color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase;
+  margin-top:.25rem;
+}
+
+/* ── SECTION LAYOUT ── */
+section{position:relative;z-index:1;padding:6rem 5%}
+.section-tag{
+  display:inline-block;
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);
+  background:rgba(240,176,0,0.08);
+  border:1px solid rgba(240,176,0,0.2);
+  padding:.3rem .8rem;border-radius:4px;
+  margin-bottom:1rem;
+}
+.section-title{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,5vw,3.5rem);
+  letter-spacing:.03em;
+  line-height:1.05;
+  margin-bottom:1rem;
+}
+.section-sub{
+  color:var(--text-dim);
+  font-size:1rem;line-height:1.65;
+  max-width:520px;margin-bottom:3rem;
+}
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(240,176,0,0.25),transparent);
+  margin:0;
+}
+
+/* ── HOW IT WORKS ── */
+.how-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.5rem;margin-top:3rem;
+}
+.how-card{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.1);
+  border-radius:12px;
+  padding:2rem 1.5rem;
+  position:relative;
+  transition:all .3s;
+}
+.how-card:hover{
+  border-color:rgba(240,176,0,0.3);
+  background:var(--surface-3);
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(0,0,0,0.4),0 0 30px rgba(240,176,0,0.08);
+}
+.step-num{
+  font-family:var(--font-display);
+  font-size:4rem;
+  color:rgba(240,176,0,0.12);
+  line-height:1;
+  margin-bottom:1rem;
+  display:block;
+}
+.how-card h3{
+  font-size:1.1rem;font-weight:600;
+  margin-bottom:.5rem;
+}
+.how-card p{color:var(--text-dim);font-size:.9rem;line-height:1.6}
+
+/* ── SIGNALS PREVIEW ── */
+.signals-section{background:var(--surface)}
+.signals-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  align-items:start;
+}
+@media(max-width:768px){.signals-wrap{grid-template-columns:1fr}}
+.phone-mockup{
+  background:var(--surface-4);
+  border:1px solid rgba(240,176,0,0.2);
+  border-radius:20px;
+  overflow:hidden;
+  max-width:320px;
+  margin:0 auto;
+  box-shadow:0 0 60px rgba(240,176,0,0.08),0 32px 80px rgba(0,0,0,0.5);
+}
+.phone-header{
+  background:var(--surface-3);
+  padding:1rem 1.25rem .75rem;
+  border-bottom:1px solid rgba(240,176,0,0.1);
+  display:flex;align-items:center;gap:.75rem;
+}
+.bot-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#ff8f00);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.85rem;color:#06070d;
+  box-shadow:0 0 12px rgba(240,176,0,0.4);
+}
+.bot-info h4{font-size:.875rem;font-weight:600;margin:0}
+.bot-info span{font-size:.7rem;color:var(--green);display:flex;align-items:center;gap:.3rem}
+.online-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+.messages{padding:1rem;display:flex;flex-direction:column;gap:.75rem;min-height:480px;background:var(--bg)}
+.msg{
+  background:var(--surface-2);
+  border-radius:12px 12px 12px 4px;
+  padding:.875rem 1rem;
+  font-family:var(--font-mono);font-size:.75rem;
+  border:1px solid rgba(240,176,0,0.12);
+  line-height:1.6;
+  max-width:90%;
+}
+.msg.buy{border-color:rgba(0,230,118,0.25);background:rgba(0,230,118,0.05)}
+.msg.sell{border-color:rgba(255,82,82,0.25);background:rgba(255,82,82,0.05)}
+.msg-dir{
+  font-weight:700;font-size:.8rem;letter-spacing:.08em;
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  margin-bottom:.4rem;
+}
+.msg-dir.b{background:rgba(0,230,118,0.2);color:var(--green)}
+.msg-dir.s{background:rgba(255,82,82,0.2);color:var(--red)}
+.msg-row{display:flex;justify-content:space-between;margin-top:.3rem}
+.msg-row .label{color:var(--text-faint)}
+.msg-row .val{font-weight:600}
+.msg-row .val.g{color:var(--green)}
+.msg-row .val.r{color:var(--red)}
+.msg-row .val.gold{color:var(--gold)}
+.result-badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:rgba(0,230,118,0.1);
+  border:1px solid rgba(0,230,118,0.3);
+  color:var(--green);
+  border-radius:6px;padding:4px 10px;
+  font-size:.7rem;font-weight:700;
+  margin-top:.5rem;
+}
+.signals-info{display:flex;flex-direction:column;gap:1.5rem;justify-content:center}
+.info-card{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.1);
+  border-radius:12px;padding:1.5rem;
+  display:flex;gap:1rem;align-items:flex-start;
+}
+.info-icon{
+  width:40px;height:40px;border-radius:8px;
+  background:rgba(240,176,0,0.1);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1.25rem;
+}
+.info-card h4{font-size:1rem;font-weight:600;margin-bottom:.25rem}
+.info-card p{font-size:.875rem;color:var(--text-dim);line-height:1.55}
+
+/* ── FREE TRIAL BANNER ── */
+.trial-banner{
+  margin:0 5% 6rem;
+  background:linear-gradient(135deg,rgba(240,176,0,0.08),rgba(240,176,0,0.03));
+  border:1px solid rgba(240,176,0,0.25);
+  border-radius:16px;
+  padding:3rem;
+  text-align:center;
+  position:relative;overflow:hidden;
+  z-index:1;
+}
+.trial-banner::before{
+  content:'';
+  position:absolute;
+  top:-60px;right:-60px;
+  width:300px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(240,176,0,0.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.trial-num{
+  font-family:var(--font-display);
+  font-size:5rem;color:var(--gold);
+  text-shadow:0 0 30px var(--gold-glow);
+  line-height:1;
+  display:block;
+}
+.trial-label{
+  font-family:var(--font-display);
+  font-size:2rem;letter-spacing:.05em;
+  margin-bottom:.75rem;
+}
+.trial-sub{color:var(--text-dim);font-size:.975rem;max-width:440px;margin:0 auto 2rem}
+
+/* ── PRICING ── */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+  margin-top:3rem;
+}
+.price-card{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.12);
+  border-radius:16px;
+  padding:2rem 1.75rem;
+  position:relative;
+  transition:all .3s;
+  display:flex;flex-direction:column;
+}
+.price-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(240,176,0,0.08);
+}
+.price-card.featured{
+  border-color:var(--gold);
+  background:linear-gradient(160deg,rgba(240,176,0,0.08),var(--surface-2));
+  box-shadow:0 0 40px rgba(240,176,0,0.12),0 0 100px rgba(240,176,0,0.04);
+}
+.price-badge{
+  position:absolute;
+  top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:#06070d;
+  font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:.3rem 1rem;border-radius:999px;
+  white-space:nowrap;
+}
+.price-days{
+  font-family:var(--font-display);
+  font-size:2.5rem;letter-spacing:.03em;
+  color:var(--gold);margin-bottom:.25rem;
+}
+.price-period{color:var(--text-dim);font-size:.875rem;margin-bottom:1.5rem}
+.price-amount{
+  font-family:var(--font-display);
+  font-size:3rem;letter-spacing:.02em;
+  line-height:1;margin-bottom:.25rem;
+}
+.price-per-day{
+  font-size:.75rem;color:var(--text-dim);margin-bottom:1.75rem;
+  display:flex;align-items:center;gap:.3rem;
+}
+.price-savings{
+  color:var(--green);font-weight:600;
+  background:rgba(0,230,118,0.1);
+  border:1px solid rgba(0,230,118,0.2);
+  border-radius:4px;padding:1px 6px;font-size:.7rem;
+}
+.price-features{list-style:none;margin-bottom:2rem;flex:1}
+.price-features li{
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.9rem;color:var(--text-dim);
+  padding:.45rem 0;
+  border-bottom:1px solid rgba(240,176,0,0.05);
+}
+.price-features li:last-child{border:none}
+.check{color:var(--green);font-weight:700;flex-shrink:0}
+.btn-plan{
+  display:block;text-align:center;
+  background:rgba(240,176,0,0.1);
+  border:1px solid rgba(240,176,0,0.3);
+  color:var(--gold);
+  font-weight:700;font-size:.95rem;
+  padding:.875rem;border-radius:8px;
+  text-decoration:none;
+  transition:all .2s;
+}
+.btn-plan:hover{background:rgba(240,176,0,0.18);border-color:var(--gold)}
+.price-card.featured .btn-plan{
+  background:var(--gold);color:#06070d;
+  border-color:var(--gold);
+  box-shadow:0 0 24px rgba(240,176,0,0.35);
+}
+.price-card.featured .btn-plan:hover{background:#ffd740;box-shadow:0 0 40px rgba(240,176,0,0.5)}
+
+/* ── WHY US ── */
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.5rem;
+  margin-top:3rem;
+}
+.why-card{
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.08);
+  border-radius:12px;padding:1.75rem;
+  transition:all .3s;
+}
+.why-card:hover{
+  border-color:rgba(240,176,0,0.2);
+  background:var(--surface-3);
+}
+.why-icon{
+  font-size:2rem;margin-bottom:1rem;display:block;
+  filter:drop-shadow(0 0 8px rgba(240,176,0,0.3));
+}
+.why-card h3{font-size:1rem;font-weight:600;margin-bottom:.5rem}
+.why-card p{font-size:.875rem;color:var(--text-dim);line-height:1.6}
+
+/* ── GUARANTEE ── */
+.guarantee-section{
+  background:var(--surface);
+  text-align:center;
+}
+.guarantee-box{
+  display:inline-flex;flex-direction:column;align-items:center;gap:1rem;
+  background:var(--surface-2);
+  border:1px solid rgba(240,176,0,0.2);
+  border-radius:16px;
+  padding:3rem 4rem;
+  max-width:600px;
+  margin:0 auto;
+  position:relative;
+}
+.shield{font-size:3.5rem;filter:drop-shadow(0 0 16px rgba(240,176,0,0.4))}
+.guarantee-box h3{font-family:var(--font-display);font-size:2rem;letter-spacing:.05em}
+.guarantee-box p{color:var(--text-dim);font-size:.95rem;line-height:1.65;max-width:420px}
+
+/* ── FAQ ── */
+.faq-list{max-width:720px;margin:3rem auto 0}
+.faq-item{
+  border-bottom:1px solid rgba(240,176,0,0.08);
+}
+.faq-q{
+  width:100%;text-align:left;
+  background:none;border:none;
+  color:var(--text);font-family:var(--font);font-size:1rem;font-weight:500;
+  padding:1.25rem 0;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:color .2s;
+}
+.faq-q:hover{color:var(--gold)}
+.faq-arrow{
+  color:var(--gold);font-size:1.25rem;flex-shrink:0;
+  transition:transform .3s;
+}
+.faq-a{
+  color:var(--text-dim);font-size:.925rem;line-height:1.7;
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease,padding .3s;
+}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:1.25rem}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+/* ── FINAL CTA ── */
+.final-cta{
+  text-align:center;
+  padding:8rem 5%;
+  position:relative;overflow:hidden;
+}
+.final-cta-bg{
+  position:absolute;
+  width:1000px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(240,176,0,0.06) 0%,transparent 60%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.final-cta-content{position:relative;z-index:1}
+.final-cta h2{
+  font-family:var(--font-display);
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:.03em;
+  margin-bottom:1.25rem;
+}
+.final-cta p{
+  color:var(--text-dim);font-size:1.1rem;max-width:480px;
+  margin:0 auto 2.5rem;line-height:1.65;
+}
+.tg-handle{
+  font-family:var(--font-mono);
+  color:var(--gold);font-size:1.25rem;
+  background:rgba(240,176,0,0.08);
+  border:1px solid rgba(240,176,0,0.2);
+  border-radius:8px;padding:.6rem 1.5rem;
+  display:inline-block;margin-bottom:2.5rem;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--surface);
+  border-top:1px solid rgba(240,176,0,0.1);
+  padding:2.5rem 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-logo{font-family:var(--font-display);font-size:1.25rem;color:var(--gold)}
+.footer-copy{font-size:.8rem;color:var(--text-faint)}
+.footer-links{display:flex;gap:1.5rem;list-style:none}
+.footer-links a{font-size:.8rem;color:var(--text-faint);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+
+/* ── SCROLL FADE IN ── */
+.fade-in{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  nav{padding:0 4%}
+  .nav-links{display:none}
+  section{padding:4rem 4%}
+  .stats-strip{padding:1.5rem 4%;gap:1.5rem}
+  .trial-banner{padding:2rem 1.5rem;margin:0 4% 4rem}
+  .guarantee-box{padding:2rem 1.5rem}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
 </head>
-<body class="bg-grid relative">
-  <div class="scanlines fixed inset-0 pointer-events-none z-0"></div>
-  
-  <!-- Header -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-outline-variant">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center glow-gold">
-          <span class="text-primary font-mono font-bold text-sm">GPT</span>
-        </div>
-        <div>
-          <h1 class="font-bold text-base text-glow-gold">MONEY_BOT</h1>
-          <p class="text-[10px] text-on-surface-variant flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
-            Онлайн • XAUUSD
-          </p>
-        </div>
-      </div>
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#how" class="text-on-surface-variant hover:text-primary transition">Как работает</a>
-        <a href="#signals" class="text-on-surface-variant hover:text-primary transition">Сигналы</a>
-        <a href="#pricing" class="text-on-surface-variant hover:text-primary transition">Тарифы</a>
-        <a href="#faq" class="text-on-surface-variant hover:text-primary transition">FAQ</a>
-      </nav>
-      <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container transition text-sm pulse-gold">
-        3 дня бесплатно
+<body class="grid-bg">
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-logo">GPT_<span>MONEY</span>_BOT</div>
+  <ul class="nav-links">
+    <li><a href="#how">Как работает</a></li>
+    <li><a href="#signals">Сигналы</a></li>
+    <li><a href="#pricing">Тарифы</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="nav-cta">🤖 Открыть бот</a>
+</nav>
+
+<!-- ── LIVE TICKER ── -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker">
+    <!-- items will be cloned by JS -->
+    <span class="ticker-item"><span class="ticker-badge">XAUUSD</span><span class="up">▲ 2 347.80</span></span>
+    <span class="ticker-item">📡 Сигналов за 30 дней: <b style="color:var(--gold)">1840</b></span>
+    <span class="ticker-item">✅ Точность GPT: <span class="up">94%</span></span>
+    <span class="ticker-item"><span class="ticker-badge">GOLD</span>+0.42% сегодня</span>
+    <span class="ticker-item">🏆 Лучшая серия: <span class="up">+9 подряд</span></span>
+    <span class="ticker-item">⚡ Последний сигнал: <span class="up">BUY 2346.10 → TP: +38 pts</span></span>
+    <span class="ticker-item">24/5 автоторговля в реальном времени</span>
+    <span class="ticker-item"><span class="ticker-badge">AI</span> GPT-анализ рынка</span>
+    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+2 140 pts</span></span>
+    <span class="ticker-item"><span class="ticker-badge">XAUUSD</span><span class="up">▲ 2 347.80</span></span>
+    <span class="ticker-item">📡 Сигналов за 30 дней: <b style="color:var(--gold)">1840</b></span>
+    <span class="ticker-item">✅ Точность GPT: <span class="up">94%</span></span>
+    <span class="ticker-item"><span class="ticker-badge">GOLD</span>+0.42% сегодня</span>
+    <span class="ticker-item">🏆 Лучшая серия: <span class="up">+9 подряд</span></span>
+    <span class="ticker-item">⚡ Последний сигнал: <span class="up">BUY 2346.10 → TP: +38 pts</span></span>
+    <span class="ticker-item">24/5 автоторговля в реальном времени</span>
+    <span class="ticker-item"><span class="ticker-badge">AI</span> GPT-анализ рынка</span>
+    <span class="ticker-item">📈 Суммарный профит за месяц: <span class="up">+2 140 pts</span></span>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-radial"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring hero-ring-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Бот активен · Торгуем прямо сейчас
+    </div>
+    <h1 class="hero-title">
+            AI<br><span class="highlight">СИГНАЛЫ</span><br>XAUUSD
+    </h1>
+    <p class="hero-sub">
+      GPT_MONEY_BOT — торговый ИИ на рынке XAUUSD.<br>
+      Реальные сигналы 24/5 прямо в Telegram. Без слива. Без угадывания.
+    </p>
+    <div class="hero-actions">
+      <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-primary">
+        🚀 Попробовать 3 дня бесплатно
+      </a>
+      <a href="#signals" class="btn-secondary">
+        📊 Смотреть сигналы
       </a>
     </div>
-  </header>
-
-  <!-- Hero -->
-  <section class="py-12 md:py-20 px-4 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div>
-    <div class="max-w-4xl mx-auto text-center relative">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant text-sm mb-6 animate-slide-up">
-        <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
-        <span id="ticker-status">Работает прямо сейчас</span>
-        <span class="text-on-surface-variant">•</span>
-        <span id="signal-count">Последний сигнал: только что</span>
-      </div>
-      
-      <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight animate-slide-up delay-100">
-        Перестань терять на <span class="text-primary text-glow-gold">золоте</span><br/>
-        <span class="text-2xl md:text-4xl text-on-surface-variant font-bold">Начни зарабатывать с GPT_MONEY_BOT</span>
-      </h1>
-      
-      <p class="text-lg md:text-xl text-on-surface-variant mb-8 max-w-2xl mx-auto animate-slide-up delay-200">
-        Точные сигналы по XAUUSD в твоём Telegram. Вход, стоп, тейк — всё в одном сообщении. 
-        <strong class="text-primary">Протестируй 3 дня бесплатно</strong> — потом реши.
-      </p>
-      
-      <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up delay-300">
-        <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="group px-8 py-4 bg-primary text-on-primary font-bold rounded-xl text-lg hover:bg-primary-container transition pulse-gold glow-gold-strong flex items-center justify-center gap-2">
-          <span class="text-2xl">🚀</span>
-          Получить 3 дня бесплатно
-          <span class="group-hover:translate-x-1 transition-transform">→</span>
-        </a>
-        <a href="#how" class="px-8 py-4 bg-surface-container border border-outline-variant font-semibold rounded-xl text-lg hover:bg-surface-container-highest transition flex items-center justify-center gap-2">
-          <span>Как это работает</span>
-          <span>↓</span>
-        </a>
-      </div>
-      
-      <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm animate-slide-up delay-400">
-        <div class="flex items-center gap-2">
-          <span class="text-success">✓</span>
-          <span>Без карты</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-success">✓</span>
-          <span>Без обязательств</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-success">✓</span>
-          <span>Отмена в любой момент</span>
-        </div>
-      </div>
-      
-      <p class="text-xs text-on-surface-variant mt-6">
-        ⚠️ Не является инвестиционной рекомендацией. Торговля сопряжена с риском потери капитала.
-      </p>
-    </div>
-  </section>
-
-  <!-- Live Stats Ticker -->
-  <div class="border-y border-outline-variant bg-surface-container-low/50 overflow-hidden">
-    <div class="animate-ticker whitespace-nowrap py-3 px-4 font-mono text-sm">
-      📊 Точность: <strong class="text-success">94%</strong>
-      <span class="mx-6">📈 Сигналов (30д): <strong class="text-success">1840</strong></span>
-      <span class="mx-6">🎯 Средний R:R: <strong>1:2.3</strong></span>
-      <span class="mx-6">⚡ Сигналов сегодня: <strong>5</strong></span>
-      <span class="mx-6">👥 Пользователей: <strong>1 247</strong></span>
-      <span class="mx-6">🛡 Просадка (макс): <strong class="text-danger">18.4%</strong></span>
-      <span class="mx-6">🔄 Обновлено: <strong>только что</strong></span>
-      <!-- Duplicate -->
-      <span class="mx-6">📊 Точность: <strong class="text-success">94%</strong></span>
-      <span class="mx-6">📈 Сигналов (30д): <strong class="text-success">1840</strong></span>
-      <span class="mx-6">🎯 Средний R:R: <strong>1:2.3</strong></span>
-      <span class="mx-6">⚡ Сигналов сегодня: <strong>5</strong></span>
-      <span class="mx-6">👥 Пользователей: <strong>1 247</strong></span>
-      <span class="mx-6">🛡 Просадка (макс): <strong class="text-danger">18.4%</strong></span>
-      <span class="mx-6">🔄 Обновлено: <strong>только что</strong></span>
+    <div class="hero-trust">
+      <span class="trust-item"><span class="trust-icon">⚡</span>Мгновенные алерты</span>
+      <span class="trust-item"><span class="trust-icon">🔒</span>Без регистрации</span>
+      <span class="trust-item"><span class="trust-icon">🤖</span>Полный GPT-анализ</span>
+      <span class="trust-item"><span class="trust-icon">💳</span>Первые 3 дня — 0 руб.</span>
     </div>
   </div>
+</section>
 
-  <!-- Stats Grid -->
-  <section class="py-12 px-4">
-    <div class="max-w-5xl mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="stat-card p-4 rounded-xl bg-surface-container border border-outline-variant text-center">
-          <p class="text-3xl font-black text-primary mb-1">94%+</p>
-          <p class="text-xs text-on-surface-variant">Средний R:R</p>
-        </div>
-        <div class="stat-card p-4 rounded-xl bg-surface-container border border-outline-variant text-center">
-          <p class="text-3xl font-black text-success mb-1">1:2.3</p>
-          <p class="text-xs text-on-surface-variant">Средний R:R</p>
-        </div>
-        <div class="stat-card p-4 rounded-xl bg-surface-container border border-outline-variant text-center">
-          <p class="text-3xl font-black text-primary mb-1">1 840</p>
-          <p class="text-xs text-on-surface-variant">Сигналов за 30 дней</p>
-        </div>
-        <div class="stat-card p-4 rounded-xl bg-surface-container border border-outline-variant text-center">
-          <p class="text-3xl font-black text-success mb-1">24/5</p>
-          <p class="text-xs text-on-surface-variant">Работает без выходных</p>
-        </div>
-      </div>
+<!-- ── STATS STRIP ── -->
+<div class="stats-strip fade-in">
+  <div class="stat-item">
+    <span class="stat-value">78%</span>
+    <span class="stat-label">Точность сигналов</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">1840</span>
+    <span class="stat-label">Сигналов за 30 дней</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">+2140</span>
+    <span class="stat-label">Пунктов за месяц</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">24/5</span>
+    <span class="stat-label">Работает без выходных</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">3 сек</span>
+    <span class="stat-label">До алерта в Telegram</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="fade-in">
+    <div class="section-tag">Как это работает</div>
+    <h2 class="section-title">4 шага до первой сделки</h2>
+    <p class="section-sub">Никаких настроек, никаких сложных терминалов. Просто подписка и поток сигналов в Telegram.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-card fade-in">
+      <span class="step-num">01</span>
+      <h3>Открываешь бот</h3>
+      <p>Переходишь в @GPT_MONEY_BOT и нажимаешь /start. Первые 3 дня — полностью бесплатно.</p>
     </div>
-  </section>
-
-  <!-- How It Works -->
-  <section id="how" class="py-16 px-4 bg-surface-container-low/30">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">3 шага к прибыльной торговле</h2>
-        <p class="text-on-surface-variant">Всё максимально просто — справится даже новичок</p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-2xl bg-surface-container border border-outline-variant relative overflow-hidden group hover:border-primary/50 transition-all">
-          <div class="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition"></div>
-          <div class="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center text-primary font-bold text-2xl mb-5">1</div>
-          <h3 class="font-bold text-xl mb-3">Подключи бота</h3>
-          <p class="text-on-surface-variant text-sm leading-relaxed">
-            Нажми кнопку ниже → открой Telegram → нажми «Старт». 
-            Бесплатный триал активируется автоматически.
-          </p>
-          <div class="mt-4 text-xs text-primary">⏱ Займёт 30 секунд</div>
-        </div>
-        
-        <div class="p-6 rounded-2xl bg-surface-container border border-outline-variant relative overflow-hidden group hover:border-primary/50 transition-all">
-          <div class="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition"></div>
-          <div class="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center text-primary font-bold text-2xl mb-5">2</div>
-          <h3 class="font-bold text-xl mb-3">Получай сигналы</h3>
-          <p class="text-on-surface-variant text-sm leading-relaxed">
-            Каждый сигнал — это готовая сделка: направление, цена входа, 
-            стоп-лосс, тейк-профит + пояснение.
-          </p>
-          <div class="mt-4 text-xs text-primary">🔔 Приходит за 1-3 сек до входа</div>
-        </div>
-        
-        <div class="p-6 rounded-2xl bg-surface-container border border-outline-variant relative overflow-hidden group hover:border-primary/50 transition-all">
-          <div class="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition"></div>
-          <div class="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center text-primary font-bold text-2xl mb-5">3</div>
-          <h3 class="font-bold text-xl mb-3">Копируй сделки</h3>
-          <p class="text-on-surface-variant text-sm leading-relaxed">
-            Открывай сделку вручную в своём терминале или настрой 
-            автоматическое копирование в MT5. Полный контроль у тебя.
-          </p>
-          <div class="mt-4 text-xs text-primary">💰 Результат — через несколько часов</div>
-        </div>
-      </div>
-      
-      <div class="text-center mt-10">
-        <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container transition pulse-gold">
-          <span>🚀</span> Попробовать бесплатно
-        </a>
-      </div>
+    <div class="how-card fade-in">
+      <span class="step-num">02</span>
+      <h3>GPT анализирует рынок</h3>
+      <p>ИИ анализирует технические уровни, объёмы и паттерны на XAUUSD в реальном времени 24/5.</p>
     </div>
-  </section>
-
-  <!-- Sample Signals -->
-  <section id="signals" class="py-16 px-4">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-4">
-        <h2 class="text-3xl font-bold mb-4">Последние сигналы из бота</h2>
-        <p class="text-on-surface-variant">Реальные сообщения — ничего не придумано</p>
-      </div>
-      
-      <div class="space-y-4">
-        <!-- Win -->
-        <div class="signal-item p-5 rounded-xl bg-surface-container border border-outline-variant relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1 h-full bg-success"></div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <span class="px-2 py-1 bg-success/20 text-success text-xs font-bold rounded">BUY</span>
-              <span class="font-mono font-bold">XAUUSD</span>
-              <span class="text-xs text-on-surface-variant">📅 14:32 MSK • 12 май</span>
-            </div>
-            <span class="px-2 py-1 bg-success/20 text-success text-xs font-bold rounded">+10.5$</span>
-          </div>
-          <div class="grid grid-cols-3 gap-4 mb-3 font-mono text-sm">
-            <div>
-              <span class="text-on-surface-variant text-xs">ВХОД</span>
-              <p class="font-bold">2341.50</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">СТОП</span>
-              <p class="text-danger font-bold">2336.00</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">ТЕЙК</span>
-              <p class="text-success font-bold">2352.00</p>
-            </div>
-          </div>
-          <p class="text-xs text-on-surface-variant">
-            🎯 R:R 1:2.4 | 💡 Пробой утреннего диапазона + отскок от 15мин поддержки. Объёмы подтвердили движение.
-          </p>
-        </div>
-        
-        <!-- Loss -->
-        <div class="signal-item loss p-5 rounded-xl bg-surface-container border border-outline-variant relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1 h-full bg-danger"></div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <span class="px-2 py-1 bg-danger/20 text-danger text-xs font-bold rounded">SELL</span>
-              <span class="font-mono font-bold">XAUUSD</span>
-              <span class="text-xs text-on-surface-variant">📅 09:17 MSK • 12 май</span>
-            </div>
-            <span class="px-2 py-1 bg-danger/20 text-danger text-xs font-bold rounded">-5.3$</span>
-          </div>
-          <div class="grid grid-cols-3 gap-4 mb-3 font-mono text-sm">
-            <div>
-              <span class="text-on-surface-variant text-xs">ВХОД</span>
-              <p class="font-bold">2358.20</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">СТОП</span>
-              <p class="text-danger font-bold">2363.50</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">ТЕЙК</span>
-              <p class="text-success font-bold">2347.00</p>
-            </div>
-          </div>
-          <p class="text-xs text-on-surface-variant">
-            🎯 R:R 1:2.1 | 💡 Отскок от дневного сопротивления, но NFP-новости развернули тренд. Сработал стоп.
-          </p>
-        </div>
-        
-        <!-- Win -->
-        <div class="signal-item p-5 rounded-xl bg-surface-container border border-outline-variant relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1 h-full bg-success"></div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <span class="px-2 py-1 bg-success/20 text-success text-xs font-bold rounded">BUY</span>
-              <span class="font-mono font-bold">XAUUSD</span>
-              <span class="text-xs text-on-surface-variant">📅 18:45 MSK • 11 май</span>
-            </div>
-            <span class="px-2 py-1 bg-success/20 text-success text-xs font-bold rounded">+11.7$</span>
-          </div>
-          <div class="grid grid-cols-3 gap-4 mb-3 font-mono text-sm">
-            <div>
-              <span class="text-on-surface-variant text-xs">ВХОД</span>
-              <p class="font-bold">2329.80</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">СТОП</span>
-              <p class="text-danger font-bold">2324.00</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">ТЕЙК</span>
-              <p class="text-success font-bold">2341.50</p>
-            </div>
-          </div>
-          <p class="text-xs text-on-surface-variant">
-            🎯 R:R 1:2.0 | 💡 Лонг от ключевого уровня 2330. Подтверждение объёмом на подъёме.
-          </p>
-        </div>
-        
-        <!-- Pending -->
-        <div class="signal-item pending p-5 rounded-xl bg-surface-container border border-outline-variant relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <span class="px-2 py-1 bg-primary/20 text-primary text-xs font-bold rounded">SELL</span>
-              <span class="font-mono font-bold">XAUUSD</span>
-              <span class="text-xs text-on-surface-variant">📅 21:03 MSK • 13 май</span>
-            </div>
-            <span class="px-2 py-1 bg-primary/20 text-primary text-xs font-bold rounded">⏳ В работе</span>
-          </div>
-          <div class="grid grid-cols-3 gap-4 mb-3 font-mono text-sm">
-            <div>
-              <span class="text-on-surface-variant text-xs">ВХОД</span>
-              <p class="font-bold">2345.00</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">СТОП</span>
-              <p class="text-danger font-bold">2351.00</p>
-            </div>
-            <div>
-              <span class="text-on-surface-variant text-xs">ТЕЙК</span>
-              <p class="text-success font-bold">2332.00</p>
-            </div>
-          </div>
-          <p class="text-xs text-on-surface-variant">
-            🎯 R:R 1:2.2 | 💡 Формирование двойной вершины на H4. Ждём подтверждения.
-          </p>
-        </div>
-      </div>
-      
-      <div class="text-center mt-8 p-4 rounded-xl bg-surface-container-low border border-outline-variant">
-        <p class="text-sm text-on-surface-variant">
-          💡 <strong>Почему показываю убыточную сделку?</strong> Потому что честность — это основа доверия. 
-          100% винрейт — это либо обман, либо сказка. Мы показываем реальные результаты.
-        </p>
-      </div>
+    <div class="how-card fade-in">
+      <span class="step-num">03</span>
+      <h3>Получаешь сигнал</h3>
+      <p>В Telegram приходит точный сигнал: направление, цена входа, TP и SL. Всё готово к открытию.</p>
     </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="py-16 px-4 bg-surface-container-low/30">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-4">
-        <h2 class="text-3xl font-bold mb-4">Простая и честная подписка</h2>
-        <p class="text-on-surface-variant max-w-xl mx-auto">
-          Начни бесплатно. Если понравится — выбери тариф. 
-          <strong>Никаких скрытых платежей.</strong>
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        <!-- Trial -->
-        <div class="price-card p-6 rounded-2xl bg-surface-container border border-outline-variant">
-          <div class="text-center mb-6">
-            <h3 class="font-bold text-xl mb-2">🎁 Пробный</h3>
-            <p class="text-4xl font-black text-primary">0 ₽</p>
-            <p class="text-sm text-on-surface-variant mt-1">3 дня без ограничений</p>
-          </div>
-          <ul class="space-y-3 text-sm mb-6">
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Все сигналы</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Инструкции по настройке</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Поддержка в чате</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Доступ к боту сразу</li>
-          </ul>
-          <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="block w-full py-3 bg-surface-container-highest border border-outline-variant font-semibold rounded-lg text-center hover:bg-primary hover:text-on-primary transition">
-            Получить бесплатно
-          </a>
-          <p class="text-xs text-on-surface-variant text-center mt-3">Без карты • Без обязательств</p>
-        </div>
-        
-        <!-- Popular - Month -->
-        <div class="price-card popular p-6 rounded-2xl bg-surface-container relative">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-on-primary text-xs font-bold rounded-full">
-            ⭐ ЛУЧШИЙ ВЫБОР
-          </div>
-          <div class="text-center mb-6 pt-2">
-            <h3 class="font-bold text-xl mb-2">🚀 Месяц</h3>
-            <p class="text-4xl font-black text-primary">2 000 ₽</p>
-            <p class="text-sm text-on-surface-variant mt-1">30 дней • 67 ₽/день</p>
-          </div>
-          <ul class="space-y-3 text-sm mb-6">
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Всё из пробного</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Приоритетная поддержка</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Архив всех сигналов</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Еженедельные обзоры</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Статистика в реальном времени</li>
-          </ul>
-          <a href="https://t.me/GPT_MONEY_BOT?start=sub_30d" class="block w-full py-3 bg-primary text-on-primary font-bold rounded-lg text-center hover:bg-primary-container transition pulse-gold">
-            Подключить за 2 000 ₽
-          </a>
-          <p class="text-xs text-success text-center mt-3">💡 Окупается за 1-2 сделки</p>
-        </div>
-        
-        <!-- Short Start -->
-        <div class="price-card p-6 rounded-2xl bg-surface-container border border-outline-variant">
-          <div class="text-center mb-6">
-            <h3 class="font-bold text-xl mb-2">⚡ Короткий</h3>
-            <div class="flex items-baseline justify-center gap-2">
-              <p class="text-4xl font-black text-primary">1 000 ₽</p>
-            </div>
-            <p class="text-sm text-on-surface-variant mt-1">5 дней • 200 ₽/день</p>
-          </div>
-          <ul class="space-y-3 text-sm mb-6">
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Все сигналы</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Инструкции</li>
-            <li class="flex items-center gap-2"><span class="text-success">✓</span> Поддержка</li>
-          </ul>
-          <a href="https://t.me/GPT_MONEY_BOT?start=sub_5d" class="block w-full py-3 bg-surface-container-highest border border-outline-variant font-semibold rounded-lg text-center hover:bg-primary hover:text-on-primary transition">
-            Попробовать 5 дней
-          </a>
-          <p class="text-xs text-on-surface-variant text-center mt-3">Для быстрой проверки</p>
-        </div>
-      </div>
-      
-      <div class="max-w-xl mx-auto mt-8 p-4 rounded-xl bg-surface-container border border-outline-variant">
-        <p class="text-sm text-center text-on-surface-variant">
-          💡 <strong>Совет:</strong> Начни с 3 дней бесплатно → оцени винрейт и удобство → если всё устраивает, бери месяц.
-          <br><span class="text-primary">Месяц за 2000₽ = 67₽/день. Одна прибыльная сделка по золоту легко покрывает месяц.</span>
-        </p>
-      </div>
+    <div class="how-card fade-in">
+      <span class="step-num">04</span>
+      <h3>Открываешь сделку</h3>
+      <p>Копируешь параметры в свой брокер. Бот сам отправит уведомление о результате.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Testimonials / Social Proof -->
-  <section class="py-16 px-4">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Что говорят пользователи</h2>
-        <p class="text-on-surface-variant">Отзывы реальных людей (скриншоты из Telegram)</p>
-      </div>
-      
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="p-5 rounded-xl bg-surface-container border border-outline-variant">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">А</div>
-            <div>
-              <p class="font-semibold text-sm">@alex_trader_ru</p>
-              <p class="text-xs text-on-surface-variant">Подписан 2 недели</p>
-            </div>
-          </div>
-          <p class="text-sm text-on-surface-variant">
-            «За две недели +23% к депозиту. Для меня это космос, тк до этого сливал 3 месяца. 
-            Особенно нравится, что не нужно думать — открыл сделку по сигналу и всё.»
-          </p>
-          <div class="flex items-center gap-1 mt-3">
-            <span class="text-success text-xs">★★★★★</span>
-          </div>
-        </div>
-        
-        <div class="p-5 rounded-xl bg-surface-container border border-outline-variant">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">М</div>
-            <div>
-              <p class="font-semibold text-sm">@max_invest_mos</p>
-              <p class="text-xs text-on-surface-variant">Подписан 1 месяц</p>
-            </div>
-          </div>
-          <p class="text-sm text-on-surface-variant">
-            «Сначала думал развод, но триал убедил. Поставил на демо, посмотрел неделю — 
-            винрейт реально около 70%. Теперь копирую на основной счёт, но маленьким лотом.»
-          </p>
-          <div class="flex items-center gap-1 mt-3">
-            <span class="text-success text-xs">★★★★★</span>
-          </div>
-        </div>
-        
-        <div class="p-5 rounded-xl bg-surface-container border border-outline-variant">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center text-success font-bold">И</div>
-            <div>
-              <p class="font-semibold text-sm">@irina_finance</p>
-              <p class="text-xs text-on-surface-variant">Подписан 3 недели</p>
-            </div>
-          </div>
-          <p class="text-sm text-on-surface-variant">
-            «Новичок в трейдинге, но с ботам разобралась за 5 минут. Сигналы приходят чёткие, 
-            всё понятно. SL и TP прямо в сообщении — удобно!»
-          </p>
-          <div class="flex items-center gap-1 mt-3">
-            <span class="text-success text-xs">★★★★☆</span>
-          </div>
-        </div>
-        
-        <div class="p-5 rounded-xl bg-surface-container border border-outline-variant">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">Д</div>
-            <div>
-              <p class="font-semibold text-sm">@den_trade_krd</p>
-              <p class="text-xs text-on-surface-variant">Подписан 1.5 месяца</p>
-            </div>
-          </div>
-          <p class="text-sm text-on-surface-variant">
-            «Уже третий месяц продлеваю. Пробовал других ботов — там либо фантастические обещания, либо молчат. 
-            Здесь честный подход: показывают и лосей тоже.»
-          </p>
-          <div class="flex items-center gap-1 mt-3">
-            <span class="text-success text-xs">★★★★★</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="divider"></div>
 
-  <!-- FAQ -->
-  <section id="faq" class="py-16 px-4 bg-surface-container-low/30">
-    <div class="max-w-3xl mx-auto">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold mb-4">Ответы на вопросы</h2>
-      </div>
-      <div class="space-y-3">
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Нужен ли опыт в трейдинге?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <div class="mt-3 text-sm text-on-surface-variant space-y-2">
-            <p>Нет, но базовое понимание пригодится. Каждый сигнал содержит:</p>
-            <ul class="list-disc list-inside space-y-1 ml-2">
-              <li>Направление (BUY/SELL)</li>
-              <li>Цена входа</li>
-              <li>Стоп-лосс (риск)</li>
-              <li>Тейк-профит (цель)</li>
-            </ul>
-            <p class="mt-2">Просто копируй эти данные в терминал. Рекомендуем начать с демо-счёта.</p>
-          </div>
-        </details>
-        
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Как быстро приходят сигналы?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <p class="mt-3 text-sm text-on-surface-variant">
-            Сигнал отправляется за 1-3 секунды до рекомендуемого входа. Уведомление в Telegram приходит мгновенно. 
-            Включи звук и push-уведомления, чтобы не пропустить.
-          </p>
-        </details>
-        
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Сколько денег нужно на счёте?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <p class="mt-3 text-sm text-on-surface-variant">
-            Рекомендуем минимум 200-300$ для комфортной торговли. Риск на сделку — не более 1-2% от депозита. 
-            При 100$ депозите это 1-2$ за сделку. Можно начать и с меньшего, но будь аккуратнее с лотом.
-          </p>
-        </details>
-        
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Можно ли автоматизировать копирование?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <p class="mt-3 text-sm text-on-surface-variant">
-            Да! Предоставляем инструкцию по настройке копирования в MT5 и других терминалах. 
-            Это опционально — многие торгуют вручную и тоже довольны.
-          </p>
-        </details>
-        
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Что если будет серия убытков?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <p class="mt-3 text-sm text-on-surface-variant">
-            2-3 убыточные сделки подряд — нормальная ситуация. Мы работаем по статистике: 
-            при винрейте 70%+ и R:R 1:2+ математическое ожидание положительное. 
-            Главное — не увеличивать лот после лосей и соблюдать риск-менеджмент.
-          </p>
-        </details>
-        
-        <details class="group p-4 rounded-xl bg-surface-container border border-outline-variant transition">
-          <summary class="font-semibold cursor-pointer list-none flex justify-between items-center">
-            <span>Как отменить / продлить подписку?</span>
-            <span class="text-primary transition-transform group-open:rotate-180">▼</span>
-          </summary>
-          <p class="mt-3 text-sm text-on-surface-variant">
-            Напиши <code class="bg-surface-container-highest px-1 rounded">/cancel</code> в боте — доступ прекратится в конце периода. 
-            Автопродления нет. Для продления просто напиши <code class="bg-surface-container-highest px-1 rounded">/subscribe</code>.
-          </p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Risk Disclaimer -->
-  <section class="py-12 px-4 border-t border-outline-variant">
-    <div class="max-w-4xl mx-auto">
-      <div class="p-6 rounded-2xl bg-surface-container border border-danger/30">
-        <div class="flex items-start gap-3">
-          <span class="text-2xl">⚠️</span>
+<!-- ── SIGNALS PREVIEW ── -->
+<section id="signals" class="signals-section">
+  <div class="signals-wrap">
+    <div class="fade-in">
+      <div class="section-tag">Реальные сигналы</div>
+      <h2 class="section-title">Вот что<br>ты получаешь</h2>
+      <p class="section-sub">Каждый сигнал содержит все необходимые данные для немедленного открытия позиции.</p>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="info-card">
+          <div class="info-icon">📍</div>
           <div>
-            <h3 class="font-bold text-lg mb-2 text-danger">Важное предупреждение</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">
-              Торговля на финансовых рынках, включая золото (XAUUSD), сопряжена с высоким риском потери капитала. 
-              Прошлые результаты (94%+ винрейт, 1:2.3 R:R) не гарантируют будущую прибыль. 
-              Сигналы предоставляются исключительно в информационных целях и 
-              <strong>не являются инвестиционной рекомендацией</strong>. 
-              Вы самостоятельно несёте ответственность за свои торговые решения. 
-              Используйте только средства, которые готовы потерять. Всегда применяйте риск-менеджмент.
-            </p>
+            <h4>Точная цена входа</h4>
+            <p>Бот указывает конкретную цену или диапазон для открытия позиции.</p>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="py-16 px-4 text-center">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="text-3xl font-bold mb-4">Готов попробовать?</h2>
-      <p class="text-on-surface-variant mb-8">
-        3 дня полного доступа — бесплатно. Никаких обязательств. Отмена в любой момент.
-      </p>
-      <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-on-primary font-bold rounded-xl text-lg hover:bg-primary-container transition pulse-gold glow-gold-strong">
-        <span class="text-2xl">🚀</span>
-        <span>Активировать бесплатный доступ</span>
-      </a>
-      <p class="text-xs text-on-surface-variant mt-6">
-        После нажатия → Telegram → «Старт» → инструкции в чате
-      </p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-8 px-4 border-t border-outline-variant">
-    <div class="max-w-5xl mx-auto">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-            <span class="text-primary font-mono font-bold text-xs">GPT</span>
-          </div>
+        <div class="info-card">
+          <div class="info-icon">🎯</div>
           <div>
-            <p class="font-semibold text-sm">GPT_MONEY_BOT</p>
-            <p class="text-xs text-on-surface-variant">Сигналы XAUUSD 24/5</p>
+            <h4>TP и SL всегда указаны</h4>
+            <p>Тейк-профит и стоп-лосс с оптимальным соотношением риск/прибыль.</p>
           </div>
         </div>
-        <nav class="flex flex-wrap justify-center gap-4 text-sm text-on-surface-variant">
-          <a href="#" class="hover:text-primary transition">Политика конфиденциальности</a>
-          <a href="#" class="hover:text-primary transition">Условия использования</a>
-          <a href="https://t.me/YOUR_SUPPORT" class="hover:text-primary transition">Поддержка</a>
-        </nav>
-        <p class="text-xs text-on-surface-variant">© 2026 GPT_MONEY_BOT</p>
+        <div class="info-card">
+          <div class="info-icon">✅</div>
+          <div>
+            <h4>Отчёт по каждой сделке</h4>
+            <p>Закрытие позиции с итоговым результатом в пунктах.</p>
+          </div>
+        </div>
       </div>
     </div>
-  </footer>
+    <div class="fade-in">
+      <div class="phone-mockup glow-gold">
+        <div class="phone-header">
+          <div class="bot-avatar">GM</div>
+          <div class="bot-info">
+            <h4>GPT_MONEY_BOT</h4>
+            <span><span class="online-dot"></span>онлайн</span>
+          </div>
+        </div>
+        <div class="messages">
+          <div class="msg buy">
+            <div class="msg-dir b">📈 BUY</div>
+            <div class="msg-row"><span class="label">Инструмент</span><span class="val gold">XAUUSD</span></div>
+            <div class="msg-row"><span class="label">Вход</span><span class="val">2 341.50</span></div>
+            <div class="msg-row"><span class="label">TP</span><span class="val g">2 357.00</span></div>
+            <div class="msg-row"><span class="label">SL</span><span class="val r">2 334.00</span></div>
+            <span class="result-badge">✅ +15.50 pts ЗАКРЫТО</span>
+          </div>
+          <div class="msg sell">
+            <div class="msg-dir s">📉 SELL</div>
+            <div class="msg-row"><span class="label">Инструмент</span><span class="val gold">XAUUSD</span></div>
+            <div class="msg-row"><span class="label">Вход</span><span class="val">2 362.80</span></div>
+            <div class="msg-row"><span class="label">TP</span><span class="val g">2 344.00</span></div>
+            <div class="msg-row"><span class="label">SL</span><span class="val r">2 371.00</span></div>
+            <span class="result-badge">✅ +18.80 pts ЗАКРЫТО</span>
+          </div>
+          <div class="msg buy">
+            <div class="msg-dir b">📈 BUY</div>
+            <div class="msg-row"><span class="label">Инструмент</span><span class="val gold">XAUUSD</span></div>
+            <div class="msg-row"><span class="label">Вход</span><span class="val">2 347.10</span></div>
+            <div class="msg-row"><span class="label">TP</span><span class="val g">2 363.50</span></div>
+            <div class="msg-row"><span class="label">SL</span><span class="val r">2 340.00</span></div>
+            <div style="color:var(--text-faint);font-size:.7rem;margin-top:.4rem">⏳ Сигнал активен...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- Sticky Mobile CTA -->
-  <div class="fixed bottom-0 left-0 right-0 p-4 bg-surface-container/95 backdrop-blur-md border-t border-outline-variant md:hidden z-50">
-    <a href="https://t.me/GPT_MONEY_BOT?start=trial" class="flex items-center justify-center gap-2 w-full py-3 bg-primary text-on-primary font-bold rounded-lg pulse-gold">
-      <span>🎁</span>
-      <span>3 дня бесплатно</span>
-      <span>→</span>
+<div class="divider"></div>
+
+<!-- ── FREE TRIAL BANNER ── -->
+<div class="trial-banner fade-in">
+  <span class="trial-num">3</span>
+  <div class="trial-label">дня бесплатно</div>
+  <p class="trial-sub">Получи полный доступ ко всем сигналам без оплаты. Никаких данных карты, никаких обязательств.</p>
+  <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem">
+    🎁 Активировать бесплатный период
+  </a>
+</div>
+
+<!-- ── PRICING ── -->
+<section id="pricing">
+  <div class="fade-in" style="text-align:center">
+    <div class="section-tag">Тарифы</div>
+    <h2 class="section-title">Выбери свой план</h2>
+    <p class="section-sub" style="margin:0 auto 0">Никаких скрытых платежей. Плати только за дни, которые нужны.</p>
+  </div>
+  <div class="pricing-grid">
+    <!-- 5 days -->
+    <div class="price-card fade-in">
+      <div class="price-days">5 ДНЕЙ</div>
+      <div class="price-period">Пробный доступ</div>
+      <div class="price-amount">1 000 <span style="font-size:1.5rem">₽</span></div>
+      <div class="price-per-day">≈ 200 ₽/день</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Все сигналы XAUUSD</li>
+        <li><span class="check">✓</span>Алерты в Telegram</li>
+        <li><span class="check">✓</span>TP / SL к каждому сигналу</li>
+        <li><span class="check">✓</span>Отчёты по сделкам</li>
+      </ul>
+      <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-plan">Выбрать →</a>
+    </div>
+    <!-- 15 days — FEATURED -->
+    <div class="price-card featured fade-in">
+      <div class="price-badge">🔥 Популярный</div>
+      <div class="price-days">15 ДНЕЙ</div>
+      <div class="price-period">Оптимальный выбор</div>
+      <div class="price-amount">1 500 <span style="font-size:1.5rem">₽</span></div>
+      <div class="price-per-day">≈ 100 ₽/день <span class="price-savings">-50%</span></div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Все сигналы XAUUSD</li>
+        <li><span class="check">✓</span>Алерты в Telegram</li>
+        <li><span class="check">✓</span>TP / SL к каждому сигналу</li>
+        <li><span class="check">✓</span>Отчёты по сделкам</li>
+        <li><span class="check">✓</span>Еженедельная статистика</li>
+      </ul>
+      <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-plan">Выбрать →</a>
+    </div>
+    <!-- 30 days -->
+    <div class="price-card fade-in">
+      <div class="price-days">30 ДНЕЙ</div>
+      <div class="price-period">Максимальная выгода</div>
+      <div class="price-amount">2 000 <span style="font-size:1.5rem">₽</span></div>
+      <div class="price-per-day">≈ 67 ₽/день <span class="price-savings">-67%</span></div>
+      <ul class="price-features">
+        <li><span class="check">✓</span>Все сигналы XAUUSD</li>
+        <li><span class="check">✓</span>Алерты в Telegram</li>
+        <li><span class="check">✓</span>TP / SL к каждому сигналу</li>
+        <li><span class="check">✓</span>Отчёты по сделкам</li>
+        <li><span class="check">✓</span>Еженедельная статистика</li>
+        <li><span class="check">✓</span>Приоритетная поддержка</li>
+      </ul>
+      <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-plan">Выбрать →</a>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:2rem;color:var(--text-faint);font-size:.85rem">
+    ⚡ Активация — мгновенная, сразу после оплаты
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── WHY US ── -->
+<section>
+  <div class="fade-in" style="text-align:center">
+    <div class="section-tag">Преимущества</div>
+    <h2 class="section-title">Почему GPT_MONEY_BOT?</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card fade-in">
+      <span class="why-icon">🧠</span>
+      <h3>Настоящий ИИ, не скрипт</h3>
+      <p>GPT-модель анализирует паттерны, объёмы и новостной фон. Адаптируется к рынку в реальном времени.</p>
+    </div>
+    <div class="why-card fade-in">
+      <span class="why-icon">⚡</span>
+      <h3>Скорость реакции 3 сек</h3>
+      <p>От генерации сигнала до алерта в Telegram — менее 3 секунд. Не пропустишь ни одну точку входа.</p>
+    </div>
+    <div class="why-card fade-in">
+      <span class="why-icon">📊</span>
+      <h3>Прозрачная статистика</h3>
+      <p>Все сделки фиксируются в боте. История доступна по команде /stats — видишь всё своими глазами.</p>
+    </div>
+    <div class="why-card fade-in">
+      <span class="why-icon">🎯</span>
+      <h3>Только золото (XAUUSD)</h3>
+      <p>Узкая специализация = глубокая экспертиза. Бот заточен на один инструмент и знает его вдоль и поперёк.</p>
+    </div>
+    <div class="why-card fade-in">
+      <span class="why-icon">🔒</span>
+      <h3>Без привязки к брокеру</h3>
+      <p>Работает с любым брокером где есть XAUUSD: MT4, MT5, cTrader. Ты сам принимаешь решения.</p>
+    </div>
+    <div class="why-card fade-in">
+      <span class="why-icon">📱</span>
+      <h3>Всё в Telegram</h3>
+      <p>Не нужно ничего устанавливать. Сигналы, статистика и поддержка — прямо в привычном мессенджере.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── GUARANTEE ── -->
+<section class="guarantee-section">
+  <div class="guarantee-box fade-in glow-gold">
+    <span class="shield">🛡️</span>
+    <h3>Гарантия 3 дня</h3>
+    <p>
+      Если за бесплатный период тебе не понравится качество сигналов —
+      просто не подписывайся. Никаких вопросов, никаких списаний.
+      Ты ничем не рискуешь.
+    </p>
+    <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-primary" style="margin-top:.5rem">
+      Начать бесплатно
     </a>
   </div>
-  
-  <!-- Extra padding for sticky CTA on mobile -->
-  <div class="h-20 md:hidden"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── FAQ ── -->
+<section id="faq">
+  <div class="fade-in" style="text-align:center">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Частые вопросы</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">
+        Нужно ли передавать доступ к счёту?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        Нет. Бот только присылает торговые сигналы в Telegram. Ты сам решаешь, открывать ли сделку. Никаких API-ключей от брокера не требуется.
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">
+        Как активировать 3 бесплатных дня?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        Просто открой @GPT_MONEY_BOT в Telegram и нажми /start. Бесплатный период активируется автоматически — никаких карт и регистраций не нужно.
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">
+        Сколько сигналов в день?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        В среднем 5–8 сигналов в день в зависимости от активности рынка. В периоды высокой волатильности количество может быть выше. Качество важнее количества.
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">
+        Как продлить подписку?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        Через команду /subscribe в боте. Выбираешь нужный тариф (5/15/30 дней) и оплачиваешь. Доступ продлевается мгновенно.
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">
+        Бот гарантирует прибыль?
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-a">
+        Нет — любая торговля несёт риски. Бот даёт сигналы с высокой вероятностью успеха на основе ИИ-анализа, но итоговый результат зависит от многих факторов. Торгуй только средствами, которые можешь позволить себе потерять.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── FINAL CTA ── -->
+<section class="final-cta">
+  <div class="final-cta-bg"></div>
+  <div class="final-cta-content fade-in">
+    <h2 class="text-glow">Начни зарабатывать<br><span class="text-gold">прямо сегодня</span></h2>
+    <p>Первые 3 дня бесплатно. Сигналы пойдут в течение нескольких минут после подключения.</p>
+    <div class="tg-handle">@GPT_MONEY_BOT</div>
+    <br>
+    <a href="https://t.me/GPT_MONEY_BOT" target="_blank" class="btn-primary" style="font-size:1.1rem;padding:1.1rem 3rem">
+      🤖 Открыть бот в Telegram
+    </a>
+    <p style="margin-top:1.5rem;font-size:.8rem;color:var(--text-faint)">
+      Без скачивания · Без регистрации · Только Telegram
+    </p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">GPT_MONEY_BOT</div>
+  <span class="footer-copy">© 2025 · Торговые сигналы XAUUSD · Не является финансовой консультацией</span>
+  <ul class="footer-links">
+    <li><a href="https://t.me/GPT_MONEY_BOT" target="_blank">Telegram</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#pricing">Тарифы</a></li>
+  </ul>
+</footer>
+
+<script>
+// ── SCROLL FADE IN ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── FAQ ACCORDION ──
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ── LIVE TICKER PRICE SIMULATION ──
+function jitter(base, range) {
+  return (base + (Math.random() - 0.5) * range).toFixed(2);
+}
+setInterval(() => {
+  const price = jitter(2347.8, 4);
+  const change = (Math.random() > 0.5 ? '+' : '-') + (Math.random() * 0.8).toFixed(2) + '%';
+  const isUp = !change.includes('-');
+  const items = document.querySelectorAll('.ticker-item');
+  if (items.length > 0) {
+    items[0].innerHTML = `<span class="ticker-badge">XAUUSD</span><span class="${isUp ? 'up' : 'down'}">${isUp ? '▲' : '▼'} ${price}</span>`;
+    if (items[3]) items[3].innerHTML = `<span class="ticker-badge">GOLD</span>${change} сегодня`;
+  }
+}, 3000);
+</script>
 </body>
 </html>
